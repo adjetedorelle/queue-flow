@@ -19,7 +19,7 @@ return new class extends Migration
             $table->time('heure_ferm');
             $table->foreignId('admin_id')
                   ->constrained('admins')
-                  ->onDelete('cascade');
+                  ->onDelete('cascade');               
             $table->timestamps();
         });
     }

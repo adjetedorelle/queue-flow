@@ -8,7 +8,7 @@
         <p class="text-on-surface-variant text-sm">Veuillez entrer vos identifiants pour accéder à
             QueueFlow.</p>
     </div>
-    <form class="space-y-6">
+    <form class="space-y-6" method="post" action="{{ route('login') }}" >@csrf
         <!-- Email Field -->
         <div class="relative">
             <label class="block text-xs font-label uppercase tracking-wider text-on-surface-variant mb-2"
@@ -18,7 +18,7 @@
                     class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">mail</span>
                 <input
                     class="w-full pl-10 pr-4 py-3 bg-surface-variant/30 border-b-2 border-transparent focus:border-primary focus:bg-surface-variant/10 transition-all outline-none text-on-surface placeholder:text-outline"
-                    id="email" name="email" placeholder="nom@entreprise.com" type="email" />
+                    id="email" name="email" value="{{old('email')}}" placeholder="nom@entreprise.com" type="email" />
             </div>
         </div>
         <!-- Password Field -->
@@ -28,8 +28,7 @@
             <div class="relative group">
                 <span
                     class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">lock</span>
-                <input
-                    class="w-full pl-10 pr-12 py-3 bg-surface-variant/30 border-b-2 border-transparent focus:border-primary focus:bg-surface-variant/10 transition-all outline-none text-on-surface placeholder:text-outline"
+                <input class="w-full pl-10 pr-12 py-3 bg-surface-variant/30 border-b-2 border-transparent focus:border-primary focus:bg-surface-variant/10 transition-all outline-none text-on-surface placeholder:text-outline"
                     id="password" name="password" placeholder="••••••••" type="password" />
                 <button class="absolute right-0 top-1/2 -translate-y-1/2 text-outline hover:text-primary p-2"
                     type="button">
@@ -42,12 +41,12 @@
             <label class="flex items-center space-x-3 cursor-pointer group">
                 <input
                     class="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary-container transition-all"
-                    type="checkbox" />
+                    type="checkbox" name="remember" />
                 <span
                     class="text-xs font-label text-on-surface-variant group-hover:text-primary transition-colors">Rester
                     connecté</span>
             </label>
-            <a class="text-xs font-label text-primary font-semibold hover:underline" href="#">Mot de
+            <a class="text-xs font-label text-primary font-semibold hover:underline" href="{{ route('password.request') }}">Mot de
                 passe oublié ?</a>
         </div>
         <!-- CTA Buttons -->

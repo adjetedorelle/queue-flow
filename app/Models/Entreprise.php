@@ -18,11 +18,18 @@ class Entreprise extends Model
         'adresse',
         'heure_ouv',
         'heure_ferm',
-        'admin_id',     
+        'admin_id', 
+        'jour_ouv',
+        'statut'    
     ];
 
     public function services (){
       return $this->hasMany(Service::class);
     }
+
+    public function admin (){
+        return $this->belongsTo(Admin::class);
+    }
 }
+
 
