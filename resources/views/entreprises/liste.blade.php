@@ -116,7 +116,7 @@
                         <td class="px-8 py-6 text-right">
                             <div
                                 class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button
+                                <button onclick="window.location.href='{{ route('formulaire_entreprise',['id_entreprise'=>$entreprise->id]) }}'"
                                     class="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors">
                                     <span class="material-symbols-outlined text-xl" data-icon="edit">edit</span>
                                 </button>
@@ -133,23 +133,7 @@
         <!-- Pagination Footer -->
         <div
             class="px-8 py-6 bg-surface-container-low/10 flex items-center justify-between border-t border-surface-container-low">
-            <p class="text-sm text-on-surface-variant">Affichage de <span class="font-bold text-on-surface">3</span>
-                sur <span class="font-bold text-on-surface">24</span> entreprises</p>
-            <div class="flex items-center gap-2">
-                <button
-                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-surface-container-low text-on-surface-variant hover:bg-white hover:text-primary transition-all">
-                    <span class="material-symbols-outlined text-xl" data-icon="chevron_left">chevron_left</span>
-                </button>
-                <button
-                    class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold shadow-md shadow-primary/20">1</button>
-                <button
-                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-surface-container-low text-on-surface-variant hover:bg-white hover:text-primary transition-all">2</button>
-                <button
-                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-surface-container-low text-on-surface-variant hover:bg-white hover:text-primary transition-all">3</button>
-                <button
-                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-surface-container-low text-on-surface-variant hover:bg-white hover:text-primary transition-all">
-                    <span class="material-symbols-outlined text-xl" data-icon="chevron_right">chevron_right</span>
-                </button>
+            {{$entreprises->links()}}
             </div>
         </div>
     </div>

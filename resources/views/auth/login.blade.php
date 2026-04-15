@@ -41,10 +41,9 @@
             <label class="flex items-center space-x-3 cursor-pointer group">
                 <input
                     class="h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary-container transition-all"
-                    type="checkbox" name="remember" />
+                    type="checkbox" name="remember" id="remember_me" />
                 <span
-                    class="text-xs font-label text-on-surface-variant group-hover:text-primary transition-colors">Rester
-                    connecté</span>
+                    class="text-xs font-label text-on-surface-variant group-hover:text-primary transition-colors">{{ __('Remember me') }}</span>
             </label>
             <a class="text-xs font-label text-primary font-semibold hover:underline" href="{{ route('password.request') }}">Mot de
                 passe oublié ?</a>

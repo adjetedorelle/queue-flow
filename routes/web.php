@@ -40,6 +40,12 @@ Route::post('enregistrer_entreprise',[EntrepriseController::class,'enregistrer_e
 Route::get('liste_entreprises', [EntrepriseController::class, 'liste'])
 ->middleware(['auth', 'verified'])->name('liste_entreprises');
 
+Route::get('formulaire_entreprise/{id_entreprise}',[EntrepriseController::class, 'modifier'])
+->middleware(['auth', 'verified'])->name('formulaire_entreprise');
+
+Route::put('modifier_entreprise/{id_entreprise}',[EntrepriseController::class, 'mettreAjour'])
+->middleware(['auth', 'verified'])->name('modifier_entreprise');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
