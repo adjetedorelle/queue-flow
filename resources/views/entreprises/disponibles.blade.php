@@ -73,7 +73,7 @@
                             </div>
                             <button
                                 class="w-full kinetic-glow text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-primary-container/20 hover:shadow-primary-container/40">
-                                voir les
+                                voir les services
                                 <span class="material-symbols-outlined"
                                     data-icon="confirmation_number">confirmation_number</span>
                             </button>
