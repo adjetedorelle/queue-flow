@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,10 +53,24 @@ Route::get('entreprises_disponibles',[EntrepriseController::class, 'afficher'])
 Route::delete('supprimer_entreprise/{id_entreprise}',[EntrepriseController::class, 'supprimer'])
 ->middleware(['auth', 'verified'])->name('supprimer_entreprises');
 
+Route::get('ajouter_service',[ServiceController::class, 'ajoutService'])
+->middleware(['auth', 'verified'])->name('service_ajout');
+
+Route::post('enregistrer_service',[ServiceController::class,'enregistrerService'])
+->middleware(['auth', 'verified'])->name('service_enregistrer');
+
+Route::get('liste_service',[ServiceController::class,'listes'])
+->middleware(['auth', 'verified'])->name('service_liste');
+
+
+
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
 });
 
 require __DIR__.'/auth.php';

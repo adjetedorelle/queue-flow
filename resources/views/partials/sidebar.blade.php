@@ -32,7 +32,7 @@
             <span class="font-manrope text-sm font-medium tracking-tight">Statistiques</span>
         </a>
         <a class="flex items-center gap-3 text-slate-400 hover:text-white hover:bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out"
-            href="#">
+            href="{{ route('service_liste')}}">
             <span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Services</span>
         </a>
@@ -41,16 +41,29 @@
             <span class="material-symbols-outlined" data-icon="group">group</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Personnel</span>
         </a>
-        <a class="flex items-center gap-3 text-slate-400 hover:text-white hover:bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out"
+        @if (auth()->user()->role === 'super-admin')
+        
+            <a class="flex items-center gap-3 text-slate-400 hover:text-white hover:bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out"
             href="{{ route('liste_entreprises') }}">
             <span class="material-symbols-outlined" data-icon="business">business</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Entreprises</span>
-        </a>
-        <a class="flex items-center gap-3 text-slate-400 hover:text-white hover:bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out"
+            </a>
+
+            <a class="flex items-center gap-3 text-slate-400 hover:text-white hover:bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out"
             href="#">
             <span class="material-symbols-outlined" data-icon="settings">settings</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Paramètres</span>
-        </a>
+            </a>
+        @endif
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <a onclick="event.preventDefault(); this.closest('form').submit();" class="flex items-center gap-3 text-slate-400 hover:text-white hover:bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out"
+            href="{{ route('logout') }}">
+            <span class="material-symbols-outlined" data-icon="settings">settings</span>
+            <span class="font-manrope text-sm font-medium tracking-tight">Deconnexion</span>
+            </a>
+        </form>
+        
     </nav>
     <div class="mt-auto px-6 py-6 border-t border-white/5">
         <div class="p-4 bg-white/5 rounded-2xl">
