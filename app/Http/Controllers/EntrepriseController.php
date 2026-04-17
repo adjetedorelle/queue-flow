@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Entreprise;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EntrepriseController extends Controller
 {
@@ -17,6 +18,8 @@ class EntrepriseController extends Controller
         $request->validate([
             'nom_ent'=> 'string|required|max:100',
             'adresse'=> 'string|nullable|max:150',
+            'bio'=> 'string|required',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'heure_ouv'=> 'string|required|max:05',
             'heure_ferm'=> 'string|required|max:05',
             'jour_ouv'=> 'string|required|max:100',
@@ -41,6 +44,8 @@ class EntrepriseController extends Controller
         Entreprise::create([
             'nom_ent'=>$request->nom_ent,
             'adresse'=>$request->adresse,
+            'bio'=>$request->bio,
+            'image' => $request->file('image')->store('entreprises', 'public'),
             'heure_ouv'=>$request->heure_ouv,
             'heure_ferm'=>$request->heure_ferm,
             'jour_ouv'=>$request->jour_ouv,
@@ -67,18 +72,45 @@ class EntrepriseController extends Controller
             'heure_ouv'=> 'string|required|max:10',
              'heure_ferm'=> 'string|required|max:10',
              'jour_ouv'=> 'string|required|max:100',
+             'bio'=> 'string|required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             
         ]);
                
        $entreprise = Entreprise::where('id', '=',$id_entreprise)->first();
+       if ($request->hasFile('image')) {
+        $entreprise['image'] = $request->file('image')->store('entreprises', 'public');
+    }
        $entreprise->update([
         'nom_ent'=> $request->nom_ent,
         'adresse'=> $request->adresse,
         'heure_ouv'=> $request->heure_ouv,
         'heure_ferm'=> $request->heure_ferm,
         'jour_ouv'=> $request->jour_ouv,
+        'bio'=>$request->bio,
+        
        ]);
+
+       
         return redirect(route('liste_entreprises'));
       
     }
+    public function afficher () {
+         $entreprises = Entreprise::paginate(6) ;
+        return view('entreprises.disponibles',compact('entreprises'));
+    }
+
+    public function supprimer($id) {
+      
+    $entreprise = Entreprise::findOrFail($id);
+
+    if ($entreprise->image && Storage::disk('public')->exists($entreprise->image)) {
+        Storage::disk('public')->delete($entreprise->image);
+    }
+
+    $entreprise->delete();
+
+    return redirect()->back()->with('success', 'Entreprise supprimée avec succès.');
+} 
+    
 }

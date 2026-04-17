@@ -106,7 +106,7 @@
             </div>
             <div class="hidden md:flex gap-8 items-center">
                 <a class="text-[#002B5B] dark:text-blue-300 font-bold border-b-2 border-[#002B5B] font-headline text-sm" href="/">Acceuil</a>
-                <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 transition-colors font-headline text-sm" href="#">Entreprises</a>
+                <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 transition-colors font-headline text-sm" href="{{ route('entreprises_disponibles') }}">Entreprises</a>
                 <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 transition-colors font-headline text-sm" href="/contactez-nous">Contactez-nous</a>
                 @auth
                 <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 transition-colors font-headline text-sm" href="#">Profile</a>

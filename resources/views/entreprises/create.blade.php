@@ -43,7 +43,7 @@
             </p>
         </div>
         <!-- Form Start -->
-        <form action="{{ route('enregistrer_entreprise') }}" class="p-8 space-y-8" method="POST">@csrf
+        <form action="{{ route('enregistrer_entreprise') }}" class="p-8 space-y-8" method="POST" enctype="multipart/form-data">@csrf
             <!-- Section 1: Business Info -->
             <section class="space-y-6">
                 <header class="flex items-center gap-2">
@@ -62,8 +62,22 @@
                                 class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
                                 data-icon="domain">domain</span>
                             <input class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                id="company_name" name="nom_ent" placeholder="Ex: Kinetic Slate Tech"
+                                id="company_name" name="nom_ent" placeholder="Ex: CITECH SARL"
                                 required="" type="text" />
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <div class="relative">
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1" for="company_name">
+                            Description <span class="text-primary">*</span>
+                        </label>
+                        <div class="relative group">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
+                                data-icon=""></span>
+                            <textarea class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
+                                id="company_name" name="bio"
+                                required="" type="text"> </textarea>
                         </div>
                     </div>
                     <!-- Adresse -->
@@ -76,7 +90,7 @@
                                 class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
                                 data-icon="location_on">location_on</span>
                             <input class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                id="adresse" name="adresse" placeholder="123 Rue de l'Innovation, Paris"
+                                id="adresse" name="adresse" placeholder="calavi"
                                 required="" type="text" />
                         </div>
                     </div>
@@ -121,6 +135,19 @@
                                     id="closing_time" name="heure_ferm" required="" type="time" />
                             </div>
                              
+                        </div>
+                    </div>
+                     <!-- image -->
+                    <div class="relative">
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1" for="company_name">
+                            Image <span class="text-primary">*</span>
+                        </label>
+                        <div class="relative group">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
+                                data-icon="domain"></span>
+                            <input class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
+                                id="company_name" name="image" required="" type="file" accept="image/*"/>
                         </div>
                     </div>
                 </div>

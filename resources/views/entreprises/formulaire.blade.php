@@ -43,7 +43,8 @@
             </p>
         </div>
         <!-- Form Start -->
-        <form action="{{ route('modifier_entreprise',['id_entreprise'=>$entreprise->id]) }}" class="p-8 space-y-8" method="POST">@csrf  @method('PUT')
+        <form action="{{ route('modifier_entreprise', ['id_entreprise' => $entreprise->id]) }}" class="p-8 space-y-8"
+            method="POST" enctype="multipart/form-data">@csrf @method('PUT')
             <!-- Section 1: Business Info -->
             <section class="space-y-6">
                 <header class="flex items-center gap-2">
@@ -62,8 +63,8 @@
                                 class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
                                 data-icon="domain">domain</span>
                             <input class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                id="company_name" name="nom_ent" placeholder="Ex: Kinetic Slate Tech"
-                                required="" type="text" value="{{$entreprise->nom_ent}}" />
+                                id="company_name" name="nom_ent" placeholder="Ex: Kinetic Slate Tech" required=""
+                                type="text" value="{{ $entreprise->nom_ent }}" />
                         </div>
                     </div>
                     <!-- Adresse -->
@@ -77,7 +78,20 @@
                                 data-icon="location_on">location_on</span>
                             <input class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
                                 id="adresse" name="adresse" placeholder="123 Rue de l'Innovation, Paris"
-                                required="" type="text"  value="{{$entreprise->adresse}}"/>
+                                required="" type="text" value="{{ $entreprise->adresse }}" />
+                        </div>
+                    </div>
+
+                    <div class="relative">
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1" for="company_name">
+                            Description <span class="text-primary">*</span>
+                        </label>
+                        <div class="relative group">
+                            <span
+                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
+                                data-icon=""></span>
+                            <textarea class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium" name="bio"
+                                required="" type="text"> {{ $entreprise->bio }}</textarea>
                         </div>
                     </div>
                     <div class="relative">
@@ -89,8 +103,8 @@
                                 class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
                                 data-icon=""></span>
                             <input class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                id="jour_ouv" name="jour_ouv" placeholder="lundi-jeudi"
-                                required="" type="text" value="{{$entreprise->jour_ouv}}" />
+                                id="jour_ouv" name="jour_ouv" placeholder="lundi-jeudi" required="" type="text"
+                                value="{{ $entreprise->jour_ouv }}" />
                         </div>
                     </div>
                     <!-- Time Grid -->
@@ -105,7 +119,8 @@
                                     data-icon="schedule">schedule</span>
                                 <input
                                     class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                    id="opening_time" name="heure_ouv" required="" type="time" value="{{$entreprise->heure_ouv}}"/>
+                                    id="opening_time" name="heure_ouv" required="" type="time"
+                                    value="{{ $entreprise->heure_ouv }}" />
                             </div>
                         </div>
                         <div class="relative">
@@ -118,32 +133,53 @@
                                     data-icon="alarm_off">alarm_off</span>
                                 <input
                                     class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                    id="closing_time" name="heure_ferm" required="" type="time" value="{{$entreprise->heure_ferm}}" />
+                                    id="closing_time" name="heure_ferm" required="" type="time"
+                                    value="{{ $entreprise->heure_ferm }}" />
                             </div>
-                             
+                            <div class="relative">
+                                <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1">
+                                    Image <span class="text-primary">*</span>
+                                </label>
+
+                                {{-- Afficher l'image actuelle --}}
+                                @if ($entreprise->image)
+                                    <div class="mb-3">
+                                        <p class="text-xs text-on-surface-variant mb-1">Image actuelle :</p>
+                                        <img src="{{ asset('storage/' . $entreprise->image) }}"
+                                            alt="{{ $entreprise->nom_ent }}"
+                                            class="w-16 h-16 object-cover rounded-lg" />
+                                    </div>
+                                @endif
+                                <input
+                                    class="sunken-input w-full pl-4 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
+                                    name="image" type="file" accept="image/*" />
+                                <p class="text-xs text-on-surface-variant mt-1 ml-1">
+                                    Laissez vide pour conserver l'image actuelle.
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
-           
+
             <!-- Actions -->
             <div class="flex flex-col md:flex-row gap-4 pt-6">
                 <button
                     class="flex-1 signature-glow text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 order-1 md:order-2 flex items-center justify-center gap-2"
                     type="submit">
                     <span>Modifier l’entreprise</span>
-                   
-                <button
-                    class="flex-1 bg-transparent border-2 border-surface-container-high text-on-surface-variant font-bold py-4 px-6 rounded-lg hover:bg-surface-container-low transition-all duration-200 order-2 md:order-1"
-                    type="button">
-                    Annuler
-                </button>
+
+                    <button
+                        class="flex-1 bg-transparent border-2 border-surface-container-high text-on-surface-variant font-bold py-4 px-6 rounded-lg hover:bg-surface-container-low transition-all duration-200 order-2 md:order-1"
+                        type="button">
+                        Annuler
+                    </button>
             </div>
         </form>
 
 
-        
-        
 
-        
+
+
+
 </x-app-layout>

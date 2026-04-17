@@ -46,6 +46,12 @@ Route::get('formulaire_entreprise/{id_entreprise}',[EntrepriseController::class,
 Route::put('modifier_entreprise/{id_entreprise}',[EntrepriseController::class, 'mettreAjour'])
 ->middleware(['auth', 'verified'])->name('modifier_entreprise');
 
+Route::get('entreprises_disponibles',[EntrepriseController::class, 'afficher'])
+->name('entreprises_disponibles');
+
+Route::delete('supprimer_entreprise/{id_entreprise}',[EntrepriseController::class, 'supprimer'])
+->middleware(['auth', 'verified'])->name('supprimer_entreprises');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

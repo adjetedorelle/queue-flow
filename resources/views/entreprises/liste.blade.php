@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <style>
         body {
             font-family: 'Manrope', sans-serif;
@@ -64,12 +63,15 @@
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                             Adresse</th>
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                            Description</th>
+                        <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                             Jour d'ouverture</th>
-
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                             Statut</th>
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                             Heures</th>
+                        <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                            Image</th>
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                             Administrateur</th>
                         <th
@@ -79,63 +81,85 @@
                 </thead>
 
                 <tbody class="divide-y divide-surface-container-low">
-                   @foreach ($entreprises as $entreprise)
-                     <tr class="hover:bg-surface-container-low/40 transition-colors group">
-                        <td class="px-8 py-6 text-on-surface-variant font-medium">{{$loop->index +1}}</td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center gap-4">
-                                <div
-                                    class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600">
-                                    <span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+                    @foreach ($entreprises as $entreprise)
+                        <tr class="hover:bg-surface-container-low/40 transition-colors group">
+                            <td class="px-8 py-6 text-on-surface-variant font-medium">{{ $loop->index + 1 }}</td>
+                            <td class="px-8 py-6">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600">
+                                        <span class="material-symbols-outlined" data-icon="storefront">storefront</span>
+                                    </div>
+                                    <span class="font-bold text-on-surface">{{ $entreprise->nom_ent }}</span>
                                 </div>
-                                <span class="font-bold text-on-surface">{{$entreprise->nom_ent}}</span>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{$entreprise->adresse}}</td>
-                        <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{$entreprise->jour_ouv}}</td>
-                        <td class="px-8 py-6">
+                            </td>
+                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
+                                {{ $entreprise->adresse }}</td>
+                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{ $entreprise->bio }}
+                            </td>
+                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
+                                {{ $entreprise->jour_ouv }}</td>
+                            <td class="px-8 py-6">
+                                <span
+                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold ring-1 ring-emerald-600/10">
+                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                    {{ $entreprise->statut }}
+                                </span>
+                            </td>
+                            <td class="px-8 py-6">
+                                <div class="flex flex-col">
+                                    <span
+                                        class="text-sm font-semibold text-on-surface">{{ $entreprise->heure_ouv }}-{{ $entreprise->heure_ferm }}</span>
 
-                            <span
-                                class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold ring-1 ring-emerald-600/10">
-                                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                               {{$entreprise->statut}}
-                            </span>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="flex flex-col">
-                                <span class="text-sm font-semibold text-on-surface">{{$entreprise->heure_ouv}}-{{$entreprise->heure_ferm}}</span>
+                                </div>
+                            </td>
+                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
+                                @if ($entreprise->image)
+                                    <img src="{{ asset('storage/' . $entreprise->image) }}"
+                                        alt="{{ $entreprise->nom_ent }}" class="w-16 h-16 object-cover rounded-lg" />
+                                @else
+                                    <span class="text-gray-400 text-sm">Aucune image</span>
+                                @endif
+                            </td>
+                            <td class="px-8 py-6">
+                                <div class="flex items-center gap-2">
 
-                            </div>
-                        </td>
-                        <td class="px-8 py-6">
-                            <div class="flex items-center gap-2">
-
-                                <span class="text-sm font-medium text-on-surface">{{$entreprise->admin->utilisateur->nom}} {{$entreprise->admin->utilisateur->prenom}}</span>
-                            </div>
-                        </td>
-                        <td class="px-8 py-6 text-right">
-                            <div
-                                class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onclick="window.location.href='{{ route('formulaire_entreprise',['id_entreprise'=>$entreprise->id]) }}'"
-                                    class="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors">
-                                    <span class="material-symbols-outlined text-xl" data-icon="edit">edit</span>
-                                </button>
-                                <button class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors">
-                                    <span class="material-symbols-outlined text-xl" data-icon="delete">delete</span>
-                                </button>
-                            </div>
-                        </td>
-                      </tr>
-                  @endforeach
+                                    <span
+                                        class="text-sm font-medium text-on-surface">{{ $entreprise->admin->utilisateur->nom }}
+                                        {{ $entreprise->admin->utilisateur->prenom }}</span>
+                                </div>
+                            </td>
+                            <td class="px-8 py-6 text-right">
+                                <div
+                                    class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <button
+                                        onclick="window.location.href='{{ route('formulaire_entreprise', ['id_entreprise' => $entreprise->id]) }}'"
+                                        class="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors">
+                                        <span class="material-symbols-outlined text-xl" data-icon="edit">edit</span>
+                                    </button>
+                                    <form action="{{ route('supprimer_entreprises', $entreprise->id) }}" method="POST"
+                                        onsubmit="return confirm('Voulez-vous vraiment supprimer {{ $entreprise->nom_ent }} ?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit"
+                                            class="p-2 hover:bg-error/10 rounded-lg text-error transition-colors">
+                                            <span class="material-symbols-outlined text-xl"
+                                                data-icon="delete">delete</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
         <!-- Pagination Footer -->
         <div
             class="px-8 py-6 bg-surface-container-low/10 flex items-center justify-between border-t border-surface-container-low">
-            {{$entreprises->links()}}
-            </div>
+            {{ $entreprises->links() }}
         </div>
+    </div>
     </div>
 
 

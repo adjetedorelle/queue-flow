@@ -20,7 +20,9 @@ class Entreprise extends Model
         'heure_ferm',
         'admin_id', 
         'jour_ouv',
-        'statut'    
+        'statut',
+        'bio',
+        'image'    
     ];
 
     public function services (){
