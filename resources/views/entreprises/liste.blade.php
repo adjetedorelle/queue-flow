@@ -33,7 +33,7 @@
                 <p class="text-on-surface-variant max-w-md text-lg">Gérez les entreprises inscrites sur la
                     plateforme QueueFlow, supervisez leurs accès et surveillez leur activité en temps réel.</p>
             </div>
-            <button onclick="window.location.href='{{ route ('ajout_entreprise') }}'"
+            <button onclick="window.location.href='{{ route('ajout_entreprise') }}'"
                 class="signature-glow text-white px-8 py-4 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg shadow-orange-500/20 group">
                 <span class="material-symbols-outlined text-white transition-transform group-hover:rotate-90"
                     data-icon="add">add</span>
@@ -100,11 +100,19 @@
                             <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
                                 {{ $entreprise->jour_ouv }}</td>
                             <td class="px-8 py-6">
-                                <span
-                                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold ring-1 ring-emerald-600/10">
-                                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                                    {{ $entreprise->statut }}
-                                </span>
+                                @if ($entreprise->statut === 'actif')
+                                    <span
+                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold ring-1 ring-emerald-600/10">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        Actif
+                                    </span>
+                                @else
+                                    <span
+                                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-50 text-red-700 text-xs font-bold ring-1 ring-red-600/10">
+                                        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+                                        Suspendu
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-8 py-6">
                                 <div class="flex flex-col">
@@ -146,6 +154,25 @@
                                             <span class="material-symbols-outlined text-xl"
                                                 data-icon="delete">delete</span>
                                         </button>
+                                    </form>
+                                    {{-- Bouton Suspendre / Activer --}}
+                                    <form action="{{ route('modifier_statut_entreprise', $entreprise->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        @if ($entreprise->statut === 'actif')
+                                            <button type="submit"
+                                                class="px-4 py-1.5 rounded-lg bg-red-100 text-red-600 hover:bg-red-200 text-xs font-bold transition-colors flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-base">block</span>
+                                                Suspendre
+                                            </button>
+                                        @else
+                                            <button type="submit"
+                                                class="px-4 py-1.5 rounded-lg bg-emerald-100 text-emerald-600 hover:bg-emerald-200 text-xs font-bold transition-colors flex items-center gap-1">
+                                                <span class="material-symbols-outlined text-base">check_circle</span>
+                                                Activer
+                                            </button>
+                                        @endif
                                     </form>
                                 </div>
                             </td>

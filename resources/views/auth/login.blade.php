@@ -18,7 +18,7 @@
                     class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">mail</span>
                 <input
                     class="w-full pl-10 pr-4 py-3 bg-surface-variant/30 border-b-2 border-transparent focus:border-primary focus:bg-surface-variant/10 transition-all outline-none text-on-surface placeholder:text-outline"
-                    id="email" name="email" value="{{old('email')}}" placeholder="nom@entreprise.com" type="email" />
+                    id="email" name="email" value="{{old('email')}}"  type="email" />
             </div>
         </div>
         <!-- Password Field -->
@@ -29,10 +29,9 @@
                 <span
                     class="material-symbols-outlined absolute left-0 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">lock</span>
                 <input class="w-full pl-10 pr-12 py-3 bg-surface-variant/30 border-b-2 border-transparent focus:border-primary focus:bg-surface-variant/10 transition-all outline-none text-on-surface placeholder:text-outline"
-                    id="password" name="password" placeholder="••••••••" type="password" />
+                    id="password" name="password"  type="password" />
                 <button class="absolute right-0 top-1/2 -translate-y-1/2 text-outline hover:text-primary p-2"
                     type="button">
-                    <span class="material-symbols-outlined" data-icon="visibility">visibility</span>
                 </button>
             </div>
         </div>

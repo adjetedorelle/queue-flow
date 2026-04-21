@@ -1,298 +1,182 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
 
-
-
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
-
-
+<html class="h-full" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>QueueFlow | Connexion Client</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#004b74",
+                        "tertiary": "#006398",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#582200",
+                        "error": "#ba1a1a",
+                        "primary-container": "#f97316",
+                        "on-secondary-container": "#773a16",
+                        "secondary": "#8f4d27",
+                        "primary": "#9d4300",
+                        "tertiary-container": "#00a2f4",
+                        "secondary-fixed": "#ffdbca",
+                        "inverse-on-surface": "#e9f1ff",
+                        "error-container": "#ffdad6",
+                        "surface-dim": "#cbdcf2",
+                        "secondary-container": "#fda77a",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "on-surface": "#0c1d2d",
+                        "on-primary-fixed-variant": "#783200",
+                        "on-secondary-fixed": "#341100",
+                        "on-background": "#0c1d2d",
+                        "on-primary-fixed": "#341100",
+                        "primary-fixed": "#ffdbca",
+                        "on-tertiary-container": "#003554",
+                        "tertiary-fixed": "#cde5ff",
+                        "inverse-surface": "#223243",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#d3e4fa",
+                        "background": "#f8f9ff",
+                        "surface-container-low": "#eef4ff",
+                        "surface-container-high": "#daeaff",
+                        "outline-variant": "#e0c0b1",
+                        "surface-container-highest": "#d3e4fa",
+                        "on-error": "#ffffff",
+                        "surface-tint": "#9d4300",
+                        "on-surface-variant": "#584237",
+                        "on-secondary-fixed-variant": "#713612",
+                        "tertiary-fixed-dim": "#93ccff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#001d32",
+                        "primary-fixed-dim": "#ffb690",
+                        "outline": "#8c7164",
+                        "surface-container": "#e4efff",
+                        "secondary-fixed-dim": "#ffb690",
+                        "inverse-primary": "#ffb690",
+                        "on-secondary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            }
+        }
+    </script>
 <style>
-
-:root {
-  --navy:    #0D1B3E;
-  --orange:  #F97316;
-  --orange2: #EA580C;
-  --muted:   #8A9BBE;
-  --border:  #E8EDF6;
-  --white:   #FFFFFF;
-  --text:    #1A2B4A;
-  --subtle:  #6B7FA3;
-}
-
-/* ══════════════════════════════
-   Conteneur du panneau formulaire
-══════════════════════════════ */
-.qf-panel {
-  width: 100%;
-  max-width: 460px;
-  background: var(--white);
-  border-radius: 24px;
-  padding: 52px 48px 44px;
-  box-shadow:
-    0 2px 4px rgba(13,27,62,0.04),
-    0 12px 40px rgba(13,27,62,0.10),
-    0 0 0 1px rgba(13,27,62,0.05);
-  position: relative;
-  overflow: hidden;
-}
-
-/* Accent orange en haut */
-.qf-panel::before {
-  content: '';
-  position: absolute; top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--navy) 0%, var(--orange) 50%, var(--navy) 100%);
-}
-
-/* ── Entête (remplace le logo) ── */
-.qf-eyebrow {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 28px;
-}
-.qf-eyebrow-line {
-  flex: 1; height: 1px; background: var(--border);
-}
-.qf-eyebrow-tag {
-  display: flex; align-items: center; gap: 6px;
-  background: #FFF5ED;
-  border: 1px solid rgba(249,115,22,0.2);
-  border-radius: 100px;
-  padding: 5px 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--orange2); font-weight: 500;
-}
-.qf-eyebrow-tag .dot {
-  width: 5px; height: 5px; border-radius: 50%;
-  background: var(--orange);
-  box-shadow: 0 0 6px var(--orange);
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-@keyframes pulse-dot {
-  0%,100% { opacity: 1; } 50% { opacity: 0.4; }
-}
-
-/* ── Titre & sous-titre ── */
-.qf-header { margin-bottom: 36px; }
-.qf-header h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px; font-weight: 700;
-  color: var(--navy); line-height: 1.15;
-  margin-bottom: 8px;
-}
-.qf-header h2 em {
-  font-style: normal;
-  background: linear-gradient(90deg, var(--orange), var(--orange2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-}
-.qf-header p {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13.5px; color: var(--subtle); line-height: 1.65;
-}
-
-/* ── Champs ── */
-.qf-row { display: flex; gap: 16px; }
-.qf-row .qf-field { flex: 1; }
-
-.qf-field { margin-bottom: 20px; }
-.qf-field label {
-  display: block;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase;
-  color: var(--subtle); margin-bottom: 8px; font-weight: 500;
-}
-
-.qf-input-wrap {
-  position: relative; display: flex; align-items: center;
-}
-.qf-input-wrap .material-icons-round {
-  position: absolute; left: 14px;
-  font-size: 17px; color: #C5CEDF;
-  pointer-events: none;
-  transition: color 0.2s;
-}
-.qf-input-wrap:focus-within .material-icons-round {
-  color: var(--orange);
-}
-
-.qf-input-wrap input {
-  width: 100%;
-  background: #F7F9FC;
-  border: 1.5px solid var(--border);
-  border-radius: 12px;
-  padding: 13px 16px 13px 42px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px; color: var(--text);
-  outline: none;
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
-}
-.qf-input-wrap input::placeholder {
-  color: #B8C4D8; font-size: 13.5px;
-}
-.qf-input-wrap input:focus {
-  background: var(--white);
-  border-color: var(--orange);
-  box-shadow: 0 0 0 3.5px rgba(249,115,22,0.10);
-}
-
-/* ── Séparateur discret ── */
-.qf-divider {
-  height: 1px; background: var(--border);
-  margin: 8px 0 24px;
-}
-
-/* ── Bouton principal ── */
-.qf-btn {
-  width: 100%;
-  padding: 15px 20px;
-  background: var(--navy);
-  border: none; border-radius: 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px; font-weight: 600; letter-spacing: 0.03em;
-  color: var(--white);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 9px;
-  position: relative; overflow: hidden;
-  box-shadow: 0 6px 24px rgba(13,27,62,0.18);
-  transition: transform 0.15s, box-shadow 0.2s;
-}
-/* Trait orange animé au survol */
-.qf-btn::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0;
-  width: 0; height: 3px;
-  background: linear-gradient(90deg, var(--orange), var(--orange2));
-  transition: width 0.3s ease;
-}
-.qf-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 32px rgba(13,27,62,0.22); }
-.qf-btn:hover::after { width: 100%; }
-.qf-btn:active { transform: scale(0.98); }
-.qf-btn .material-icons-round { font-size: 18px; color: var(--orange); }
-
-/* ── Footer liens ── */
-.qf-footer {
-  margin-top: 24px;
-  display: flex; justify-content: center; gap: 20px;
-}
-.qf-footer a {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
-  color: #B8C4D8; text-decoration: none;
-  transition: color 0.2s;
-}
-.qf-footer a:hover { color: var(--subtle); }
-
-/* ── Animations d'entrée ── */
-.qf-panel > * {
-  opacity: 0; transform: translateY(14px);
-  animation: qfUp 0.45s ease forwards;
-}
-.qf-eyebrow  { animation-delay: 0.08s; }
-.qf-header   { animation-delay: 0.16s; }
-.qf-form     { animation-delay: 0.24s; }
-.qf-footer   { animation-delay: 0.32s; }
-@keyframes qfUp {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Responsive ── */
-@media (max-width: 500px) {
-  .qf-panel { padding: 36px 24px 32px; border-radius: 0; }
-  .qf-row   { flex-direction: column; gap: 0; }
-}
-</style>
-
-<!-- ════ PANNEAU FORMULAIRE ════ -->
-
-<div class="qf-panel">
-
-  <!-- Pastille "En cours de service" -->
-
-  <div class="qf-eyebrow">
-    <div class="qf-eyebrow-line"></div>
-    <div class="qf-eyebrow-tag">
-      <div class="dot"></div>
-      <span>Service en cours</span>
-    </div>
-    <div class="qf-eyebrow-line"></div>
-  </div>
-
-  <!-- Titre -->
-
-  <div class="qf-header">
-    <h2>Rejoignez<br/>la <em>file</em> en ligne.</h2>
-    <p>Renseignez vos informations pour obtenir<br/>votre numéro de passage instantanément.</p>
-  </div>
-
-  <!-- Formulaire -->
-
-  <form class="qf-form" method="post" action="{{ route('login') }}">
-    @csrf
-
-```
-<!-- Nom & Prénom -->
-<div class="qf-row">
-  <div class="qf-field">
-    <label for="nom">Nom</label>
-    <div class="qf-input-wrap">
-      <span class="material-icons-round">badge</span>
-      <input
-        id="nom" name="nom" type="text"
-        placeholder="Dupont"
-        value="{{ old('nom') }}"
-        autocomplete="family-name"
-        required />
-    </div>
-  </div>
-  <div class="qf-field">
-    <label for="prenom">Prénom</label>
-    <div class="qf-input-wrap">
-      <span class="material-icons-round">person</span>
-      <input
-        id="prenom" name="prenom" type="text"
-        placeholder="Marie"
-        value="{{ old('prenom') }}"
-        autocomplete="given-name"
-        required />
-    </div>
-  </div>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #0B1C2C; /* Request mandated specific color */
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .input-group:focus-within label {
+            color: #f97316;
+        }
+        .input-group:focus-within .material-symbols-outlined {
+            color: #f97316;
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex items-center justify-center min-h-screen p-6">
+<!-- Login Container -->
+<div class="w-full max-w-md animate-fade-in">
+<div class="bg-surface-container-lowest rounded-xl shadow-2xl overflow-hidden">
+<!-- Form Header & Decorative Icon -->
+<div class="p-8 pb-4 text-center">
+<div class="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-surface-container-low text-primary-container">
+<span class="material-symbols-outlined text-4xl" data-icon="confirmation_number">confirmation_number</span>
 </div>
-
-<!-- Téléphone -->
-<div class="qf-field">
-  <label for="telephone">Numéro de téléphone</label>
-  <div class="qf-input-wrap">
-    <span class="material-icons-round">phone</span>
-    <input
-      id="telephone" name="telephone" type="tel"
-      placeholder="+33 6 12 34 56 78"
-      value="{{ old('telephone') }}"
-      autocomplete="tel"
-      required />
-  </div>
+<h1 class="text-on-surface text-3xl font-bold tracking-tight mb-2">Connexion client</h1>
+<p class="text-on-surface-variant text-sm font-medium">Veuillez entrer vos informations pour continuer</p>
 </div>
-
-<div class="qf-divider"></div>
-
-<!-- Bouton -->
-<button class="qf-btn" type="submit">
-  <span class="material-icons-round">confirmation_number</span>
-  Obtenir mon ticket
+<!-- Form Body -->
+<form action="#" class="p-8 pt-4 space-y-6" method="POST">
+<!-- Input: Nom -->
+<div class="input-group relative">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1" for="last_name">
+                        Nom <span class="text-primary">*</span>
+</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="person">person</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container" id="last_name" name="last_name" placeholder="Ex: Martin" required="" type="text"/>
+</div>
+</div>
+<!-- Input: Prénom -->
+<div class="input-group relative">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1" for="first_name">
+                        Prénom <span class="text-primary">*</span>
+</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="person_outline">person_outline</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container" id="first_name" name="first_name" placeholder="Ex: Jean" required="" type="text"/>
+</div>
+</div>
+<!-- Input: Téléphone -->
+<div class="input-group relative">
+<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1" for="phone">
+                        Numéro de téléphone <span class="text-primary">*</span>
+</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="phone">phone</span>
+</div>
+<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container" id="phone" name="phone" placeholder="06 12 34 56 78" required="" type="tel"/>
+</div>
+</div>
+<!-- Privacy Mention -->
+<p class="text-[10px] text-center text-on-surface-variant leading-relaxed px-4">
+                    En continuant, vous acceptez notre politique de gestion des files d'attente et le traitement de vos données personnelles.
+                </p>
+<!-- Submit Button -->
+<div class="pt-2">
+<button class="group relative w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-md text-sm font-extrabold text-white bg-gradient-to-br from-primary to-primary-container hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-primary-container/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container active:scale-95" type="submit">
+<span class="mr-2">Obtenir mon ticket</span>
+<span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
 </button>
-```
-
-  </form>
-
-  <!-- Liens bas de page -->
-
-  <div class="qf-footer">
-    <a href="#">Politique de confidentialité</a>
-    <a href="#">Conditions d'utilisation</a>
-  </div>
-
 </div>
-<!-- ════ FIN PANNEAU ════ -->
-</x-guest-layout>
+</form>
+<!-- Footer Graphic (Abstract) -->
+<div class="h-2 w-full bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-20"></div>
+</div>
+<!-- Branding Branding -->
+<div class="mt-8 text-center flex flex-col items-center gap-2">
+<div class="flex items-center gap-2">
+<span class="text-[#F97316] font-extrabold text-2xl tracking-tighter">QueueFlow</span>
+<span class="w-1.5 h-1.5 bg-[#F97316] rounded-full mt-1"></span>
+</div>
+<p class="text-slate-500 text-xs font-medium tracking-wide">L'excellence de l'attente digitalisée</p>
+</div>
+</div>
+</body></html>

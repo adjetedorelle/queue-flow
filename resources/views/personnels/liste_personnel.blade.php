@@ -29,13 +29,13 @@
             <div>
 
                 <h1 class="text-4xl font-extrabold text-on-surface tracking-tight leading-none mb-4">Liste des
-                    services</h1>
-                <p class="text-on-surface-variant max-w-md text-lg">Gérez les services de votre entreprise.</p>
+                    employés</h1>
+                <p class="text-on-surface-variant max-w-md text-lg">Gérez le personnel de votre entreprise.</p>
             </div>
-             <button onclick="window.location.href='{{ route ('service_ajout') }}'" class="signature-glow text-white px-8 py-4 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg shadow-orange-500/20 group">
+             <button onclick="window.location.href='{{ route ('ajouter_personnel') }}'" class="signature-glow text-white px-8 py-4 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg shadow-orange-500/20 group">
                 <span class="material-symbols-outlined text-white transition-transform group-hover:rotate-90"
                     data-icon="add">add</span>
-                Ajouter un service
+                Ajouter un personnel
             </button>
         </div>
         <!-- Filters Section -->
@@ -46,7 +46,7 @@
                     data-icon="search">search</span>
                 <input
                     class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-on-surface-variant/50"
-                    placeholder="Rechercher une entreprise ou un administrateur..." type="text" />
+                    placeholder="Rechercher un personnel..." type="text" />
             </div>
         </div>
         <!-- Table Section -->
@@ -57,10 +57,11 @@
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                             #</th>
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
-                            Nom du Service</th>
+                            Nom du personnel</th>
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
-                            Temps estimé</th>
-                        
+                         Prenom du personnel</th>
+                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                         Email</th>
                         <th
                             class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-right">
                             Actions</th>
@@ -68,7 +69,7 @@
                 </thead>
 
                 <tbody class="divide-y divide-surface-container-low">
-                    @foreach ($services as $service)
+                    @foreach ($personnels as $personnel)
                         <tr class="hover:bg-surface-container-low/40 transition-colors group">
                             <td class="px-8 py-6 text-on-surface-variant font-medium">{{ $loop->index + 1 }}</td>
                             <td class="px-8 py-6">
@@ -76,22 +77,21 @@
                                     <div
                                         class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600">
                                     <span class="material-symbols-outlined" >headset_mic</span>  </div>
-                                    <span class="font-bold text-on-surface">{{ $service->libelle }}</span>
+                                    <span class="font-bold text-on-surface">{{ $personnel->utilisateur->nom }}</span>
                                 </div>
                             </td>
-                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
-                                {{ $service->temps_estime }}</td>
-                          
+                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{ $personnel->utilisateur->prenom}}</td>
+                          <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{ $personnel->utilisateur->email}}</td>
                             
                             <td class="px-8 py-6 text-right">
                                 <div
                                     class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <button
-                                        onclick="window.location.href='{{ route('formulaire_service',['id_service'=>$service->id]) }}'"
+                                        onclick="window.location.href='{{ route('personnel_formulaire',['id_user'=>$personnel->utilisateur->id]) }}'"
                                         class="p-2 hover:bg-surface-container-high rounded-lg text-on-surface-variant transition-colors">
                                         <span class="material-symbols-outlined text-xl" data-icon="edit">edit</span>
                                     </button>
-                                     <form action="{{route('supprimer_service',['id_service'=>$service->id])}}" method="POST">
+                                     <form action="{{ route('supprimer_personnel',['id_user'=>$personnel->utilisateur->id]) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
@@ -110,7 +110,7 @@
         <!-- Pagination Footer -->
         <div
             class="px-8 py-6 bg-surface-container-low/10 flex items-center justify-between border-t border-surface-container-low">
-            {{ $services->links() }}
+            {{ $personnels->links() }}
         </div>
     </div>
     </div>
