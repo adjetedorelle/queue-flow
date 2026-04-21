@@ -96,32 +96,42 @@
 
 <body class="bg-surface text-on-surface font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
     <!-- TopAppBar -->
-    <header class="w-full sticky top-0 z-50 bg-[#faf9fe] dark:bg-slate-950 transition-all duration-300 ease-in-out">
-        <nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
-            <div class="flex items-center gap-2">
-                <span class="material-symbols-outlined text-[#002B5B] dark:text-blue-400" data-icon="layers">layers</span>
-                <span class="text-2xl font-black font-headline tracking-tight">
-                    <span class="text-[#002B5B] dark:text-blue-400">Queue</span><span class="text-[#FF6B00]">Flow</span>
-                </span>
-            </div>
-            <div class="hidden md:flex gap-8 items-center">
-                <a class="text-[#002B5B] dark:text-blue-300 font-bold border-b-2 border-[#002B5B] font-headline text-sm" href="/">Acceuil</a>
-                <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 transition-colors font-headline text-sm" href="{{ route('entreprises_disponibles') }}">Entreprises</a>
-                <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 transition-colors font-headline text-sm" href="/contactez-nous">Contactez-nous</a>
-                @auth
-                <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 transition-colors font-headline text-sm" href="#">Profile</a>
-                 @endauth
-                @guest
-               <a class="text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 transition-colors font-headline text-sm" href="{{route('login')}}">Se connecter</a>  
-                @endguest
-              
+   <header class="w-full sticky top-0 z-50 bg-[#faf9fe] dark:bg-slate-950 transition-all duration-300 ease-in-out">
+    <nav class="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#002B5B] dark:text-blue-400" data-icon="layers">layers</span>
+            <span class="text-2xl font-black font-headline tracking-tight">
+                <span class="text-[#002B5B] dark:text-blue-400">Queue</span><span class="text-[#FF6B00]">Flow</span>
+            </span>
+        </div>
 
-            </div>
-            <button class="md:hidden text-[#002B5B]">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-        </nav>
-    </header>
+        <div class="hidden md:flex gap-8 items-center">
+
+            @php
+                $navItem = fn($active) => $active
+                    ? 'text-[#002B5B] dark:text-blue-400 font-bold border-b-2 border-[#002B5B] dark:border-blue-400 font-headline text-sm'
+                    : 'text-slate-600 dark:text-slate-400 font-medium hover:text-[#002B5B] dark:hover:text-blue-300 hover:border-b-2 hover:border-[#002B5B] transition-colors font-headline text-sm';
+            @endphp
+
+            <a class="{{ $navItem(request()->is('/')) }}" href="/">Accueil</a>
+            <a class="{{ $navItem(request()->routeIs('entreprises_disponibles')) }}" href="{{ route('entreprises_disponibles') }}">Entreprises</a>
+            <a class="{{ $navItem(request()->is('contactez-nous')) }}" href="/contactez-nous">Contactez-nous</a>
+
+            @auth
+                <a class="{{ $navItem(request()->is('profile')) }}" href="#">Profile</a>
+            @endauth
+
+            @guest
+                <a class="bg-primary px-6 py-2 rounded-xl text-white font-bold hover:bg-primary-container transition-all" href="{{ route('connexion_client') }}">Login</a>
+            @endguest
+
+        </div>
+
+        <button class="md:hidden text-[#002B5B]">
+            <span class="material-symbols-outlined">menu</span>
+        </button>
+    </nav>
+</header>
     <main>
         @yield('content')
     </main>
@@ -141,17 +151,7 @@
                     Simplifiez la gestion des files d’attente dans les banques, universités, administrations et autres services à forte affluence.
                 </p>
 
-                <div class="flex gap-4 mt-6">
-                    <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#FF6B00] transition">
-                        <i class="fab fa-facebook-f text-sm"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#FF6B00] transition">
-                        <i class="fab fa-instagram text-sm"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center hover:bg-[#FF6B00] transition">
-                        <i class="fab fa-linkedin-in text-sm"></i>
-                    </a>
-                </div>
+                
             </div>
 
             <!-- Navigation rapide -->
@@ -173,7 +173,6 @@
                     <li>Banques et microfinances</li>
                     <li>Universités et écoles</li>
                     <li>Administrations publiques</li>
-                    <li>Hôpitaux et cliniques</li>
                     <li>Agences télécoms</li>
                 </ul>
             </div>
@@ -188,7 +187,7 @@
                     </p>
                     <p class="flex items-start gap-3">
                         <span class="material-symbols-outlined text-[#FF6B00] text-lg">call</span>
-                        +229 01 00 00 00 00
+                        +229 01 97 05 71 49 | +229 01 62 69 66 46
                     </p>
                     <p class="flex items-start gap-3">
                         <span class="material-symbols-outlined text-[#FF6B00] text-lg">location_on</span>

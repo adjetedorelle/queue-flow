@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Entreprise;
+use App\Models\FileAttente;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -96,7 +98,7 @@ class EntrepriseController extends Controller
       
     }
     public function afficher () {
-         $entreprises = Entreprise::paginate(6) ;
+         $entreprises = Entreprise::where('statut', '=' , 'actif')->paginate(6) ;
         return view('entreprises.disponibles',compact('entreprises'));
     }
 
@@ -112,5 +114,36 @@ class EntrepriseController extends Controller
 
     return redirect()->back()->with('success', 'Entreprise supprimée avec succès.');
 } 
-    
+ 
+public function toggleStatut($id_entreprise)
+{
+    $entreprise = Entreprise::findOrFail($id_entreprise);
+    $entreprise->statut = $entreprise->statut === 'actif' ? 'suspendu' : 'actif';
+    $entreprise->save();
+
+    return back()->with('success', 'Statut mis à jour avec succès.');
+}
+public function filesActives () {
+    $user_connectee = auth()->user();
+    if ($user_connectee -> role === 'personnel') {
+       $services=Service::WHERE('entreprise_id','=',$user_connectee ->entreprise_id)->get(['id']);
+       $files=FileAttente::WHEREIN('service_id',$services)->paginate(6);
+    }
+
+    if ($user_connectee -> role === 'admin') {
+    $admin=Admin::WHERE('utilisateur_id','=',$user_connectee->id)->first();
+    $entreprise = Entreprise::WHERE('admin_id','=',$admin->id)->first();
+    $services=Service::WHERE('entreprise_id','=',$entreprise->id)->get(['id']);
+    $files=FileAttente::WHEREIN('service_id',$services)->paginate(6);
+
+   }
+   
+    if ($user_connectee -> role === 'super-admin') {
+     $files=FileAttente::paginate(6);
+     
+    }
+    return view('entreprises.files_disponibles', compact('files'));
+   
+}
+   
 }

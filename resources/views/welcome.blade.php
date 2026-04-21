@@ -19,11 +19,11 @@
             <div class="relative">
                 <div class="absolute -top-12 -right-12 w-64 h-64 bg-tertiary-fixed/30 rounded-full blur-3xl"></div>
                 <div
-                    class="relative rounded-[2rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
-                    <img class="w-full h-[500px] object-cover"
-                        data-alt="modern tech-savvy person using a smartphone in a bright airy lobby to check a digital ticket queue system"
-                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3wuFC3Q7esauiG4ySnD0TX9fz373LDe4ICHmTeeyEOr3udIUXAKgKSZWNxai7ZfHFjKWiueWfQM2DbyHlizr4Uww7kRXiXP-B24Q7Y65uN1wP5BwvOvhZYG_kv0clAuuXdhkjFaGK0VDVZNboqE9rLXQMBZM8N_w5iHgVjhcHE33x0OgqaDYpFxchZYWrFEeN-KRgHu-wEyT-IElzhjjtn2ZOMyFHYDTbyIUeJj_YprlALEBJ-DQhJqzMc-zfU566WztNXRrYYDs" />
-                    <div class="absolute bottom-6 left-6 right-6 glass-nav p-6 rounded-2xl shadow-xl">
+                   class="relative rounded-[2rem] overflow-hidden shadow-2xl">
+                    <img class="w-full h-[600px] object-cover"
+                           src="{{ asset('images/image_acceuil.jpeg') }}"
+                         alt="Description de ton image" />
+                    <div class="absolute bottom-2 left-6 right-6 glass-nav p-4 rounded-2xl shadow-xl">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-sm font-bold text-primary">Votre Position</span>
                             <span class="text-xs text-on-surface-variant">Ticket #A242</span>
@@ -187,7 +187,7 @@
                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHOR8BOedAC6B7bJ65SnoetkibytrVVkedfxhEzbyg422-aJSfDvf311glZujT7aHEeb2UNaNZpwKtnEmyPmS0YLYaj3TcSoKh0YO2Fl0XwZqR33iryJ3kbjRDwLXVB6P4HomJVUrpjHL2epntSUQZ0-0XcAc_5fv5gV03NoMTUvTOsDhoRWDS5R4evB76Witb11kGqvutALb0mAjsbfiWVQeeWi1-qn-1rrG4O8IpwhqGnI-mUCHHFYO92dkiy8DOSyGLPOY0jnU" />
                         </div>
                         <div>
-                            <div class="font-bold text-primary">Jean Dupont</div>
+                            <div class="font-bold text-primary"> Mr Jean CODJO</div>
                             <div class="text-xs text-on-surface-variant">Dir. Banque Centrale</div>
                         </div>
                     </div>
@@ -209,7 +209,7 @@
                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCIIN-XujVrnOHt5mbxKDA9d8kjg3DlFbnotxuySurh7DgU5er5E-GgUkV9oNoii9osguCdj4kPK4nKori4HcBfE7Ad-kvhtqIXTKsPhB4vZz7h7nGgU6TR-mwIHp20nkozrP8O4ZFBpyNm3GiuOl8op5qYd3pY2EWsGJdVOY0v0bs25rZo7ikgP9pO8mWhNZuUAdw7u5PMx7LaKAE8tOqK1Iu9DdnKaVBul2JGHUn73vkr5KlHgzJ69JHc_jnSw6JRJ-1_mWcnPM" />
                         </div>
                         <div>
-                            <div class="font-bold text-primary">Marie Leroux</div>
+                            <div class="font-bold text-primary"> Mme Marie DOSSOU</div>
                             <div class="text-xs text-on-surface-variant">Responsable Académique</div>
                         </div>
                     </div>
@@ -222,8 +222,8 @@
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
                         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">star</span>
                     </div>
-                    <p class="text-on-surface mb-8 italic leading-relaxed">"Enfin une solution simple et efficace. Nos
-                        patients apprécient de pouvoir attendre dans leur voiture ou au café d'à côté."</p>
+                    <p class="text-on-surface mb-8 italic leading-relaxed">“Une vraie amélioration dans la gestion de nos usagers. Ils n’ont plus besoin de faire
+                         la queue physiquement, ils peuvent patienter librement et être appelés à distance.”</p>
                     <div class="flex items-center gap-4">
                         <div class="w-12 h-12 rounded-full bg-surface-container overflow-hidden">
                             <img class="w-full h-full object-cover"
@@ -231,8 +231,8 @@
                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqYZv4Q1POEiuZiTH1g4gfBYXApapWomuelv9YCO4efcYLZoXkMxqVche7R6GuMgUQHmiYcaGwWRAOwPsVphxoTAQrHt2NQBGyox06vSoD4RdMYDagI_rlRcArjMOSk60r-ptQgaykkHCP9oURpSHXNivTCeFcd63W9e2lO_VGMI12BHxrX24lo1_xeZAfz7aQwS9ydYS1ZCn6iSCdF6xB8ggPRRUCZ1H5rKBbARI1hde2KEC_NKj8fQ2wIzyTnNb44VlUEwIN38w" />
                         </div>
                         <div>
-                            <div class="font-bold text-primary">Dr. Ahmed Benali</div>
-                            <div class="text-xs text-on-surface-variant">Directeur Clinique</div>
+                            <div class="font-bold text-primary">Mr Francis Koutouan</div>
+                            <div class="text-xs text-on-surface-variant">Responsable du service accueil – Mairie de service public </div>
                         </div>
                     </div>
                 </div>
@@ -258,18 +258,26 @@
                         <span>L'application est-elle gratuite pour les clients ?</span>
                         <span class="material-symbols-outlined text-outline">expand_more</span>
                     </button>
+                    <p class="mt-4 text-sm text-on-surface-variant leading-relaxed">l’utilisation de la plateforme est entièrement gratuite pour les clients. Vous pouvez consulter les 
+                        entreprises disponibles, choisir un service et prendre un ticket sans aucun frais. Notre objectif 
+                        est de vous offrir une expérience simple, rapide et accessible, afin de réduire votre temps d’attente
+                         et faciliter vos démarches au quotidien.</p>
                 </div>
                 <div class="bg-surface-container-low rounded-2xl p-6 transition-all hover:bg-surface-container">
                     <button class="flex justify-between items-center w-full text-left font-bold text-primary">
                         <span>Puis-je annuler mon ticket ?</span>
                         <span class="material-symbols-outlined text-outline">expand_more</span>
                     </button>
+                    <p class="mt-4 text-sm text-on-surface-variant leading-relaxed">Oui, vous avez la possibilité d’annuler votre ticket à tout moment tant qu’il n’a pas encore été appelé ou traité. Cette option vous permet de libérer votre place
+                         dans la file d’attente si vous n’êtes plus disponible, afin de mieux organiser le passage des autres clients.</p>
                 </div>
                 <div class="bg-surface-container-low rounded-2xl p-6 transition-all hover:bg-surface-container">
                     <button class="flex justify-between items-center w-full text-left font-bold text-primary">
                         <span>Quelles entreprises utilisent QueueFlow ?</span>
                         <span class="material-symbols-outlined text-outline">expand_more</span>
                     </button>
+                    <p class="mt-4 text-sm text-on-surface-variant leading-relaxed">QueueFlow est utilisé par plusieurs types d’entreprises comme les banques, les administrations, les universités ou encore les centres de services. Notre objectif est d’aider ces structures à mieux organiser leurs files d’attente et à offrir une expérience 
+                        plus rapide et fluide à leurs clients.</p>
                 </div>
             </div>
         </div>

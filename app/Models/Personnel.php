@@ -18,5 +18,7 @@ class Personnel extends Model
         'entreprise_id'
         
     ];
-
+     public function utilisateur () {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -40,11 +40,38 @@ class ServiceController extends Controller
     
     public function listes()
     {     
-    
         $services = Service::paginate(10) ;
-        return view('services.tableauService',compact('services'));
-    
-        return view('services.tableauService');
+        return view('services.tableauService',compact('services'));  
     }
 
+     public function modifier ($id_service) {
+       $service = Service::where('id', '=',$id_service)->first();
+        return view('services.formulaire_modification', compact('service'));
+     }
+
+     public function mettreAjour(Request $request , $id_service) {
+        $request->validate([
+            'libelle'=> 'string|required|max:100',
+            'temps_estime'=> 'string|required|max:50',    
+        ]);
+       $service = Service::where('id', '=',$id_service)->first();
+       $service->update([
+          'libelle'=>$request->libelle,
+          'temps_estime'=>$request->temps_estime
+       ]);
+
+    return redirect(route('service_liste') );
+
+     }
+
+     public function supprimer($id_service){
+        $service = Service::where('id', '=',$id_service)->first();
+        $service->delete();
+        return redirect()->back();
+     }
+
+     public function servicedispo ($id_entreprise) {
+        $services=Service::WHERE('entreprise_id','=',$id_entreprise)->get();
+        return view('services.services_dispo', compact('services'));
+     }
 }
