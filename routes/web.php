@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\EntrepriseController;
+use App\Http\Controllers\FileController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +56,9 @@ Route::get('entreprises_disponibles',[EntrepriseController::class, 'afficher'])
 Route::delete('supprimer_entreprise/{id_entreprise}',[EntrepriseController::class, 'supprimer'])
 ->middleware(['auth', 'verified'])->name('supprimer_entreprises');
 
+Route::patch('modifier_statut/{id_entreprise}',[EntrepriseController::class, 'toggleStatut'])
+->middleware(['auth', 'verified'])->name('modifier_statut_entreprise');
+
 Route::get('ajouter_service',[ServiceController::class, 'ajoutService'])
 ->middleware(['auth', 'verified'])->name('service_ajout');
 
@@ -72,6 +77,9 @@ Route::put('modifier_service/{id_service}',[ServiceController::class,'mettreAjou
 Route::delete('supprimer_service/{id_service}',[ServiceController::class,'supprimer'])
 ->middleware(['auth', 'verified'])->name('supprimer_service');
 
+ Route::get('services_disponibles/{id_entreprise}',[ServiceController::class, 'servicedispo'])
+->middleware(['auth', 'verified'])->name('services_disponibles');
+
 Route::get('ajouter_personnel',[PersonnelController::class, 'ajoutPersonnel'])
 ->middleware(['auth', 'verified'])->name('ajouter_personnel');
 
@@ -80,7 +88,6 @@ Route::post('enregistrer_personnel',[PersonnelController::class, 'enregistrerPer
 
 Route::get('liste_personnel',[PersonnelController::class, 'listePersonnel'])
 ->middleware(['auth', 'verified'])->name('liste_personnel');
-
 
 Route::get('personnel_formulaire/{id_user}',[PersonnelController::class, 'modifier'])
 ->middleware(['auth', 'verified'])->name('personnel_formulaire');
@@ -91,14 +98,14 @@ Route::put('modifier_personnel/{id_user}',[PersonnelController::class, 'mettreAj
 Route::delete('supprimer_personnel/{id_user}',[PersonnelController::class,'supprimer'])
 ->middleware(['auth', 'verified'])->name('supprimer_personnel');
 
- Route::get('services_disponibles/{id_entreprise}',[ServiceController::class, 'servicedispo'])
-->middleware(['auth', 'verified'])->name('services_disponibles');
-
-Route::patch('modifier_statut/{id_entreprise}',[EntrepriseController::class, 'toggleStatut'])
-->middleware(['auth', 'verified'])->name('modifier_statut_entreprise');
-
- Route::get('files_disponibles',[EntrepriseController::class, 'filesActives'])
+ Route::get('files_disponibles',[FileController::class, 'filesActives'])
 ->middleware(['auth', 'verified'])->name('files_disponibles');
+
+Route::get('tickets_disponibles',[TicketController::class, 'ticketsdispo'])
+->middleware(['auth', 'verified'])->name('tickets_disponibles');
+
+Route::get('tickets_en_attente/{id_service}',[TicketController::class, 'ticketsEnAttente'])
+->middleware(['auth', 'verified'])->name('tickets_en_attente');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
