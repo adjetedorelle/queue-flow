@@ -18,7 +18,7 @@ class FileAttente extends Model
      */
     protected $fillable = [
         'date',
-        'nbre_client_restant',
+        'nb_client_restant',
         'nb_total',
         'statut',
         'service_id',     

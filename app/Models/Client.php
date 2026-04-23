@@ -26,4 +26,8 @@ class Client extends Model
        public function notifications (){
         return $this->hasMany(Notification::class);
        }
+
+        public function utilisateur () {
+        return $this->belongsTo(User::class);
+    }
 }

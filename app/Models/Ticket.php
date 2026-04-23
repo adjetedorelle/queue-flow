@@ -23,4 +23,11 @@ class Ticket extends Model
         'client_id',
         'service_id'	    
     ];
+    public function service () {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function client () {
+        return $this->belongsTo(Client::class);
+    }
 }

@@ -22,7 +22,7 @@
             <span class="font-manrope text-sm font-medium tracking-tight">Dashboard</span>
         </a>
 
-        <a class="{{ $navLink(request()->routeIs('tickets*')) }}" href="#">
+        <a class="{{ $navLink(request()->routeIs('tickets_disponibles*')) }}" href="{{ route('tickets_disponibles') }}">
             <span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Tickets</span>
         </a>
