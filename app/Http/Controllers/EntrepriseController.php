@@ -127,8 +127,5 @@ public function toggleStatut($id_entreprise)
 }
 
 
-
-
-
    
 }

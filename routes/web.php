@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConnexionClientController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\PersonnelController;
@@ -78,7 +79,7 @@ Route::delete('supprimer_service/{id_service}',[ServiceController::class,'suppri
 ->middleware(['auth', 'verified'])->name('supprimer_service');
 
  Route::get('services_disponibles/{id_entreprise}',[ServiceController::class, 'servicedispo'])
-->middleware(['auth', 'verified'])->name('services_disponibles');
+->name('services_disponibles');
 
 Route::get('ajouter_personnel',[PersonnelController::class, 'ajoutPersonnel'])
 ->middleware(['auth', 'verified'])->name('ajouter_personnel');
@@ -104,8 +105,20 @@ Route::delete('supprimer_personnel/{id_user}',[PersonnelController::class,'suppr
 Route::get('tickets_disponibles',[TicketController::class, 'ticketsdispo'])
 ->middleware(['auth', 'verified'])->name('tickets_disponibles');
 
-Route::get('tickets_en_attente/{id_service}',[TicketController::class, 'ticketsEnAttente'])
+Route::get('tickets_en_attente/{id_service}',[TicketController::class, 'ticketsNonTraites'])
 ->middleware(['auth', 'verified'])->name('tickets_en_attente');
+
+Route::get('formulaire_date',[TicketController::class, 'formulaireDate'])
+->name('formulaire_date');
+
+Route::post('page_otp',[ConnexionClientController::class, 'connexionClient'])
+->name('page_otp');
+
+Route::get('page_ticket',[TicketController::class, 'pageTicket'])
+->name('page_ticket');
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

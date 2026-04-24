@@ -118,7 +118,7 @@
             <header class="mb-12 space-y-2">
                 
                 <h1 class="text-4xl font-extrabold tracking-tight text-on-surface lg:text-5xl">
-                    Files d’attente-
+                    Files d’attentes
                 </h1>
                 <p class="text-lg text-on-surface-variant max-w-2xl font-medium">
                     Suivez et gérez les files d’attente des services de l’entreprise en temps réel. Optimisez le flux et
@@ -253,7 +253,7 @@
                                     <div class="flex items-center justify-end gap-2">
                                         <button
                                             class="p-2 rounded-md hover:bg-surface-container-high text-tertiary transition-colors"
-                                            title="Consulter">
+                                            title="Consulter" onclick="window.location.href='{{ route('tickets_en_attente', ['id_service' => $file->service_id]) }}'">
                                             <span class="material-symbols-outlined">visibility</span>
                                         </button>
                                         <button class="p-2 rounded-md hover:bg-error/10 text-error transition-colors"

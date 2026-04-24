@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 
-<html class="h-full" lang="fr"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>QueueFlow | Connexion Client</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script id="tailwind-config">
+<html class="h-full" lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>QueueFlow | Connexion Client</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",
             theme: {
@@ -77,106 +84,116 @@
             }
         }
     </script>
-<style>
+    <style>
         body {
             font-family: 'Manrope', sans-serif;
-            background-color: #0B1C2C; /* Request mandated specific color */
+            background-color: #faf9fe;
+            /* Request mandated specific color */
         }
+
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+
         .input-group:focus-within label {
             color: #f97316;
         }
+
         .input-group:focus-within .material-symbols-outlined {
             color: #f97316;
         }
+
         .animate-fade-in {
             animation: fadeIn 0.8s ease-out forwards;
         }
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
-<style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
-  </head>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
 <body class="flex items-center justify-center min-h-screen p-6">
-<!-- Login Container -->
-<div class="w-full max-w-md animate-fade-in">
-<div class="bg-surface-container-lowest rounded-xl shadow-2xl overflow-hidden">
-<!-- Form Header & Decorative Icon -->
-<div class="p-8 pb-4 text-center">
-<div class="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-surface-container-low text-primary-container">
-<span class="material-symbols-outlined text-4xl" data-icon="confirmation_number">confirmation_number</span>
-</div>
-<h1 class="text-on-surface text-3xl font-bold tracking-tight mb-2">Connexion client</h1>
-<p class="text-on-surface-variant text-sm font-medium">Veuillez entrer vos informations pour continuer</p>
-</div>
-<!-- Form Body -->
-<form action="#" class="p-8 pt-4 space-y-6" method="POST">
-<!-- Input: Nom -->
-<div class="input-group relative">
-<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1" for="last_name">
-                        Nom <span class="text-primary">*</span>
-</label>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="person">person</span>
-</div>
-<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container" id="last_name" name="last_name" placeholder="Ex: Martin" required="" type="text"/>
-</div>
-</div>
-<!-- Input: Prénom -->
-<div class="input-group relative">
-<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1" for="first_name">
-                        Prénom <span class="text-primary">*</span>
-</label>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="person_outline">person_outline</span>
-</div>
-<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container" id="first_name" name="first_name" placeholder="Ex: Jean" required="" type="text"/>
-</div>
-</div>
-<!-- Input: Téléphone -->
-<div class="input-group relative">
-<label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1" for="phone">
-                        Numéro de téléphone <span class="text-primary">*</span>
-</label>
-<div class="relative group">
-<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200">
-<span class="material-symbols-outlined text-on-surface-variant" data-icon="phone">phone</span>
-</div>
-<input class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container" id="phone" name="phone" placeholder="06 12 34 56 78" required="" type="tel"/>
-</div>
-</div>
-<!-- Privacy Mention -->
-<p class="text-[10px] text-center text-on-surface-variant leading-relaxed px-4">
-                    En continuant, vous acceptez notre politique de gestion des files d'attente et le traitement de vos données personnelles.
+    <!-- Login Container -->
+    <div class="w-full max-w-md animate-fade-in">
+        <div class="bg-surface-container-lowest rounded-xl shadow-2xl overflow-hidden">
+            <!-- Form Header & Decorative Icon -->
+            <div class="p-8 pb-4 text-center">
+                <div
+                    class="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-surface-container-low text-primary-container">
+                    <span class="material-symbols-outlined text-4xl"
+                        data-icon="confirmation_number">confirmation_number</span>
+                </div>
+                <h1 class="text-on-surface text-3xl font-bold tracking-tight mb-2">Connexion client</h1>
+                <p class="text-on-surface-variant text-sm font-medium">Veuillez entrer vos informations pour continuer
                 </p>
-<!-- Submit Button -->
-<div class="pt-2">
-<button class="group relative w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-md text-sm font-extrabold text-white bg-gradient-to-br from-primary to-primary-container hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-primary-container/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container active:scale-95" type="submit">
-<span class="mr-2">Obtenir mon ticket</span>
-<span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform" data-icon="arrow_forward">arrow_forward</span>
-</button>
-</div>
-</form>
-<!-- Footer Graphic (Abstract) -->
-<div class="h-2 w-full bg-gradient-to-r from-transparent via-primary-container to-transparent opacity-20"></div>
-</div>
-<!-- Branding Branding -->
-<div class="mt-8 text-center flex flex-col items-center gap-2">
-<div class="flex items-center gap-2">
-<span class="text-[#F97316] font-extrabold text-2xl tracking-tighter">QueueFlow</span>
-<span class="w-1.5 h-1.5 bg-[#F97316] rounded-full mt-1"></span>
-</div>
-<p class="text-slate-500 text-xs font-medium tracking-wide">L'excellence de l'attente digitalisée</p>
-</div>
-</div>
-</body></html>
+            </div>
+            <!-- Form Body -->
+            <form action="{{route('page_otp')}}" class="p-8 pt-4 space-y-6" method="POST">@csrf
+                
+                <!-- Input: Téléphone -->
+                <div class="input-group relative">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1"
+                        for="phone">
+                        Numéro de téléphone <span class="text-primary">*</span>
+                    </label>
+                    <div class="relative group">
+                        <div
+                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200">
+                            <span class="material-symbols-outlined text-on-surface-variant"
+                                data-icon="phone">phone</span>
+                        </div>
+                        <input
+                            class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container"
+                            id="phone" name="tel" placeholder="06 12 34 56 78" required="" type="tel" />
+                    </div>
+                    
+                </div>
+
+                <div class="input-group relative">
+                    <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1"
+                        for="phone">
+                        Email <span class="text-primary">*</span>
+                    </label>
+                    <div class="relative group">
+                        <div
+                            class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200">
+                            <span class="material-symbols-outlined text-on-surface-variant"
+                                data-icon="email">email</span>
+                        </div>
+                        <input
+                            class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container"
+                            id="phone" name="tel" placeholder="email@example.com" required="" type="email" />
+                    </div>
+                    
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="pt-2">
+                    <button
+                        class="group relative w-full flex justify-center items-center py-4 px-6 border border-transparent rounded-md text-sm font-extrabold text-white bg-gradient-to-br from-primary to-primary-container hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-primary-container/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-container active:scale-95"
+                        type="submit">
+                        <span class="mr-2">Valider</span>
+                        <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform"
+                            data-icon="arrow_forward">arrow_forward</span>
+                    </button>
+                </div>
+            </form>
+            
+    </div>
+</body>
+
+</html>

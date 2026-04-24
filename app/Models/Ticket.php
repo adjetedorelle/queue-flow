@@ -21,7 +21,8 @@ class Ticket extends Model
         'date_debut_traitement	', 
         'date_fin_traitement',
         'client_id',
-        'service_id'	    
+        'service_id',
+        'personnel_id'	    
     ];
     public function service () {
         return $this->belongsTo(Service::class);
@@ -30,4 +31,9 @@ class Ticket extends Model
     public function client () {
         return $this->belongsTo(Client::class);
     }
+
+    public function personnel () {
+        return $this->belongsTo(Personnel::class);
+    }
 }
+
