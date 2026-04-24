@@ -39,8 +39,15 @@ class ServiceController extends Controller
     }
     
     public function listes()
-    {     
-        $services = Service::paginate(10) ;
+    {   
+        $user = auth() -> user(); 
+        if ($user->role === 'admin') {
+            $admin = Admin::WHERE('utilisateur_id','=',$user->id) ->first();
+            $entreprise = Entreprise::WHERE('admin_id','=',$admin->id) ->first();
+            $services = Service::WHERE('entreprise_id','=',$entreprise->id)->paginate(10) ;
+        } else {
+             $services = Service::paginate(10) ;
+        } 
         return view('services.tableauService',compact('services'));  
     }
 

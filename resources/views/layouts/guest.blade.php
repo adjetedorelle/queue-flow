@@ -97,26 +97,23 @@
         }
 
         .bg-login-hero {
-            background-image: linear-gradient(135deg, rgba(0, 23, 54, 0.85) 0%, rgba(0, 43, 91, 0.7) 100%), url(https://lh3.googleusercontent.com/aida-public/AB6AXuDiwxCt3P3Hneq-WO7AcbYkwbcALCpqDiPx1Rk1CxLNhIU3vp_CcI1vanLmDUI03M9tcySQnjax8UkvUqGTN3rNEF0RALcYOYFu7fZTK65FGDNbAt8d5hyfoWDqRzwpiClHZ57OE4-qWQHK0r4ZLMFwayV7SuztoPP-2zWDoSaWBWPyLIX_0YbiraHTDi1prlxJp594XzL-X4-RX9HijmvvtjwV_OpSngRjw91Wg1I151_KYRMI9ZSH13mYMmfqsg_CA8BHJhv9ABo);
-            background-size: cover;
-            background-position: center
-        }
+        background-image:  url('/images/connexion.jpeg');
+        background-size: cover;
+        background-position: center;
+    }
     </style>
 </head>
 
 <body class="bg-surface font-body text-on-surface antialiased overflow-hidden">
     <!-- Header Navigation (Simplified for Transactional Page) -->
     <header class="absolute top-0 w-full flex justify-between items-center px-8 py-6 z-50">
-        <div
-            class="text-2xl font-headline font-extrabold tracking-tight text-white md:text-blue-900 dark:md:text-blue-50">
-            QueueFlow
+        <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#002B5B] dark:text-blue-400" data-icon="layers">layers</span>
+            <span class="text-2xl font-black font-headline tracking-tight">
+                <span class="text-[#002B5B] dark:text-blue-400">Queue</span><span class="text-[#FF6B00]">Flow</span>
+            </span>
         </div>
-        <div class="hidden md:flex space-x-4">
-            <button
-                class="font-label text-xs uppercase tracking-widest text-slate-500 hover:text-blue-700 transition-colors">
-                Support
-            </button>
-        </div>
+        
     </header>
     <main class="flex h-screen w-full">
         <!-- Left Side: Visual/Editorial Content -->
@@ -157,6 +154,4 @@
             © 2024 QueueFlow Systems
         </p>
     </footer>
-</body>
 
-</html>

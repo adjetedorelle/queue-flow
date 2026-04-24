@@ -21,4 +21,8 @@ class Personnel extends Model
      public function utilisateur () {
         return $this->belongsTo(User::class);
     }
+
+    public function tickets () {
+        return $this->hasMany(Ticket::class);
+    }
 }
