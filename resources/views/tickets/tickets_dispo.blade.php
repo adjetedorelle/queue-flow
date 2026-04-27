@@ -102,6 +102,7 @@
             min-height: max(884px, 100dvh);
         }
     </style>
+
     <body class="text-on-surface antialiased">
         <main class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
             <!-- Header Section -->
@@ -116,30 +117,29 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <div class="relative group">
-                        <span
-                            class="absolute inset-y-0 left-3 flex items-center text-on-surface-variant group-focus-within:text-primary transition-colors">
-                            <span class="material-symbols-outlined text-[20px]">search</span>
-                        </span>
-                        <input
-                            class="pl-10 pr-4 py-2.5 bg-surface-container-low border-none rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all w-full md:w-64 text-sm font-medium"
-                            placeholder="Rechercher un ticket..." type="text" />
+
+
                     </div>
-                    
+
                 </div>
             </div>
             <!-- Content Card -->
-            <div
-                class="bg-surface-container-lowest rounded-xl shadow-[0_20px_50px_rgba(12,29,45,0.08)] overflow-hidden">
+            <div class="bg-surface-container-lowest rounded-xl shadow-[0_20px_50px_rgba(12,29,45,0.08)] overflow-hidden">
                 <!-- Table Controls / Filters -->
                 <div class="px-8 py-6 flex items-center justify-between border-b border-surface-container-low">
                     <div class="flex items-center gap-6 overflow-x-auto no-scrollbar">
-                        <button
-                            class="text-primary font-bold border-b-2 border-primary pb-1 text-sm whitespace-nowrap">Tous
-                            les tickets</button>
-                        <button
-                            class="text-on-surface-variant hover:text-on-surface font-medium pb-1 text-sm transition-colors whitespace-nowrap">Aujourd'hui</button>
-                        <button
-                            class="text-on-surface-variant hover:text-on-surface font-medium pb-1 text-sm transition-colors whitespace-nowrap">Prioritaires</button>
+                        <a href="{{ route('tickets_disponibles', ['filtre' => 'tous']) }}"
+                            class="{{ $filtre === 'tous' ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-surface-variant hover:text-on-surface font-medium' }} pb-1 text-sm whitespace-nowrap transition-colors">
+                            Tous les tickets
+                        </a>
+                        <a href="{{ route('tickets_disponibles', ['filtre' => 'aujourd_hui']) }}"
+                            class="{{ $filtre === 'aujourd_hui' ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-surface-variant hover:text-on-surface font-medium' }} pb-1 text-sm whitespace-nowrap transition-colors">
+                            Aujourd'hui
+                        </a>
+                        <a href="{{ route('tickets_disponibles', ['filtre' => 'prioritaires']) }}"
+                            class="{{ $filtre === 'prioritaires' ? 'text-primary font-bold border-b-2 border-primary' : 'text-on-surface-variant hover:text-on-surface font-medium' }} pb-1 text-sm whitespace-nowrap transition-colors">
+                            Prioritaires
+                        </a>
                     </div>
                     <div
                         class="hidden sm:flex items-center gap-2 text-on-surface-variant text-sm font-semibold uppercase tracking-wider">
@@ -177,106 +177,91 @@
                         </thead>
                         <tbody class="divide-y divide-surface-container-low">
                             @foreach ($tickets as $ticket)
-                                
-                            
-                            <tr class="group hover:bg-surface-container-low/30 transition-all cursor-pointer">
-                                <td class="px-8 py-6">
-                                    <span
-                                        class="font-bold text-on-surface bg-surface-container-high px-3 py-1.5 rounded-lg text-sm">{{$ticket->numero}}</span>
-                                </td>
-                                <td class="px-6 py-6">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+
+
+                                <tr class="group hover:bg-surface-container-low/30 transition-all cursor-pointer">
+                                    <td class="px-8 py-6">
+                                        <span
+                                            class="font-bold text-on-surface bg-surface-container-high px-3 py-1.5 rounded-lg text-sm">{{ $ticket->numero }}</span>
+                                    </td>
+                                    <td class="px-6 py-6">
+                                        <div class="flex items-center gap-3">
+                                            <div
+                                                class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-on-surface">
+                                                    {{ $ticket->client->utilisateur->nom }}</div>
+                                                <div class="text-xs text-on-surface-variant font-medium">
+                                                    {{ $ticket->client->utilisateur->prenom }}</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div class="font-bold text-on-surface">{{$ticket->client->utilisateur->nom}}</div>
-                                            <div class="text-xs text-on-surface-variant font-medium">{{$ticket->client->utilisateur->prenom}}</div>
+                                    </td>
+                                    <td class="px-6 py-6">
+                                        <span class="flex items-center gap-2 text-sm font-semibold text-on-surface">
+                                            <span
+                                                class="material-symbols-outlined text-primary text-[18px]">payments</span>
+                                            {{ $ticket->service->libelle }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-6">
+                                        @if ($ticket->statut === 'en_cours')
+                                            <span
+                                                class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">
+                                                <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+                                                {{ $ticket->statut }}
+                                            </span>
+                                        @else
+                                            @if ($ticket->statut === 'en_attente')
+                                                <span
+                                                    class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">
+                                                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                                    {{ $ticket->statut }}
+                                                </span>
+                                            @else
+                                                @if ($ticket->statut === 'traite')
+                                                    <span
+                                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-50 text-green-600 border border-green-100">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>
+                                                        {{ $ticket->statut }}
+                                                    </span>
+                                                @else
+                                                    <span
+                                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-600 border border-red-100">
+                                                        <span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+                                                        {{ $ticket->statut }}
+                                                    </span>
+                                                @endif
+                                            @endif
+                                        @endif
+
+                                    </td>
+                                    <td class="px-6 py-6 text-center">
+                                        <div class="text-sm font-bold text-on-surface">14:30</div>
+                                        <div class="text-[10px] text-on-surface-variant font-medium">
+                                            {{ $ticket->statut }}</div>
+                                    </td>
+                                    <td class="px-6 py-6 text-center">
+                                        <div class="text-xs font-bold text-on-surface">
+                                            {{ $ticket->date_debut_traitement }}-{{ $ticket->date_fin_traitement }}
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-6">
-                                    <span class="flex items-center gap-2 text-sm font-semibold text-on-surface">
-                                        <span class="material-symbols-outlined text-primary text-[18px]">payments</span>
-                                        {{$ticket->service->libelle}}
-                                    </span>
-                                </td>
-                                <td class="px-6 py-6">
-                                    @if ($ticket->statut === 'en_cours')
-                                      <span
-                                        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-600 border border-blue-100">
-                                        <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
-                                        {{$ticket->statut}}
-                                      </span>   
-                                    @else
-                                      @if ($ticket->statut === 'en_attente')
-                                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-500 border border-slate-200">
-                                          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
-                                           {{$ticket->statut}}
-                                       </span>     
-                                       @else
-                                       @if ($ticket->statut === 'traite')
-                                          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-green-50 text-green-600 border border-green-100">
-                                              <span class="w-1.5 h-1.5 rounded-full bg-green-600"></span>
-                                                {{$ticket->statut}}                               
-                                         </span>                   
-                                         @else
-                                           <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-600 border border-red-100">
-                                                 <span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
-                                                    {{$ticket->statut}} 
-                                          </span>  
-                                         
-                                      @endif 
-                                      @endif       
-                                    @endif
-                                    
-                                </td>
-                                <td class="px-6 py-6 text-center">
-                                    <div class="text-sm font-bold text-on-surface">14:30</div>
-                                    <div class="text-[10px] text-on-surface-variant font-medium">{{$ticket->statut}}</div>
-                                </td>
-                                <td class="px-6 py-6 text-center">
-                                    <div class="text-xs font-bold text-on-surface">{{$ticket->date_debut_traitement}}-{{$ticket->date_fin_traitement}}</div>
-                                    <div class="text-[10px] text-primary font-bold uppercase tracking-tighter">Depuis 12
-                                        min</div>
-                                </td>
-                                <td class="px-8 py-6 text-right">
-                                    <button
-                                        class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant">
-                                        <span class="material-symbols-outlined">more_vert</span>
-                                    </button>
-                                </td>
-                            </tr>
-                           @endforeach
+                                        <div class="text-[10px] text-primary font-bold uppercase tracking-tighter">
+                                            Depuis 12
+                                            min</div>
+                                    </td>
+                                    <td class="px-8 py-6 text-right">
+                                        <button
+                                            class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant">
+                                            <span class="material-symbols-outlined">more_vert</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
                 <!-- Footer Pagination -->
-                <div
-                    class="px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-surface-container-low bg-surface-container-low/20">
-                    <p class="text-sm text-on-surface-variant font-medium">
-                        Affichage de <span class="font-bold text-on-surface">1 à 5</span> sur <span
-                            class="font-bold text-on-surface">42</span> tickets
-                    </p>
-                    <div class="flex items-center gap-1">
-                        <button 
-                            class="p-2 rounded-lg hover:bg-surface-container-high transition-colors text-on-surface-variant">
-                            <span class="material-symbols-outlined">chevron_left</span>
-                        </button>
-                        <button class="w-9 h-9 rounded-lg bg-primary text-on-primary font-bold text-sm">1</button>
-                        <button
-                            class="w-9 h-9 rounded-lg hover:bg-surface-container-high text-on-surface font-semibold text-sm transition-colors">2</button>
-                        <button
-                            class="w-9 h-9 rounded-lg hover:bg-surface-container-high text-on-surface font-semibold text-sm transition-colors">3</button>
-                        <span class="px-2 text-on-surface-variant">...</span>
-                        <button
-                            class="w-9 h-9 rounded-lg hover:bg-surface-container-high text-on-surface font-semibold text-sm transition-colors">8</button>
-                        <button
-                            class="p-2 rounded-lg hover:bg-surface-container-high transition-colors text-on-surface-variant">
-                            <span class="material-symbols-outlined">chevron_right</span>
-                        </button>
-                    </div>
-                </div>
+
             </div>
             <!-- Quick Stats Bento Grid (Asymmetric) -->
             <div class="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -295,7 +280,7 @@
                     <div>
                         <h3 class="text-sm font-bold text-on-surface-variant uppercase tracking-widest mb-1">Résolus
                             (H)</h3>
-                        <p class="text-2xl font-extrabold text-on-surface">28</p>
+                        <p class="text-2xl font-extrabold text-on-surface">{{ $ticketsResolus }}</p>
                     </div>
                 </div>
                 <div

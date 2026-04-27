@@ -30,7 +30,9 @@
 
                 <h1 class="text-4xl font-extrabold text-on-surface tracking-tight leading-none mb-4">Liste des
                     services</h1>
-                <p class="text-on-surface-variant max-w-md text-lg">Gérez les services de votre entreprise.</p>
+                    @if (auth()->check() && auth()->user()->role === 'admin')
+                    <p class="text-on-surface-variant max-w-md text-lg">Gérez les services de votre entreprise.</p>
+                    @endif
             </div>
              <button onclick="window.location.href='{{ route ('service_ajout') }}'" class="signature-glow text-white px-8 py-4 rounded-xl flex items-center justify-center gap-3 font-bold transition-all duration-300 hover:scale-[1.03] active:scale-95 shadow-lg shadow-orange-500/20 group">
                 <span class="material-symbols-outlined text-white transition-transform group-hover:rotate-90"
@@ -41,12 +43,7 @@
         <!-- Filters Section -->
         <div class="px-8 py-6 bg-surface-container-low/30">
             <div class="relative max-w-md group">
-                <span
-                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary"
-                    data-icon="search">search</span>
-                <input
-                    class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-on-surface-variant/50"
-                    placeholder="Rechercher une entreprise ou un administrateur..." type="text" />
+              
             </div>
         </div>
         <!-- Table Section -->
@@ -60,7 +57,11 @@
                             Nom du Service</th>
                         <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                             Temps estimé</th>
-                        
+                         @if (auth()->check() && auth()->user()->role === 'super-admin')
+
+                        <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                            Entreprise</th>
+                        @endif
                         <th
                             class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant text-right">
                             Actions</th>
@@ -81,8 +82,11 @@
                             </td>
                             <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
                                 {{ $service->temps_estime }}</td>
-                          
-                            
+                                @if (auth()->check() && auth()->user()->role === 'super-admin')
+                                <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
+                                {{ $service->entreprise->nom_ent}}</td>     
+                                @endif
+                           
                             <td class="px-8 py-6 text-right">
                                 <div
                                     class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
