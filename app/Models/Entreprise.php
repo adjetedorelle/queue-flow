@@ -32,6 +32,11 @@ class Entreprise extends Model
     public function admin (){
         return $this->belongsTo(Admin::class);
     }
+
+     public function personnels (){
+      return $this->hasMany(Personnel::class);
+    }
+
 }
 
 
