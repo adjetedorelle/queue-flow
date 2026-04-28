@@ -115,7 +115,7 @@ class TicketController extends Controller
             'jour_passage' => 'required|date|after_or_equal:today',
             'rappel_minutes' => 'nullable|integer|min:1|max:60',
             'type_ticket' => 'required|in:standard,vip',
-            'motif' => 'required_if:type_ticket,vip|string|max:255',
+            'motif' => 'required_if:type_ticket,vip|max:255',
         ]);
 
         try {
@@ -385,7 +385,6 @@ class TicketController extends Controller
             abort(403, 'Une erreur est survenue lors de la génération du PDF. Veuillez réessayer plus tard.' . $th->getMessage());
         }
     }
-}
 
 
 

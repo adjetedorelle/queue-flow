@@ -30,7 +30,7 @@ Route::get('/contactez-nous', function () {
 })->name('contact');
 
 Route::get('connexion_client', function () {
-    return view('clients.connexion_client');
+    return view('client');
 })->name('connexion_client');
 
 Route::get('/dashboard', [Dashbordcontroller::class, 'affichage'])
