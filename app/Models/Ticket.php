@@ -22,6 +22,7 @@ class Ticket extends Model
         'date_fin_traitement',
         'client_id',
         'service_id',
+        'heure_exact',
         'personnel_id',
         'rappel_minutes',
         'file_attente_id',

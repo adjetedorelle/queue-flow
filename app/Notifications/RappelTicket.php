@@ -39,19 +39,16 @@ class RappelTicket extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         $name = $notifiable->nom ?? $notifiable->name ?? 'Client';
-        $datePassage = is_string($this->ticket->jour_passage) 
-            ? \Carbon\Carbon::parse($this->ticket->jour_passage) 
-            : $this->ticket->jour_passage;
-        
+        $datePassage = is_string($this->ticket->heure_exact)
+            ? \Carbon\Carbon::parse($this->ticket->heure_exact)
+            : $this->ticket->heure_exact;
+
         return (new MailMessage)
-                    ->subject('Rappel de votre ticket QueueFlow')
-                    ->greeting('Bonjour ' . $name . ',')
-                    ->line('Ceci est un rappel pour votre ticket.')
-                    ->line('Numéro de ticket : ' . $this->ticket->numero)
-                    ->line('Service : ' . $this->ticket->service->libelle)
-                    ->line('Date de passage : ' . $datePassage->format('d/m/Y'))
-                    ->action('Voir votre ticket', url('/'))
-                    ->line('Merci d\'utiliser notre application!');
+            ->subject('Rappel de votre ticket')
+            ->greeting('Bonjour ' . ($this->ticket->client->utilisateur->nom ?? 'Client') . ',')
+            ->line('Votre ticket #' . $this->ticket->numero . ' pour le service ' . $this->ticket->service->libelle . ' est prévu le ' . $datePassage->format('d/m/Y à H:i') . '.')
+            ->line('Merci de votre ponctualité.')
+            ->salutation('Cordialement, l\'équipe QueueFlow');
     }
 
     /**
@@ -79,11 +76,11 @@ class RappelTicket extends Notification implements ShouldQueue
 
         $tel = $notifiable->tel;
 
-        $datePassage = is_string($this->ticket->jour_passage) 
-            ? \Carbon\Carbon::parse($this->ticket->jour_passage) 
-            : $this->ticket->jour_passage;
-        
-        $message = "Rappel: Votre ticket #{$this->ticket->numero} pour le service {$this->ticket->service->libelle} est prévu le {$datePassage->format('d/m/Y')}.";
+        $datePassage = is_string($this->ticket->heure_exact)
+            ? \Carbon\Carbon::parse($this->ticket->heure_exact)
+            : $this->ticket->heure_exact;
+
+        $message = "Rappel: Votre ticket #{$this->ticket->numero} pour le service {$this->ticket->service->libelle} est prévu le {$datePassage->format('d/m/Y à H:i')}.";
 
         try {
             $result = $client->messages->send([

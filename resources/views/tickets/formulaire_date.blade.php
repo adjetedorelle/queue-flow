@@ -70,11 +70,6 @@
         }
     </script>
     <style>
-        body {
-            font-family: 'Manrope', sans-serif;
-            background-color: #f8f9ff;
-        }
-
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
@@ -119,197 +114,196 @@
         }
     </style>
 
-    <body class="bg-surface min-h-screen flex items-center justify-center p-2 md:p-8">
-        <main class="w-full max-w-xl animate-slide-up mx-auto">
-            <!-- Main Form Card -->
-            <div class="bg-white rounded-2xl md:rounded-3xl shadow-[0_32px_64px_rgba(11,28,44,0.08)] overflow-hidden">
-                <!-- Header with branding -->
-                <div class="bg-on-surface p-6 md:p-8 text-center relative overflow-hidden">
-                    <!-- Decorative shapes -->
-                    <div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
-                    <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 bg-tertiary/10 rounded-full blur-3xl"></div>
-                    
-                    <div class="relative z-10 flex flex-col items-center">
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="text-white font-black text-2xl tracking-tighter uppercase">QueueFlow</span>
-                            <div class="h-2 w-2 bg-primary-container rounded-full animate-pulse"></div>
-                        </div>
-                        <h1 class="text-white text-3xl font-black tracking-tight leading-none mb-2">Prendre un ticket</h1>
-                        <p class="text-slate-400 text-sm font-medium tracking-wide">Veuillez remplir les informations suivantes</p>
+    <div class="w-full max-w-2xl animate-slide-up mx-auto">
+        <!-- Main Form Card -->
+        <div class="bg-white rounded-2xl md:rounded-3xl shadow-[0_32px_64px_rgba(11,28,44,0.08)] overflow-hidden">
+            <!-- Header with branding -->
+            <div class="bg-on-surface p-6 md:p-8 text-center relative overflow-hidden">
+                <!-- Decorative shapes -->
+                <div class="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 bg-tertiary/10 rounded-full blur-3xl"></div>
+                
+                <div class="relative z-10 flex flex-col items-center">
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="text-white font-black text-2xl tracking-tighter uppercase">QueueFlow</span>
+                        <div class="h-2 w-2 bg-primary-container rounded-full animate-pulse"></div>
                     </div>
+                    <h1 class="text-white text-xl md:text-3xl font-black tracking-tight leading-tight mb-2 text-center uppercase">Prendre un ticket</h1>
+                    <p class="text-slate-400 text-[10px] md:text-sm font-medium tracking-wide uppercase">Veuillez remplir les informations suivantes</p>
                 </div>
+            </div>
 
-                <!-- Service Context Info -->
-                @if ($service && $entreprise)
-                <div class="px-6 md:px-8 pt-6 md:pt-8 pb-4">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between p-4 md:p-5 bg-surface-container-low rounded-2xl border border-outline-variant/20 gap-4">
-                        <div class="flex items-center gap-3 md:gap-4 min-w-0">
-                            <div class="flex-shrink-0 p-2.5 md:p-3 bg-white rounded-xl shadow-sm">
-                                <span class="material-symbols-outlined text-primary text-xl md:text-2xl">store</span>
-                            </div>
-                            <div class="min-w-0">
-                                <h2 class="text-on-surface font-black text-base md:text-lg leading-tight uppercase tracking-tight truncate">{{ $entreprise->nom_ent }}</h2>
-                                <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-widest truncate">{{ $service->libelle }}</p>
-                            </div>
+            <!-- Service Context Info -->
+            @if ($service && $entreprise)
+            <div class="px-6 md:px-8 pt-6 md:pt-8 pb-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between p-4 md:p-5 bg-surface-container-low rounded-2xl border border-outline-variant/20 gap-4">
+                    <div class="flex items-center gap-3 md:gap-4 min-w-0">
+                        <div class="flex-shrink-0 p-2.5 md:p-3 bg-white rounded-xl shadow-sm">
+                            <span class="material-symbols-outlined text-primary text-xl md:text-2xl">store</span>
                         </div>
-                        <div class="flex items-center gap-2 bg-white/60 px-3 md:px-4 py-1.5 md:py-2 rounded-full self-start md:self-center flex-shrink-0">
-                            <span class="material-symbols-outlined text-primary text-xs md:text-sm">schedule</span>
-                            <span class="text-on-surface font-bold text-[10px] md:text-xs uppercase">{{ $service->temps_estime }} min</span>
+                        <div class="min-w-0">
+                            <h2 class="text-on-surface font-black text-sm md:text-base leading-tight uppercase tracking-tight truncate">{{ $entreprise->nom_ent }}</h2>
+                            <p class="text-on-surface-variant text-[9px] md:text-[10px] font-bold uppercase tracking-widest truncate">{{ $service->libelle }}</p>
                         </div>
                     </div>
-                </div>
-                @endif
-
-                <!-- Validation Errors -->
-                @if ($errors->any())
-                <div class="px-6 md:px-8 mt-4">
-                    <div class="bg-red-50 border border-red-100 p-4 rounded-xl md:rounded-2xl flex gap-3">
-                        <span class="material-symbols-outlined text-red-500 flex-shrink-0">error</span>
-                        <div class="text-sm text-red-700 font-bold break-words">
-                            @foreach ($errors->all() as $error)
-                                <p>{{ $error }}</p>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-                @endif
-
-                <form action="{{ route('formulaire_date.submit') }}" method="POST" class="p-6 md:p-8 pt-4 space-y-6 md:space-y-8">
-                    @csrf
-                    @if ($service)
-                        <input type="hidden" name="service_id" value="{{ $service->id }}">
-                    @endif
-
-                    <!-- Date Selection -->
-                    <div class="space-y-3">
-                        <label for="date" class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant ml-1">Date de passage <span class="text-primary">*</span></label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none group-focus-within:text-primary transition-colors">
-                                <span class="material-symbols-outlined text-on-surface-variant/40">calendar_today</span>
-                            </div>
-                            <input type="date" name="jour_passage" id="date" required 
-                                min="{{ now()->format('Y-m-d') }}"
-                                class="w-full pl-14 pr-6 py-4 bg-surface-container-low border-2 border-transparent focus:border-primary-container focus:bg-white focus:ring-0 rounded-2xl text-on-surface font-bold transition-all placeholder-slate-400">
-                        </div>
-                    </div>
-
-                    <!-- Ticket Type Selection -->
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between px-1">
-                            <label class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Type de ticket <span class="text-primary">*</span></label>
-                            @if ($client && $client->vip)
-                            <div class="flex items-center gap-1.5 bg-yellow-50 px-2.5 py-1 rounded-full border border-yellow-200">
-                                <span class="material-symbols-outlined text-yellow-600 text-[14px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
-                                <span class="text-[9px] font-black text-yellow-800 uppercase tracking-tighter">Éligible VIP</span>
-                            </div>
-                            @endif
-                        </div>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Standard Ticket Card -->
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" name="type_ticket" value="standard" class="ticket-type-radio hidden" checked>
-                                <div class="ticket-type-card p-5 border-2 border-outline-variant/10 bg-surface-container-low rounded-2xl flex flex-col gap-4 transition-all hover:border-outline-variant/30">
-                                    <div class="flex justify-between items-start">
-                                        <div class="p-2.5 bg-white rounded-xl shadow-sm">
-                                            <span class="material-symbols-outlined text-on-surface-variant">confirmation_number</span>
-                                        </div>
-                                        <div class="radio-circle w-5 h-5 border-2 border-on-surface-variant/20 rounded-full flex items-center justify-center transition-all"></div>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-on-surface font-black text-sm uppercase tracking-tight">Standard</h3>
-                                        <p class="text-on-surface-variant text-[10px] font-medium leading-normal mt-1">Accès classique à la file d'attente</p>
-                                    </div>
-                                </div>
-                            </label>
-
-                            <!-- VIP Ticket Card (if eligible) -->
-                            @if ($client && $client->vip)
-                            <label class="relative cursor-pointer group">
-                                <input type="radio" name="type_ticket" value="vip" class="ticket-type-radio vip-card hidden">
-                                <div class="ticket-type-card p-5 border-2 border-outline-variant/10 bg-surface-container-low rounded-2xl flex flex-col gap-4 transition-all hover:border-outline-variant/30">
-                                    <div class="flex justify-between items-start">
-                                        <div class="p-2.5 bg-white rounded-xl shadow-sm">
-                                            <span class="material-symbols-outlined text-yellow-600" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
-                                        </div>
-                                        <div class="radio-circle w-5 h-5 border-2 border-on-surface-variant/20 rounded-full flex items-center justify-center transition-all"></div>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-yellow-800 font-black text-sm uppercase tracking-tight">VIP Priority</h3>
-                                        <p class="text-yellow-600/70 text-[10px] font-medium leading-normal mt-1">Passage prioritaire avec motif justifié</p>
-                                    </div>
-                                </div>
-                            </label>
-                            @endif
-                        </div>
-                    </div>
-
-                    <!-- Motif (for VIP) - Animates in via JS -->
-                    <div id="motif-container" class="space-y-3 hidden">
-                        <label for="motif" class="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-800 ml-1">Motif de priorité <span class="text-primary">*</span></label>
-                        <div class="relative group">
-                            <textarea name="motif" id="motif" rows="3" 
-                                placeholder="Veuillez justifier votre demande de priorité..."
-                                class="w-full px-6 py-4 bg-yellow-50/50 border-2 border-yellow-200/50 focus:border-yellow-400 focus:bg-white focus:ring-0 rounded-2xl text-on-surface font-bold transition-all placeholder-yellow-800/30 resize-none"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Reminder Selection -->
-                    <div class="space-y-3">
-                        <label for="rappel" class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant ml-1">Rappel (minutes avant)</label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none group-focus-within:text-primary transition-colors">
-                                <span class="material-symbols-outlined text-on-surface-variant/40">alarm</span>
-                            </div>
-                            <input type="number" name="rappel_minutes" id="rappel" min="1" max="60"
-                                placeholder="Ex: 15"
-                                class="w-full pl-14 pr-6 py-4 bg-surface-container-low border-2 border-transparent focus:border-primary-container focus:bg-white focus:ring-0 rounded-2xl text-on-surface font-bold transition-all placeholder-slate-400">
-                        </div>
-                        <p class="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-widest text-center">Notification par Email & WhatsApp</p>
-                    </div>
-
-                    <!-- Submit Action -->
-                    <div class="pt-4">
-                        <button type="submit" class="w-full py-5 bg-on-surface text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-on-surface/20 flex items-center justify-center gap-3 group hover:scale-[1.02] active:scale-[0.98] transition-all">
-                            Obtenir mon ticket
-                            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Footer branding -->
-                <div class="p-8 bg-surface-container-low/30 text-center border-t border-dashed border-outline-variant/30">
-                    <div class="flex items-center justify-center gap-2 mb-1">
-                        <span class="text-[10px] font-black uppercase tracking-[0.4em] opacity-30">Powered by QueueFlow</span>
+                    <div class="flex items-center gap-2 bg-white/60 px-3 md:px-4 py-1.5 md:py-2 rounded-full self-start sm:self-center flex-shrink-0">
+                        <span class="material-symbols-outlined text-primary text-xs md:text-sm">schedule</span>
+                        <span class="text-on-surface font-bold text-[9px] md:text-xs uppercase">{{ $service->temps_estime }} min</span>
                     </div>
                 </div>
             </div>
-        </main>
+            @endif
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const typeRadios = document.querySelectorAll('input[name="type_ticket"]');
-                const motifContainer = document.getElementById('motif-container');
-                const motifInput = document.getElementById('motif');
+            <!-- Validation Errors -->
+            @if ($errors->any())
+            <div class="px-6 md:px-8 mt-4">
+                <div class="bg-red-50 border border-red-100 p-4 rounded-xl md:rounded-2xl flex gap-3">
+                    <span class="material-symbols-outlined text-red-500 flex-shrink-0">error</span>
+                    <div class="text-sm text-red-700 font-bold break-words">
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+            @endif
 
-                function toggleMotifField() {
-                    const selectedType = document.querySelector('input[name="type_ticket"]:checked').value;
-                    if (selectedType === 'vip') {
-                        motifContainer.classList.remove('hidden');
-                        motifInput.required = true;
-                    } else {
-                        motifContainer.classList.add('hidden');
-                        motifInput.required = false;
-                        motifInput.value = '';
-                    }
+            <form action="{{ route('formulaire_date.submit') }}" method="POST" class="p-6 md:p-8 pt-4 space-y-6 md:space-y-8">
+                @csrf
+                @if ($service)
+                    <input type="hidden" name="service_id" value="{{ $service->id }}">
+                @endif
+
+                <!-- Date Selection -->
+                <div class="space-y-3">
+                    <label for="date" class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant ml-1">Date et heure de passage <span class="text-primary">*</span></label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none group-focus-within:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-on-surface-variant/40">calendar_today</span>
+                        </div>
+                        <input type="datetime-local" name="jour_passage" id="date" required
+                            min="{{ now()->format('Y-m-d\TH:i') }}"
+                            class="w-full pl-14 pr-6 py-4 bg-surface-container-low border-2 border-transparent focus:border-primary-container focus:bg-white focus:ring-0 rounded-2xl text-on-surface font-bold transition-all placeholder-slate-400 text-sm">
+                    </div>
+                </div>
+
+                <!-- Ticket Type Selection -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between px-1">
+                        <label class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant">Type de ticket <span class="text-primary">*</span></label>
+                        @if ($client && $client->vip)
+                        <div class="flex items-center gap-1.5 bg-yellow-50 px-2.5 py-1 rounded-full border border-yellow-200">
+                            <span class="material-symbols-outlined text-yellow-600 text-[14px]" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                            <span class="text-[9px] font-black text-yellow-800 uppercase tracking-tighter">Éligible VIP</span>
+                        </div>
+                        @endif
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Standard Ticket Card -->
+                        <label class="relative cursor-pointer group">
+                            <input type="radio" name="type_ticket" value="standard" class="ticket-type-radio hidden" checked>
+                            <div class="ticket-type-card p-4 md:p-5 border-2 border-outline-variant/10 bg-surface-container-low rounded-2xl flex flex-col gap-4 transition-all hover:border-outline-variant/30 h-full">
+                                <div class="flex justify-between items-start">
+                                    <div class="p-2.5 bg-white rounded-xl shadow-sm">
+                                        <span class="material-symbols-outlined text-on-surface-variant">confirmation_number</span>
+                                    </div>
+                                    <div class="radio-circle w-5 h-5 border-2 border-on-surface-variant/20 rounded-full flex items-center justify-center transition-all"></div>
+                                </div>
+                                <div>
+                                    <h3 class="text-on-surface font-black text-sm uppercase tracking-tight">Standard</h3>
+                                    <p class="text-on-surface-variant text-[10px] font-medium leading-normal mt-1">Accès classique à la file d'attente</p>
+                                </div>
+                            </div>
+                        </label>
+
+                        <!-- VIP Ticket Card (if eligible) -->
+                        @if ($client && $client->vip)
+                        <label class="relative cursor-pointer group">
+                            <input type="radio" name="type_ticket" value="vip" class="ticket-type-radio vip-card hidden">
+                            <div class="ticket-type-card p-4 md:p-5 border-2 border-outline-variant/10 bg-surface-container-low rounded-2xl flex flex-col gap-4 transition-all hover:border-outline-variant/30 h-full">
+                                <div class="flex justify-between items-start">
+                                    <div class="p-2.5 bg-white rounded-xl shadow-sm">
+                                        <span class="material-symbols-outlined text-yellow-600" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+                                    </div>
+                                    <div class="radio-circle w-5 h-5 border-2 border-on-surface-variant/20 rounded-full flex items-center justify-center transition-all"></div>
+                                </div>
+                                <div>
+                                    <h3 class="text-yellow-800 font-black text-sm uppercase tracking-tight">VIP Priority</h3>
+                                    <p class="text-yellow-600/70 text-[10px] font-medium leading-normal mt-1">Passage prioritaire avec motif justifié</p>
+                                </div>
+                            </div>
+                        </label>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Motif (for VIP) - Animates in via JS -->
+                <div id="motif-container" class="space-y-3 hidden">
+                    <label for="motif" class="text-[10px] font-black uppercase tracking-[0.2em] text-yellow-800 ml-1">Motif de priorité <span class="text-primary">*</span></label>
+                    <div class="relative group">
+                        <textarea name="motif" id="motif" rows="3" 
+                            placeholder="Veuillez justifier votre demande de priorité..."
+                            class="w-full px-6 py-4 bg-yellow-50/50 border-2 border-yellow-200/50 focus:border-yellow-400 focus:bg-white focus:ring-0 rounded-2xl text-on-surface font-bold transition-all placeholder-yellow-800/30 resize-none text-sm"></textarea>
+                    </div>
+                </div>
+
+                <!-- Reminder Selection -->
+                <div class="space-y-3">
+                    <label for="rappel" class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant ml-1">Rappel (minutes avant)</label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none group-focus-within:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-on-surface-variant/40">alarm</span>
+                        </div>
+                        <input type="number" name="rappel_minutes" id="rappel" min="1" max="60"
+                            placeholder="Ex: 15"
+                            class="w-full pl-14 pr-6 py-4 bg-surface-container-low border-2 border-transparent focus:border-primary-container focus:bg-white focus:ring-0 rounded-2xl text-on-surface font-bold transition-all placeholder-slate-400 text-sm">
+                    </div>
+                    <p class="text-[9px] font-bold text-on-surface-variant/40 uppercase tracking-widest text-center">Notification par Email & WhatsApp</p>
+                </div>
+
+                <!-- Submit Action -->
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-5 bg-on-surface text-white rounded-2xl font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-on-surface/20 flex items-center justify-center gap-3 group hover:scale-[1.02] active:scale-[0.98] transition-all">
+                        Obtenir mon ticket
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Footer branding -->
+            <div class="p-8 bg-surface-container-low/30 text-center border-t border-dashed border-outline-variant/30">
+                <div class="flex items-center justify-center gap-2 mb-1">
+                    <span class="text-[10px] font-black uppercase tracking-[0.4em] opacity-30">Powered by QueueFlow</span>
+                </div>
+            </div>
+        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeRadios = document.querySelectorAll('input[name="type_ticket"]');
+            const motifContainer = document.getElementById('motif-container');
+            const motifInput = document.getElementById('motif');
+
+            function toggleMotifField() {
+                const checkedRadio = document.querySelector('input[name="type_ticket"]:checked');
+                if (!checkedRadio) return;
+                
+                const selectedType = checkedRadio.value;
+                if (selectedType === 'vip') {
+                    motifContainer.classList.remove('hidden');
+                    motifInput.required = true;
+                } else {
+                    motifContainer.classList.add('hidden');
+                    motifInput.required = false;
+                    motifInput.value = '';
                 }
+            }
 
-                typeRadios.forEach(radio => {
-                    radio.addEventListener('change', toggleMotifField);
-                });
-
-                toggleMotifField();
+            typeRadios.forEach(radio => {
+                radio.addEventListener('change', toggleMotifField);
             });
-        </script>
-    </body>
+
+            toggleMotifField();
+        });
+    </script>
 </x-guest-layout>

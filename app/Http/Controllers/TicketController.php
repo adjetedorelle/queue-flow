@@ -112,7 +112,7 @@ class TicketController extends Controller
 
         $request->validate([
             'service_id' => 'required|exists:services,id',
-            'jour_passage' => 'required|date|after_or_equal:today',
+            'jour_passage' => 'required|date|after:now',
             'rappel_minutes' => 'nullable|integer|min:1|max:60',
             'type_ticket' => 'required|in:standard,vip',
             'motif' => 'required_if:type_ticket,vip|max:255',
@@ -138,15 +138,21 @@ class TicketController extends Controller
             }
 
             // Chercher ou créer la FileAttente pour ce service à la date donnée et type
+            // dd($request->service_id, $request->jour_passage, $typeTicket);
             $service = Service::find($request->service_id);
+            $datePassage = Carbon::parse($request->jour_passage)->format('Y-m-d');
+            //dd($service->id, $datePassage, $typeTicket);
             $fileAttente = FileAttente::where('service_id', $service->id)
-                ->where('date', $request->jour_passage)
+                ->where('date', $datePassage)
                 ->where('type', $typeTicket)
+                ->where('statut', 'ouverte')
+                ->with('service')
                 ->first();
+            //dd($fileAttente);
 
             if (!$fileAttente) {
                 $fileAttente = FileAttente::create([
-                    'date' => $request->jour_passage,
+                    'date' => $datePassage,
                     'nb_client_restant' => 1,
                     'nb_total' => 1,
                     'statut' => 'ouverte',
@@ -161,11 +167,21 @@ class TicketController extends Controller
             // Générer un numéro de ticket unique
             $numero = $this->genererNumeroTicket($service->id, $request->jour_passage);
 
+            // Calculer l'heure exacte de passage
+            $heureExact = $this->calculerHeureExacte($service, $request->jour_passage, $typeTicket);
+
+            // Vérifier que l'heure exacte est dans les horaires d'ouverture
+            $entreprise = $service->entreprise;
+            if (!$this->verifierHorairesOuverture($heureExact, $entreprise)) {
+                return redirect()->back()->with('error', "L'heure de passage est en dehors des horaires d'ouverture de l'entreprise ({$entreprise->heure_ouv} - {$entreprise->heure_ferm}).");
+            }
+
             // Créer le ticket
             $ticket = Ticket::create([
                 'numero' => $numero,
                 'type' => $typeTicket,
                 'jour_passage' => $request->jour_passage,
+                'heure_exact' => $heureExact,
                 'statut' => 'en_attente',
                 'rappel_minutes' => $request->rappel_minutes,
                 'client_id' => $client->id,
@@ -222,6 +238,58 @@ class TicketController extends Controller
         return $anneeMois . '-' . $serviceId . '-' . $nouveauNumero;
     }
 
+    private function calculerHeureExacte($service, $jourPassage, $typeTicket)
+    {
+        // Récupérer tous les tickets de la même file d'attente (même service, même date, même type)
+        // avec une heure_exact déjà définie, triés par created_at
+        $ticketsExistants = Ticket::where('service_id', $service->id)
+            ->where('jour_passage', 'like', date('Y-m-d', strtotime($jourPassage)) . '%')
+            ->where('type', $typeTicket)
+            ->whereNotNull('heure_exact')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        // Si c'est le premier ticket, l'heure exacte = heure de passage souhaitée
+        if ($ticketsExistants->isEmpty()) {
+            return Carbon::parse($jourPassage);
+        }
+
+        // Trouver le ticket immédiatement avant (le dernier créé avec heure_exact)
+        $ticketPrecedent = $ticketsExistants->last();
+
+        if (!$ticketPrecedent) {
+            return Carbon::parse($jourPassage);
+        }
+
+        // Calculer l'heure de fin du ticket précédent
+        $heureFinPrecedent = Carbon::parse($ticketPrecedent->heure_exact)
+            ->addMinutes($service->temps_estime)
+            ->addMinutes(2); // Marge de 2 minutes
+
+        $heureSouhaitee = Carbon::parse($jourPassage);
+
+        // Si l'heure calculée est inférieure à l'heure souhaitée, utiliser l'heure souhaitée
+        if ($heureFinPrecedent->lt($heureSouhaitee)) {
+            return $heureSouhaitee;
+        }
+
+        // Sinon, utiliser l'heure calculée
+        return $heureFinPrecedent;
+    }
+
+    private function verifierHorairesOuverture($heureExact, $entreprise)
+    {
+        $heureExact = Carbon::parse($heureExact);
+        $heureOuverture = Carbon::parse($entreprise->heure_ouv);
+        $heureFermeture = Carbon::parse($entreprise->heure_ferm);
+
+        // Si l'heure exacte est en dehors des horaires d'ouverture
+        if ($heureExact->lt($heureOuverture) || $heureExact->gt($heureFermeture)) {
+            return false;
+        }
+
+        return true;
+    }
 
     public function pageOtp()
     {
