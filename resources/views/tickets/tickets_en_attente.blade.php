@@ -104,7 +104,6 @@
                     <span class="text-sm font-medium">{{now()->format('d/m/Y')}}</span>
                 </div>
             </div>
-            @if($ticket_encour)
             <!-- Section 1: Ticket en cours -->
             <section class="mb-12">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -126,39 +125,39 @@
                                         <h2
                                             class="text-on-surface-variant text-[11px] font-bold uppercase tracking-[0.1em]">
                                             Client Actuel</h2>
-                                        <p class="text-2xl font-bold text-on-surface">{{$ticket_encour->client->utilisateur->nom}}  {{$ticket_encour->client->utilisateur->prenom}}  </p>
+                                        <p class="text-2xl font-bold text-on-surface">{{$ticket_encour->client->utilisateur->nom ?? '-'}}  {{$ticket_encour->client->utilisateur->prenom ?? '-'}}  </p>
                                     </div>
                                 </div>
                                 <span
                                     class="bg-tertiary/10 text-tertiary px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider flex items-center gap-2">
                                     <span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
-                                   {{ $ticket_encour->statut }}
+                                   {{ $ticket_encour->statut ?? 'Aucun ticket en cours' }}
                                 </span>
                             </div>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 <div class="space-y-1">
                                     <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">
                                         Numéro de ticket</p>
-                                    <p class="text-4xl font-black text-primary-container tracking-tighter">{{$ticket_encour->numero}}</p>
+                                    <p class="text-4xl font-black text-primary-container tracking-tighter">{{$ticket_encour->numero ?? '-'}}</p>
                                 </div>
                                 <div class="space-y-1">
                                     <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">
                                         Service</p>
-                                    <p class="text-xl font-semibold text-on-surface">{{$ticket_encour->service->libelle}}</p>
+                                    <p class="text-xl font-semibold text-on-surface">{{$ticket_encour->service->libelle ?? '-'}}</p>
                                 </div>
                                 <div class="space-y-1">
                                     <p class="text-on-surface-variant text-[10px] font-bold uppercase tracking-wider">
                                         Début d'appel</p>
-                                    <p class="text-xl font-semibold text-on-surface">{{$ticket_encour->date_debut_traitement}}</p>
+                                    <p class="text-xl font-semibold text-on-surface">{{$ticket_encour->date_debut_traitement ?? '-'}}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                    
-                    @endif
                     <!-- Section 2: Actions -->
                     <div class="lg:col-span-4 flex flex-col gap-4 h-full">
                         <button
+                        onclick="window.location.href='{{ route('appeler_prochain',['id_service'=>$tickets->first()?->service_id]) }}'"
                             class="w-full h-1/2 flex items-center justify-center gap-3 orange-gradient text-white font-bold rounded-xl shadow-xl shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all duration-300 py-8 lg:py-0">
                             <span class="material-symbols-outlined text-2xl"
                                 style="font-variation-settings: 'FILL' 1;">campaign</span>
