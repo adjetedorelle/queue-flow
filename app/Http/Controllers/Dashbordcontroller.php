@@ -10,8 +10,10 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\File\File;
 
 class Dashbordcontroller extends Controller
-{
+{   
     public function affichage(){
+       if (auth()->user()->role === 'super-admin'|| auth()->user()->role === 'admin'|| auth()->user()->role === 'personnel') {
+
         $entreprises = Entreprise::all();
         $entreprisesrecentes=Entreprise::latest()->take(5)->get();
         $nbentreprises = $entreprises->count();
@@ -22,6 +24,11 @@ class Dashbordcontroller extends Controller
         $nbtickets = $tickets->count();
         $files = FileAttente::where('statut','=','ouverte')->get();
         return view('dashboard',compact('nbentreprises','nbadmins','nbtickets','files','entreprisesrecentes','adminsrecents'));
+
+    }
+
+
+
 
     }
 }
