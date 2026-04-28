@@ -104,7 +104,7 @@
     </style>
 </head>
 
-<body class="bg-surface font-body text-on-surface antialiased overflow-hidden">
+<body class="bg-surface font-body text-on-surface antialiased min-h-screen">
     <!-- Header Navigation (Simplified for Transactional Page) -->
     <header class="absolute top-0 w-full flex justify-between items-center px-8 py-6 z-50">
         <div class="flex items-center gap-2">
@@ -115,7 +115,7 @@
         </div>
         
     </header>
-    <main class="flex h-screen w-full">
+    <main class="flex min-h-screen w-full">
         <!-- Left Side: Visual/Editorial Content -->
         <section class="hidden lg:flex lg:w-1/2 relative bg-login-hero flex-col justify-end p-16 overflow-hidden"
             data-alt="Modern office lobby with abstract digital glow lines representing a seamless flow of people and data in a professional environment">
@@ -144,7 +144,7 @@
             </div>
         </section>
         <!-- Right Side: Login Form -->
-        <section class="w-full lg:w-1/2 flex items-center justify-center bg-surface-container-low px-6 sm:px-12">
+        <section class="w-full lg:w-1/2 flex items-center justify-center bg-surface-container-low px-4 sm:px-12 py-20 lg:py-8 overflow-y-auto">
             {{$slot}}
         </section>
     </main>

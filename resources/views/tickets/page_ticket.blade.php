@@ -210,6 +210,10 @@
         <!-- Queue Details -->
         <section class="space-y-4 mb-10">
             <div class="flex justify-between items-end border-b border-dashed border-outline-variant/30 pb-2">
+                <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Heure de passage</span>
+                <span class="text-sm font-bold text-on-surface">{{ $ticket->heure_exact ? \Carbon\Carbon::parse($ticket->heure_exact)->format('d/m/Y à H:i') : 'N/A' }}</span>
+            </div>
+            <div class="flex justify-between items-end border-b border-dashed border-outline-variant/30 pb-2">
                 <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Position</span>
                 <span class="text-lg font-black text-on-surface">{{ $ticket->fileAttente->nb_client_restant }} personne(s)</span>
             </div>
@@ -245,8 +249,8 @@
                 <span class="material-symbols-outlined text-sm">download</span>
                 Télécharger
             </a>
-            <button class="w-full py-4 border-2 border-outline-variant text-on-surface font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-surface-container-low transition-all">
-                Détails de la file
+            <button onclick="window.location.href='{{ route('Acceuil') }}'" class="w-full py-4 border-2 border-outline-variant text-on-surface font-black text-xs uppercase tracking-[0.2em] rounded-xl hover:bg-surface-container-low transition-all">
+                Revenir à l'accueil
             </button>
         </div>
     </div>
