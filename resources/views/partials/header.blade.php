@@ -1,5 +1,5 @@
 <header
-    class="sticky top-0 z-40 w-full bg-white/80 dark:bg-[#223243]/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 shadow-sm shadow-slate-200/50">
+    class="sticky top-0 z-40 w-full dark:bg-[]/80 backdrop-blur-xl flex justify-between items-center px-8 py-4 shadow-sm shadow-slate-200/50">
     <div class="flex items-center gap-4">
         <button class="md:hidden p-2 text-on-surface">
             <span class="material-symbols-outlined" data-icon="menu">menu</span>
@@ -8,21 +8,10 @@
     </div>
     <div class="flex items-center gap-6">
         <div class="relative hidden sm:block">
-            <span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-slate-400 text-lg"
-                data-icon="search">search</span>
-            <input
-                class="pl-10 pr-4 py-2 bg-surface-container-low border-0 rounded-full text-sm w-64 focus:ring-2 focus:ring-primary-container focus:bg-white transition-all"
-                placeholder="Global search..." type="text" />
+            
         </div>
         <div class="flex items-center gap-2">
-            <button
-                class="hover:bg-slate-50 dark:hover:bg-white/5 rounded-full p-2 transition-all duration-300 relative">
-                <span class="material-symbols-outlined text-slate-600" data-icon="notifications">notifications</span>
-                <span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
-            </button>
-            <button class="hover:bg-slate-50 dark:hover:bg-white/5 rounded-full p-2 transition-all duration-300">
-                <span class="material-symbols-outlined text-slate-600" data-icon="help">help</span>
-            </button>
+            
         </div>
         <div class="h-8 w-[1px] bg-slate-200"></div>
         <div class="flex items-center gap-3 cursor-pointer group">

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConnexionClientController;
+use App\Http\Controllers\Dashbordcontroller;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\PersonnelController;
@@ -29,12 +30,11 @@ Route::get('/contactez-nous', function () {
 })->name('contact');
 
 Route::get('connexion_client', function () {
-    return view('client');
+    return view('clients.connexion_client');
 })->name('connexion_client');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [Dashbordcontroller::class, 'affichage'])
+->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('ajouter_entreprise', [EntrepriseController::class, 'create'])
 ->middleware(['auth', 'verified'])->name('ajout_entreprise');
@@ -108,6 +108,7 @@ Route::get('tickets_disponibles',[TicketController::class, 'ticketsdispo'])
 Route::get('tickets_en_attente/{id_service}',[TicketController::class, 'ticketsNonTraites'])
 ->middleware(['auth', 'verified'])->name('tickets_en_attente');
 
+
 Route::get('formulaire_date/{service_id?}',[TicketController::class, 'formulaireDate'])
 ->name('formulaire_date')->middleware('auth');
 
@@ -135,7 +136,8 @@ Route::post('verifier_otp',[ConnexionClientController::class, 'verifierOtp'])
 Route::get('page_ticket/{ticketId}',[TicketController::class, 'pageTicket'])
 ->name('page_ticket');
 
-
+Route::get('appeler_prochain/{id_service}',[TicketController::class, 'appelerProchain'])
+->middleware(['auth', 'verified'])->name('appeler_prochain');
 
 
 Route::middleware('auth')->group(function () {

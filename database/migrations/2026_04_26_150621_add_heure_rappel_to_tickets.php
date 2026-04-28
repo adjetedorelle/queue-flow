@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('utilisateur_id')
-                   ->constrained('utilisateurs')
-                   ->onDelete('cascade');
-            $table->boolean('vip')->default(false);       
-            $table->timestamps();
+        Schema::table('tickets', function (Blueprint $table) {
+            $table->string('heure_rappel')->nullable()->after('jour_passage');
         });
     }
 
@@ -26,6 +21,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::table('tickets', function (Blueprint $table) {
+            $table->dropColumn('heure_rappel');
+        });
     }
 };
+

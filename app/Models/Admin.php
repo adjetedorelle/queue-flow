@@ -20,4 +20,8 @@ class Admin extends Model
     public function utilisateur () {
         return $this->belongsTo(User::class);
     }
+
+    public function entreprise () {
+       return $this->hasOne(Entreprise::class); 
+    }
 }

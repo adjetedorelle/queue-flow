@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('numero', 50)->unique();
             $table->enum('statut', ['en_attente', 'en_cours', 'traite', 'annule']);
-            $table->string('type');
+            $table->string('type')->default('normal');
             $table->datetime('jour_passage');
             $table->datetime('date_debut_traitement')->nullable();
             $table->datetime('date_fin_traitement')->nullable();

@@ -169,11 +169,7 @@
                 <div
                     class="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-surface-container-low">
                     <div class="relative group max-w-md w-full">
-                        <span
-                            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
-                        <input
-                            class="w-full pl-10 pr-4 py-2.5 bg-surface-container-low border-0 rounded-md focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all text-sm font-medium"
-                            placeholder="Rechercher une file ou un service..." type="text" />
+                        
                     </div>
                     <div class="flex items-center gap-3">
                         <button

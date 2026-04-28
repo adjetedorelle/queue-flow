@@ -1,11 +1,10 @@
-<aside class="bg-[#223243] h-screen w-64 fixed left-0 top-0 overflow-y-auto z-50 flex flex-col py-6 shadow-2xl hidden md:flex">
+<aside class="h-screen w-64 fixed left-0 top-0 overflow-y-auto z-50 flex flex-col py-6 shadow-2xl hidden md:flex">
     <div class="px-8 mb-10 flex items-center gap-3">
-        <div class="w-8 h-8 bg-primary-container rounded-lg flex items-center justify-center">
-            <span class="material-symbols-outlined text-white text-xl" data-icon="rocket_launch">rocket_launch</span>
-        </div>
-        <div class="flex flex-col">
-            <span class="text-xl font-bold text-white tracking-tight">QueueFlow</span>
-            <span class="text-[10px] text-slate-400 font-medium tracking-widest uppercase">Management Suite</span>
+         <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[#223243] dark:text-blue-400" data-icon="layers">layers</span>
+            <span class="text-2xl font-black font-headline tracking-tight">
+                <span class="text-[#223243] dark:text-blue-400">Queue</span><span class="text-[#FF6B00]">Flow</span>
+            </span>
         </div>
     </div>
 
@@ -13,15 +12,16 @@
 
         @php
             $navLink = fn($active) => $active
-                ? 'flex items-center gap-3 text-[#f97316] border-l-4 border-[#f97316] bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out'
-                : 'flex items-center gap-3 text-slate-400 hover:text-white hover:bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out';
+                ? 'flex items-center gap-3 text-[#f97316] border-l-4 border-[#f97316] bg-[#223243]/5 py-3 px-6 transition-all duration-200 ease-in-out'
+                : 'flex items-center gap-3 text-slate-400 hover:text-[#223243] hover:bg-[#223243]/5 py-3 px-6 transition-all duration-200 ease-in-out';
         @endphp
+        @if (auth()->user()->role === 'super-admin')
 
         <a class="{{ $navLink(request()->routeIs('dashboard')) }}" href="{{ route('dashboard') }}">
             <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Dashboard</span>
         </a>
-
+        @endif
         <a class="{{ $navLink(request()->routeIs('tickets_disponibles*')) }}" href="{{ route('tickets_disponibles') }}">
             <span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Tickets</span>
@@ -74,13 +74,5 @@
         </a>
     </nav>
 
-    <div class="mt-auto px-6 py-6 border-t border-white/5">
-        <div class="p-4 bg-white/5 rounded-2xl">
-            <p class="text-xs text-slate-400 mb-2">System Status</p>
-            <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span class="text-xs text-white font-semibold">Live Servers Active</span>
-            </div>
-        </div>
-    </div>
+    
 </aside>
