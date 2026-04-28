@@ -182,7 +182,7 @@ class ConnexionClientController extends Controller
                 
                 Log::info('Utilisateur authentifié avec succès', ['user_id' => $userId, 'email' => $user->email]);
 
-                return redirect()->route('formulaire_date')->with('success', 'Connexion réussie !');
+                return redirect()->route('Acceuil')->with('success', 'Connexion réussie !');
             }
 
             Log::error('Utilisateur non trouvé lors de la validation OTP', ['user_id' => $userId]);

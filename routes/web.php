@@ -136,7 +136,7 @@ Route::post('verifier_otp',[ConnexionClientController::class, 'verifierOtp'])
 Route::get('page_ticket/{ticketId}',[TicketController::class, 'pageTicket'])
 ->name('page_ticket');
 
-Route::get('appeler_prochain/{id_service}',[TicketController::class, 'appelerProchain'])
+Route::get('appeler_prochain/{id_service?}',[TicketController::class, 'appelerProchain'])
 ->middleware(['auth', 'verified'])->name('appeler_prochain');
 
 

@@ -22,48 +22,48 @@ class TicketController extends Controller
 {
 
     public function ticketsdispo(Request $request)
-{
-    $user_connectee = auth()->user();
-    $filtre = $request->query('filtre', 'tous'); // 'tous', 'aujourd_hui', 'prioritaires'
+    {
+        $user_connectee = auth()->user();
+        $filtre = $request->query('filtre', 'tous'); // 'tous', 'aujourd_hui', 'prioritaires'
 
-    // Base query selon le rôle
-    if ($user_connectee->role === 'super-admin') {
-        $query = Ticket::query();
-        $ticketsResolus = Ticket::where('statut', 'traite')->count();
+        // Base query selon le rôle
+        if ($user_connectee->role === 'super-admin') {
+            $query = Ticket::query();
+            $ticketsResolus = Ticket::where('statut', 'traite')->count();
+        }
+
+        if ($user_connectee->role === 'personnel') {
+            $personnel = Personnel::where('utilisateur_id', $user_connectee->id)->first();
+            $services = Service::where('entreprise_id', $personnel->entreprise_id)->pluck('id');
+            $query = Ticket::whereIn('service_id', $services);
+            $ticketsResolus = Ticket::whereIn('service_id', $services)
+                ->where('statut', 'traite')
+                ->count();
+        }
+
+        if ($user_connectee->role === 'admin') {
+            $admin = Admin::where('utilisateur_id', $user_connectee->id)->first();
+            $entreprise = Entreprise::where('admin_id', $admin->id)->first();
+            $services = Service::where('entreprise_id', $entreprise->id)->pluck('id');
+            $query = Ticket::whereIn('service_id', $services);
+            $ticketsResolus = Ticket::whereIn('service_id', $services)
+                ->where('statut', 'traite')
+                ->count();
+        }
+
+        // Application des filtres
+        if ($filtre === 'aujourd_hui') {
+            $query->whereDate('jour_passage', today());
+        }
+
+        if ($filtre === 'prioritaires') {
+            $query->where('type', 'express'); // adapte selon ton champ
+        }
+
+        $tickets = $query->paginate(6);
+
+        return view('tickets.tickets_dispo', compact('tickets', 'filtre', 'ticketsResolus'));
     }
-
-    if ($user_connectee->role === 'personnel') {
-        $personnel = Personnel::where('utilisateur_id', $user_connectee->id)->first();
-        $services = Service::where('entreprise_id', $personnel->entreprise_id)->pluck('id');
-        $query = Ticket::whereIn('service_id', $services);
-         $ticketsResolus = Ticket::whereIn('service_id', $services)
-                                ->where('statut', 'traite')
-                                ->count();
-    }
-
-    if ($user_connectee->role === 'admin') {
-        $admin = Admin::where('utilisateur_id', $user_connectee->id)->first();
-        $entreprise=Entreprise::where('admin_id', $admin->id)->first();
-        $services = Service::where('entreprise_id', $entreprise->id)->pluck('id');
-        $query = Ticket::whereIn('service_id', $services);
-        $ticketsResolus = Ticket::whereIn('service_id', $services)
-                                ->where('statut', 'traite')
-                                ->count();
-    }
-
-    // Application des filtres
-    if ($filtre === 'aujourd_hui') {
-        $query->whereDate('jour_passage', today());
-    }
-
-    if ($filtre === 'prioritaires') {
-        $query->where('type', 'express'); // adapte selon ton champ
-    }
-
-    $tickets = $query->paginate(6);
-
-    return view('tickets.tickets_dispo', compact('tickets', 'filtre','ticketsResolus'));
-}
 
 
     public function ticketsNonTraites($id_service)
@@ -83,6 +83,7 @@ class TicketController extends Controller
             ->WHEREIN('statut', ['en_attente', 'en_cours'])
             ->get();
         $count = $tickets->count();
+
         return view('tickets.tickets_en_attente', compact('tickets', 'ticket_encour', 'count'));
     }
 
@@ -134,6 +135,7 @@ class TicketController extends Controller
             // Vérifier le type de ticket demandé
             $typeTicket = $request->type_ticket;
             if ($typeTicket === 'vip' && !$client->vip) {
+                dd($client->vip);
                 return redirect()->back()->with('error', 'Seuls les clients VIP peuvent prendre des tickets VIP.');
             }
 
@@ -173,6 +175,7 @@ class TicketController extends Controller
             // Vérifier que l'heure exacte est dans les horaires d'ouverture
             $entreprise = $service->entreprise;
             if (!$this->verifierHorairesOuverture($heureExact, $entreprise)) {
+
                 return redirect()->back()->with('error', "L'heure de passage est en dehors des horaires d'ouverture de l'entreprise ({$entreprise->heure_ouv} - {$entreprise->heure_ferm}).");
             }
 
@@ -213,6 +216,7 @@ class TicketController extends Controller
             return redirect()->route('page_ticket', ['ticketId' => $ticket->id])->with('success', 'Ticket créé avec succès !');
         } catch (\Throwable $th) {
             DB::rollback();
+
             return redirect()->back()->with('error', 'Une erreur est survenue lors de la création du ticket.');
         }
     }
@@ -248,6 +252,7 @@ class TicketController extends Controller
             ->whereNotNull('heure_exact')
             ->orderBy('created_at', 'asc')
             ->get();
+        dd($ticketsExistants);
 
         // Si c'est le premier ticket, l'heure exacte = heure de passage souhaitée
         if ($ticketsExistants->isEmpty()) {
@@ -326,7 +331,7 @@ class TicketController extends Controller
     public function listeRebalancement()
     {
         $user = auth()->user();
-        
+
         // Récupérer les tickets VIP en attente
         $ticketsVip = Ticket::with(['client', 'client.utilisateur', 'service', 'service.entreprise', 'fileAttente'])
             ->where('type', 'vip')
@@ -444,7 +449,6 @@ class TicketController extends Controller
             return response($pdf)
                 ->header('Content-Type', 'application/pdf')
                 ->header('Content-Disposition', 'attachment; filename="ticket_' . $ticket->numero . '.pdf"');
-
         } catch (\Throwable $th) {
             Log::error('Erreur génération PDF ticket', [
                 'ticket_id' => $ticketId,
@@ -456,40 +460,38 @@ class TicketController extends Controller
 
 
 
-    public function appelerProchain($id_service)
-{
-    $user_connectee = auth()->user();
-    $personnel = Personnel::where('utilisateur_id', $user_connectee->id)->first();
+    public function appelerProchain($id_service = null)
+    {
+        $user_connectee = auth()->user();
+        $personnel = Personnel::where('utilisateur_id', $user_connectee->id)->first();
 
-    // 1. Mettre le ticket en cours à "traite"
-    $ticket_encours = Ticket::where('personnel_id', $personnel->id)
-        ->where('statut', 'en_cours')
-        ->whereDate('jour_passage', today())
-        ->first();
+        // 1. Mettre le ticket en cours à "traite"
+        $ticket_encours = Ticket::where('personnel_id', $personnel->id)
+            ->where('statut', 'en_cours')
+            ->whereDate('jour_passage', today())
+            ->first();
 
-    if ($ticket_encours) {
-        $ticket_encours->statut = 'traite';
-        $ticket_encours->date_fin_traitement = now();
-        $ticket_encours->save();
+        if ($ticket_encours) {
+            $ticket_encours->statut = 'traite';
+            $ticket_encours->date_fin_traitement = now();
+            $ticket_encours->save();
+        }
+
+        // 2. Récupérer le ticket en_attente le plus ancien du service
+        $prochain_ticket = Ticket::where('service_id', $id_service)
+            ->where('statut', 'en_attente')
+            ->whereDate('created_at', today()) // créé aujourd'hui
+            ->oldest('created_at')
+            ->first();
+
+        if ($prochain_ticket) {
+            $prochain_ticket->statut = 'en_cours';
+            $prochain_ticket->personnel_id = $personnel->id;
+            $prochain_ticket->date_debut_traitement = now();
+            $prochain_ticket->save();
+        }
+
+        // 3. Rediriger vers la liste des tickets en attente du service
+        return redirect()->back()->with('success', 'Prochain ticket appelé avec succès.');
     }
-
-    // 2. Récupérer le ticket en_attente le plus ancien du service
-    $prochain_ticket = Ticket::where('service_id', $id_service)
-    ->where('statut', 'en_attente')
-    ->whereDate('created_at', today()) // créé aujourd'hui
-    ->oldest('created_at')
-    ->first();
-
-    if ($prochain_ticket) {
-        $prochain_ticket->statut = 'en_cours';
-        $prochain_ticket->personnel_id = $personnel->id;
-        $prochain_ticket->date_debut_traitement = now();
-        $prochain_ticket->save();
-    }
-
-    // 3. Rediriger vers la liste des tickets en attente du service
-    return redirect()->route('tickets_en_attente', ['id_service' => $id_service]);
 }
-
-}
-
