@@ -16,8 +16,6 @@ class Client extends Model
     protected $fillable = [
         'utilisateur_id',
         'vip'
-
-       
     ];
        public function services (){
         return $this->belongsToMany(Service::class,'tickets','client_id','service_id')

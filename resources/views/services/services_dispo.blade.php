@@ -61,7 +61,7 @@
                         <button
                             @if (!auth()->check() || auth()->user()->role !== 'client') onclick="window.location.href='{{ route('connexion_client') }}'"
     @else
-        onclick="window.location.href='{{ route('formulaire_date') }}'" @endif
+        onclick="window.location.href='{{ route('formulaire_date', ['service_id' => $service->id]) }}'" @endif
                             class="signature-glow text-white w-full py-4 rounded-xl font-bold tracking-tight transition-transform active:scale-95 flex items-center justify-center gap-2 group-hover:shadow-lg group-hover:shadow-primary/20">
                             Prendre un ticket
                             <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>

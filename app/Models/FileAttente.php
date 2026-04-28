@@ -21,7 +21,8 @@ class FileAttente extends Model
         'nb_client_restant',
         'nb_total',
         'statut',
-        'service_id',     
+        'service_id',
+        'type',
     ];  
     public function service (){
         return $this->belongsTo(Service::class);

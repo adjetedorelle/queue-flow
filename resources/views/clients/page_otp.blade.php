@@ -126,7 +126,13 @@
                 
             </div>
             <!-- OTP Form -->
-            <form action="#" class="space-y-10" method="POST">@csrf
+            <form action="{{ route('verifier_otp') }}" class="space-y-10" method="POST">@csrf
+                @if (session('error'))
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                    <p class="text-sm font-medium">{{ session('error') }}</p>
+                </div>
+                @endif
+
                 <!-- Input: Nom -->
                 @if (!$utilisateurExistant) 
                 <div class="input-group relative">
@@ -165,7 +171,8 @@
                 @endif
                 <div class="flex flex-col items-center text-center mb-10">
                     <p class="text-on-surface-variant text-sm leading-relaxed max-w-[280px]">
-                        Veuillez entrer le code de vérification envoyé à votre numéro
+                        Veuillez entrer le code de vérification envoyé par
+                        @if($channel === 'mail') email @else WhatsApp @endif
                     </p>
                 </div>
 
@@ -174,16 +181,22 @@
                 <div class="flex justify-between gap-2 sm:gap-4">
                     <input autofocus=""
                         class="otp-input w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold bg-surface-container-low border-0 rounded-md text-on-surface transition-all duration-200 outline-none"
-                        maxlength="1" type="text" />
+                        maxlength="1" type="text" name="otp[]" />
                     <input
                         class="otp-input w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold bg-surface-container-low border-0 rounded-md text-on-surface transition-all duration-200 outline-none"
-                        maxlength="1" type="text" />
+                        maxlength="1" type="text" name="otp[]" />
                     <input
                         class="otp-input w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold bg-surface-container-low border-0 rounded-md text-on-surface transition-all duration-200 outline-none"
-                        maxlength="1" type="text" />
+                        maxlength="1" type="text" name="otp[]" />
                     <input
                         class="otp-input w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold bg-surface-container-low border-0 rounded-md text-on-surface transition-all duration-200 outline-none"
-                        maxlength="1" type="text" />
+                        maxlength="1" type="text" name="otp[]" />
+                    <input
+                        class="otp-input w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold bg-surface-container-low border-0 rounded-md text-on-surface transition-all duration-200 outline-none"
+                        maxlength="1" type="text" name="otp[]" />
+                    <input
+                        class="otp-input w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold bg-surface-container-low border-0 rounded-md text-on-surface transition-all duration-200 outline-none"
+                        maxlength="1" type="text" name="otp[]" />
                 </div>
 
                 
@@ -191,7 +204,6 @@
                 <!-- Primary Action -->
                 <div class="space-y-6">
                     <button
-                            onclick="window.location.href='{{ route('page_ticket') }}'"
                         class="w-full py-4 px-6 rounded-md bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm tracking-widest uppercase shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-150"
                         type="submit">
                         Valider
@@ -201,7 +213,7 @@
                         <span class="text-xs text-on-surface-variant/60 font-medium">Vous n'avez pas reçu le code
                             ?</span>
                         <a class="text-primary text-sm font-bold hover:underline decoration-2 underline-offset-4 transition-all"
-                            href="#">
+                            href="{{ route('connexion_client') }}">
                             Renvoyer le code
                         </a>
                     </div>
