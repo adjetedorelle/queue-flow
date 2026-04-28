@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->integer('numero')->unique();
+            $table->string('numero', 50)->unique();
             $table->enum('statut', ['en_attente', 'en_cours', 'traite', 'annule']);
             $table->string('type')->default('normal');
             $table->datetime('jour_passage');
@@ -20,8 +20,8 @@ return new class extends Migration
                   ->constrained('clients')
                   ->onDelete('cascade');
             $table->foreignId('service_id')
-                   ->constrained('services')
-                   ->onDelete('cascade');
+                  ->constrained('services')
+                  ->onDelete('cascade');
             $table->timestamps();
         });
     }

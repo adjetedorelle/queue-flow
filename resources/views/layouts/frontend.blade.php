@@ -119,6 +119,12 @@
 
             @auth
                 <a class="{{ $navItem(request()->is('profile')) }}" href="#">Profile</a>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="text-slate-600 dark:text-slate-400 font-medium hover:text-red-600 dark:hover:text-red-400 hover:border-b-2 hover:border-red-600 transition-colors font-headline text-sm">
+                        Déconnexion
+                    </button>
+                </form>
             @endauth
 
             @guest

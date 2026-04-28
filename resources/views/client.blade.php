@@ -132,17 +132,22 @@
         <div class="bg-surface-container-lowest rounded-xl shadow-2xl overflow-hidden">
             <!-- Form Header & Decorative Icon -->
             <div class="p-8 pb-4 text-center">
+                @if (session('error'))
+                <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                    <p class="text-sm font-medium">{{ session('error') }}</p>
+                </div>
+                @endif
                 <div
                     class="inline-flex items-center justify-center w-16 h-16 mb-6 rounded-full bg-surface-container-low text-primary-container">
                     <span class="material-symbols-outlined text-4xl"
                         data-icon="confirmation_number">confirmation_number</span>
                 </div>
-                <h1 class="text-on-surface text-3xl font-bold tracking-tight mb-2">Connexion client</h1>
+                <h1 class="text-on-surface text-3xl font-bold tracking-tight mb-2">Connectez-vous</h1>
                 <p class="text-on-surface-variant text-sm font-medium">Veuillez entrer vos informations pour continuer
                 </p>
             </div>
             <!-- Form Body -->
-            <form action="{{route('page_otp')}}" class="p-8 pt-4 space-y-6" method="POST">@csrf
+            <form action="{{route('page_otp.post')}}" class="p-8 pt-4 space-y-6" method="POST">@csrf
                 
                 <!-- Input: Téléphone -->
                 <div class="input-group relative">
@@ -165,8 +170,8 @@
 
                 <div class="input-group relative">
                     <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2 ml-1"
-                        for="phone">
-                        Email <span class="text-primary">*</span>
+                        for="email">
+                        Email 
                     </label>
                     <div class="relative group">
                         <div
@@ -176,9 +181,9 @@
                         </div>
                         <input
                             class="block w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 border-b-2 border-transparent text-on-surface placeholder-slate-400 rounded-t-md transition-all duration-300 focus:ring-0 focus:bg-surface-container-lowest focus:border-primary-container"
-                            id="phone" name="tel" placeholder="email@example.com" required="" type="email" />
+                            id="email" name="email" placeholder="email@example.com" type="email" />
                     </div>
-                    
+
                 </div>
                 
                 <!-- Submit Button -->

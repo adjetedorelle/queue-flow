@@ -18,11 +18,14 @@ class Ticket extends Model
         'type',
         'jour_passage',
         'statut',
-        'date_debut_traitement	', 
+        'date_debut_traitement', 
         'date_fin_traitement',
         'client_id',
         'service_id',
-        'personnel_id'	    
+        'personnel_id',
+        'rappel_minutes',
+        'file_attente_id',
+        'motif',
     ];
     public function service () {
         return $this->belongsTo(Service::class);
@@ -35,5 +38,10 @@ class Ticket extends Model
     public function personnel () {
         return $this->belongsTo(Personnel::class);
     }
+
+    public function fileAttente () {
+        return $this->belongsTo(FileAttente::class);
+    }
 }
+
 

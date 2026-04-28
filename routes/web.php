@@ -108,13 +108,32 @@ Route::get('tickets_disponibles',[TicketController::class, 'ticketsdispo'])
 Route::get('tickets_en_attente/{id_service}',[TicketController::class, 'ticketsNonTraites'])
 ->middleware(['auth', 'verified'])->name('tickets_en_attente');
 
-Route::get('formulaire_date',[ConnexionClientController::class, 'formulaireDate'])
-->name('formulaire_date');
 
-Route::post('page_otp',[ConnexionClientController::class, 'connexionClient'])
+Route::get('formulaire_date/{service_id?}',[TicketController::class, 'formulaireDate'])
+->name('formulaire_date')->middleware('auth');
+
+Route::post('formulaire_date',[TicketController::class, 'submitTicket'])
+->name('formulaire_date.submit')->middleware('auth');
+
+Route::get('tickets/rebalancement',[TicketController::class, 'listeRebalancement'])
+->name('tickets.rebalancement')->middleware('auth');
+
+Route::post('tickets/rebalancer/{ticketId}',[TicketController::class, 'rebalancerTicket'])
+->name('tickets.rebalancer')->middleware('auth');
+
+Route::get('tickets/{ticketId}/pdf',[TicketController::class, 'telechargerTicketPdf'])
+->name('tickets.pdf')->middleware('auth');
+
+Route::get('page_otp',[ConnexionClientController::class, 'showOtpForm'])
 ->name('page_otp');
 
-Route::get('page_ticket',[TicketController::class, 'pageTicket'])
+Route::post('page_otp',[ConnexionClientController::class, 'connexionClient'])
+->name('page_otp.post');
+
+Route::post('verifier_otp',[ConnexionClientController::class, 'verifierOtp'])
+->name('verifier_otp');
+
+Route::get('page_ticket/{ticketId}',[TicketController::class, 'pageTicket'])
 ->name('page_ticket');
 
 Route::get('appeler_prochain/{id_service}',[TicketController::class, 'appelerProchain'])
