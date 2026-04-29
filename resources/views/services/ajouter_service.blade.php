@@ -89,11 +89,11 @@
                     <span>Ajouter un Service</span>
                     <span class="material-symbols-outlined text-xl" data-icon="arrow_forward">arrow_forward</span>
                 </button>
-                <button
-                    class="flex-1 bg-transparent border-2 border-surface-container-high text-on-surface-variant font-bold py-4 px-6 rounded-lg hover:bg-surface-container-low transition-all duration-200 order-2 md:order-1"
-                    type="button">
+                <button type="submit" onclick="window.location.href='{{ route('service_liste') }}'"
+                    class="flex-1 bg-transparent border-2 border-surface-container-high text-on-surface-variant font-bold py-4 px-6 rounded-lg hover:bg-surface-container-low transition-all duration-200 order-2 md:order-1 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
                     Annuler
-                </button>
+               </button>
             </div>
         </form>
 

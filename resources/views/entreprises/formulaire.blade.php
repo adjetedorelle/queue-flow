@@ -164,16 +164,17 @@
 
             <!-- Actions -->
             <div class="flex flex-col md:flex-row gap-4 pt-6">
-                <button
-                    class="flex-1 signature-glow text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 order-1 md:order-2 flex items-center justify-center gap-2"
-                    type="submit">
-                    <span>Modifier l’entreprise</span>
+                <button type="submit" onclick="window.location.href='{{ route('liste_entreprises') }}'"
+                    class="flex-1 bg-transparent border-2 border-surface-container-high text-on-surface-variant font-bold py-4 px-6 rounded-lg hover:bg-surface-container-low transition-all duration-200 order-2 md:order-1 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Annuler
+            </button>
 
-                    <button
-                        class="flex-1 bg-transparent border-2 border-surface-container-high text-on-surface-variant font-bold py-4 px-6 rounded-lg hover:bg-surface-container-low transition-all duration-200 order-2 md:order-1"
-                        type="button">
-                        Annuler
-                    </button>
+                <button type="submit"
+                    class="flex-1 signature-glow text-white font-bold py-4 px-6 rounded-lg shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-200 order-1 md:order-2 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-sm">save</span>
+                    Modifier l'entreprise
+                </button>
             </div>
         </form>
 

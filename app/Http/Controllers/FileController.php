@@ -7,6 +7,7 @@ use App\Models\Entreprise;
 use App\Models\FileAttente;
 use App\Models\Personnel;
 use App\Models\Service;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 
 class FileController extends Controller
@@ -20,6 +21,19 @@ class FileController extends Controller
                           ->where('statut', '=', 'ouverte')
                           ->whereDate('date', now())
                           ->paginate(6);
+       $nbfiles = $files->count();
+       $nbClients = Ticket::whereIn('service_id', $services)
+                           ->whereDate('created_at', today())
+                           ->count();
+          $filesClosed = FileAttente::whereIn('service_id', $services)
+                              ->where('statut', 'fermee')
+                              ->whereDate('created_at', today())
+                              ->get();
+
+    $tempsMoyen = $filesClosed->avg(function($file) {
+        return $file->created_at->diffInMinutes($file->updated_at);
+    });
+    $tempsMoyen = round($tempsMoyen ?? 0);                        
     }
 
     if ($user_connectee -> role === 'admin') {
@@ -30,15 +44,41 @@ class FileController extends Controller
                           ->where('statut', '=', 'ouverte')
                           ->whereDate('date', now())
                           ->paginate(6);
+    $nbfiles = $files->count();
+    $nbClients = Ticket::whereIn('service_id', $services)
+                           ->whereDate('created_at', today())
+                           ->count();
+    $filesClosed = FileAttente::whereIn('service_id', $services)
+                              ->where('statut', 'fermee')
+                              ->whereDate('created_at', today())
+                              ->get();
 
+    $tempsMoyen = $filesClosed->avg(function($file) {
+        return $file->created_at->diffInMinutes($file->updated_at);
+    });
+    $tempsMoyen = round($tempsMoyen ?? 0);                 
+    
    }
    
     if ($user_connectee -> role === 'super-admin') {
+        $services = Service::pluck('id');
        $files = FileAttente::where('statut', 'ouverte')
                    ->whereDate('date', now())
-                    ->paginate(6);     
+                    ->paginate(6);  
+       $nbfiles = $files->count();
+       $nbClients = Ticket::whereDate('created_at', today())->count();
+        $filesClosed = FileAttente::whereIn('service_id', $services)
+                              ->where('statut', 'fermee')
+                              ->whereDate('created_at', today())
+                              ->get();
+
+    $tempsMoyen = $filesClosed->avg(function($file) {
+        return $file->created_at->diffInMinutes($file->updated_at);
+    });
+    $tempsMoyen = round($tempsMoyen ?? 0);   
+
     }
-    return view('files.files_disponibles', compact('files'));
+    return view('files.files_disponibles', compact('files', 'nbfiles', 'nbClients', 'tempsMoyen'));
    
 }
 }

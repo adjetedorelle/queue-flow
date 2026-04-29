@@ -46,7 +46,14 @@ class PersonnelController extends Controller
     }
 
     public function listePersonnel () {
-        $personnels= Personnel::paginate(10);
+        if (auth()->user()->role === 'admin') {
+            $admin = Admin::WHERE('utilisateur_id','=',auth()->id()) ->first();
+            $entreprise = Entreprise::WHERE('admin_id','=',$admin->id) ->first();
+            $personnels = Personnel::WHERE('entreprise_id','=',$entreprise->id)->paginate(05);
+        }   
+        if (auth()->user()->role === 'super-admin') {
+            $personnels = Personnel::paginate(05);
+        }   
         return view('personnels.liste_personnel', compact('personnels'));
     }
 

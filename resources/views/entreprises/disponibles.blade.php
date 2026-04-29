@@ -37,7 +37,7 @@
                         class="bg-surface-container-lowest rounded-xl shadow-[0px_32px_64px_rgba(34,50,67,0.06)] overflow-hidden transition-all duration-300 hover:-translate-y-2 group">
                         <div class="relative h-48 overflow-hidden">
                             <img alt="{{ $entreprise->nom_ent }}"
-                                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                class="w-full h-full object-fixed transition-transform duration-500 group-hover:scale-105"
                                 src="{{ asset('storage/' . $entreprise->image) }}" />
                             <div class="absolute top-4 right-4">
                                 <span

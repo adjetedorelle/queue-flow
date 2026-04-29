@@ -26,7 +26,9 @@ class ServiceController extends Controller
             if ($admin)
         {
             $entreprise = Entreprise::WHERE('admin_id','=',$admin->id) ->first();
-
+          
+        } else {
+            return redirect()->back()->withErrors('Vous n\'êtes pas autorisé à ajouter un service.');
         }
 
         Service::create([
