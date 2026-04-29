@@ -40,17 +40,6 @@
                 Ajouter une entreprise
             </button>
         </div>
-        <!-- Filters Section -->
-        <div class="px-8 py-6 bg-surface-container-low/30">
-            <div class="relative max-w-md group">
-                <span
-                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant transition-colors group-focus-within:text-primary"
-                    data-icon="search">search</span>
-                <input
-                    class="w-full pl-12 pr-4 py-4 bg-surface-container-low border-0 rounded-xl focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-on-surface-variant/50"
-                    placeholder="Rechercher une entreprise ou un administrateur..." type="text" />
-            </div>
-        </div>
         <!-- Table Section -->
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">

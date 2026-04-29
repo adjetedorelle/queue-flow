@@ -15,7 +15,7 @@
                 ? 'flex items-center gap-3 text-[#f97316] border-l-4 border-[#f97316] bg-[#223243]/5 py-3 px-6 transition-all duration-200 ease-in-out'
                 : 'flex items-center gap-3 text-slate-400 hover:text-[#223243] hover:bg-[#223243]/5 py-3 px-6 transition-all duration-200 ease-in-out';
         @endphp
-        @if (auth()->user()->role === 'super-admin')
+        @if (auth()->user()->role === 'super-admin'||auth()->user()->role === 'admin')
 
         <a class="{{ $navLink(request()->routeIs('dashboard')) }}" href="{{ route('dashboard') }}">
             <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
@@ -33,9 +33,9 @@
         </a>
        @if (auth()->user()->role === 'super-admin'||auth()->user()->role === 'admin')
 
-        <a class="{{ $navLink(request()->routeIs('statistiques*')) }}" href="#">
+        <a class="{{ $navLink(request()->routeIs('statistiques*')) }}" href="{{ route('statistiques')}}">
             <span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
-            <span class="font-manrope text-sm font-medium tracking-tight">Statistiques</span>
+            <span class="font-manrope text-sm font-medium tracking-tight">Statistiques & Rapports</span>
         </a>
 
         <a class="{{ $navLink(request()->routeIs('service_liste*')) }}" href="{{ route('service_liste') }}">
@@ -53,16 +53,13 @@
                 <span class="font-manrope text-sm font-medium tracking-tight">Entreprises</span>
             </a>
         
-            <a class="{{ $navLink(request()->routeIs('parametres*')) }}" href="#">
-                <span class="material-symbols-outlined" data-icon="settings">settings</span>
-                <span class="font-manrope text-sm font-medium tracking-tight">Paramètres</span>
-            </a>
+            
         @endif
 
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <a onclick="event.preventDefault(); this.closest('form').submit();"
-               class="flex items-center gap-3 text-slate-400 hover:text-white hover:bg-white/5 py-3 px-6 transition-all duration-200 ease-in-out"
+               class="flex items-center gap-3 text-slate-400 hover:text-[#223243] hover:bg-[#223243]/10 py-3 px-6 transition-all duration-200 ease-in-out"
                href="{{ route('logout') }}">
                 <span class="material-symbols-outlined" data-icon="logout">logout</span>
                 <span class="font-manrope text-sm font-medium tracking-tight">Déconnexion</span>

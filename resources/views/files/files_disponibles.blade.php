@@ -132,7 +132,7 @@
                     <div>
                         <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">Total Clients
                         </p>
-                        <p class="text-3xl font-black text-on-surface">1,284</p>
+                        <p class="text-3xl font-black text-on-surface">{{ $nbClients }}</p>
                     </div>
                     <div
                         class="h-12 w-12 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
@@ -143,7 +143,7 @@
                     class="bg-inverse-surface p-6 rounded-xl kinetic-shadow flex items-center justify-between text-white">
                     <div>
                         <p class="text-xs font-bold uppercase tracking-wider text-surface-dim mb-1">Files Actives</p>
-                        <p class="text-3xl font-black">12</p>
+                        <p class="text-3xl font-black">{{ $nbfiles }}</p>
                     </div>
                     <div
                         class="h-12 w-12 rounded-lg bg-white/10 flex items-center justify-center text-primary-container">
@@ -155,7 +155,7 @@
                     <div>
                         <p class="text-xs font-bold uppercase tracking-wider text-on-surface-variant mb-1">Temps Moyen
                         </p>
-                        <p class="text-3xl font-black text-on-surface">14 min</p>
+                        <p class="text-3xl font-black text-on-surface">{{ $tempsMoyen }} min</p>
                     </div>
                     <div
                         class="h-12 w-12 rounded-lg bg-surface-container-high flex items-center justify-center text-tertiary">

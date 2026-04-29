@@ -7,6 +7,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\Statcontroller;
 use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
@@ -138,6 +139,18 @@ Route::get('page_ticket/{ticketId}',[TicketController::class, 'pageTicket'])
 
 Route::get('appeler_prochain/{id_service?}',[TicketController::class, 'appelerProchain'])
 ->middleware(['auth', 'verified'])->name('appeler_prochain');
+
+Route::middleware(['auth'])->group(function () {
+Route::get('/statistiques', [Statcontroller::class, 'index'])->name('statistiques');
+
+// Super-admin
+Route::get('/export/entreprises', [Statcontroller::class, 'exportEntreprises'])->name('export.entreprises');
+
+Route::get('/export/tickets', [Statcontroller::class, 'exportTousTickets'])->name('export.tickets');
+
+// Admin
+Route::get('/export/mes-tickets', [Statcontroller::class, 'exportTicketsAdmin'])->name('export.tickets.admin');
+});
 
 
 Route::middleware('auth')->group(function () {

@@ -263,49 +263,5 @@
                 <!-- Footer Pagination -->
 
             </div>
-            <!-- Quick Stats Bento Grid (Asymmetric) -->
-            <div class="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div
-                    class="md:col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-surface-container-low flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <span class="material-symbols-outlined text-primary mb-4">timer</span>
-                    <div>
-                        <h3 class="text-sm font-bold text-on-surface-variant uppercase tracking-widest mb-1">Temps
-                            Moyen</h3>
-                        <p class="text-2xl font-extrabold text-on-surface">14 min</p>
-                    </div>
-                </div>
-                <div
-                    class="md:col-span-1 bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-surface-container-low flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <span class="material-symbols-outlined text-green-500 mb-4">task_alt</span>
-                    <div>
-                        <h3 class="text-sm font-bold text-on-surface-variant uppercase tracking-widest mb-1">Résolus
-                            (H)</h3>
-                        <p class="text-2xl font-extrabold text-on-surface">{{ $ticketsResolus }}</p>
-                    </div>
-                </div>
-                <div
-                    class="md:col-span-2 bg-gradient-to-br from-inverse-surface to-[#1a2938] p-6 rounded-xl shadow-xl flex items-center justify-between group overflow-hidden relative">
-                    <div class="relative z-10">
-                        <h3 class="text-sm font-bold text-surface-variant uppercase tracking-widest mb-1">Charge
-                            actuelle</h3>
-                        <p class="text-3xl font-extrabold text-white mb-2">Modérée</p>
-                        <p class="text-xs text-surface-variant/80 max-w-[200px]">8 guichets ouverts, temps d'attente
-                            estimé à 5 min.</p>
-                    </div>
-                    <div class="relative z-10 w-24 h-24 flex items-center justify-center">
-                        <svg class="w-full h-full transform -rotate-90">
-                            <circle class="text-white/10" cx="48" cy="48" fill="transparent" r="38"
-                                stroke="currentColor" stroke-width="8"></circle>
-                            <circle class="text-primary-container" cx="48" cy="48" fill="transparent"
-                                r="38" stroke="currentColor" stroke-dasharray="238.76" stroke-dashoffset="80"
-                                stroke-width="8"></circle>
-                        </svg>
-                        <span class="absolute text-white font-bold text-xl">65%</span>
-                    </div>
-                    <!-- Decorative background pulse -->
-                    <div
-                        class="absolute -right-4 -bottom-4 w-32 h-32 bg-primary/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700">
-                    </div>
-                </div>
-            </div>
+           
 </x-app-layout>

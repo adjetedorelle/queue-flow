@@ -29,7 +29,6 @@ class TicketController extends Controller
         // Base query selon le rôle
         if ($user_connectee->role === 'super-admin') {
             $query = Ticket::query();
-            $ticketsResolus = Ticket::where('statut', 'traite')->count();
         }
 
         if ($user_connectee->role === 'personnel') {
@@ -46,23 +45,23 @@ class TicketController extends Controller
             $entreprise = Entreprise::where('admin_id', $admin->id)->first();
             $services = Service::where('entreprise_id', $entreprise->id)->pluck('id');
             $query = Ticket::whereIn('service_id', $services);
-            $ticketsResolus = Ticket::whereIn('service_id', $services)
-                ->where('statut', 'traite')
-                ->count();
+            
         }
 
         // Application des filtres
         if ($filtre === 'aujourd_hui') {
-            $query->whereDate('jour_passage', today());
+            $query->whereDate('created_at', today());
         }
 
         if ($filtre === 'prioritaires') {
-            $query->where('type', 'express'); // adapte selon ton champ
+            $query->where('type', 'express')
+            ->wheredate('created_at', today())
+            ; // adapte selon ton champ
         }
 
         $tickets = $query->paginate(6);
 
-        return view('tickets.tickets_dispo', compact('tickets', 'filtre', 'ticketsResolus'));
+        return view('tickets.tickets_dispo', compact('tickets', 'filtre'));
     }
 
 
