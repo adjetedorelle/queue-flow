@@ -168,6 +168,30 @@
             </div>
             @endif
 
+            <!-- Success Messages -->
+            @if (session('success'))
+            <div class="px-6 md:px-8 mt-4">
+                <div class="bg-green-50 border border-green-100 p-4 rounded-xl md:rounded-2xl flex gap-3">
+                    <span class="material-symbols-outlined text-green-500 flex-shrink-0">check_circle</span>
+                    <div class="text-sm text-green-700 font-bold break-words">
+                        {{ session('success') }}
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            <!-- Error Messages -->
+            @if (session('error'))
+            <div class="px-6 md:px-8 mt-4">
+                <div class="bg-red-50 border border-red-100 p-4 rounded-xl md:rounded-2xl flex gap-3">
+                    <span class="material-symbols-outlined text-red-500 flex-shrink-0">error</span>
+                    <div class="text-sm text-red-700 font-bold break-words">
+                        {{ session('error') }}
+                    </div>
+                </div>
+            </div>
+            @endif
+
             <form action="{{ route('formulaire_date.submit') }}" method="POST" class="p-6 md:p-8 pt-4 space-y-6 md:space-y-8">
                 @csrf
                 @if ($service)

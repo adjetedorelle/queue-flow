@@ -134,8 +134,8 @@ class TicketController extends Controller
             // Vérifier le type de ticket demandé
             $typeTicket = $request->type_ticket;
             if ($typeTicket === 'vip' && !$client->vip) {
-                dd($client->vip);
-                return redirect()->back()->with('error', 'Seuls les clients VIP peuvent prendre des tickets VIP.');
+                
+                return redirect()->back()->with('error', 'Seuls les clients VIP peuvent prendre des tickets VIP')->withInput();
             }
 
             // Chercher ou créer la FileAttente pour ce service à la date donnée et type
@@ -175,7 +175,7 @@ class TicketController extends Controller
             $entreprise = $service->entreprise;
             if (!$this->verifierHorairesOuverture($heureExact, $entreprise)) {
 
-                return redirect()->back()->with('error', "L'heure de passage est en dehors des horaires d'ouverture de l'entreprise ({$entreprise->heure_ouv} - {$entreprise->heure_ferm}).");
+                return redirect()->back()->with('error', "L'heure de passage est en dehors des horaires d'ouverture de l'entreprise ({$entreprise->heure_ouv} - {$entreprise->heure_ferm}).")->withInput();
             }
 
             // Créer le ticket
@@ -215,8 +215,8 @@ class TicketController extends Controller
             return redirect()->route('page_ticket', ['ticketId' => $ticket->id])->with('success', 'Ticket créé avec succès !');
         } catch (\Throwable $th) {
             DB::rollback();
-
-            return redirect()->back()->with('error', 'Une erreur est survenue lors de la création du ticket.');
+           
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de la création du ticket')->withInput();
         }
     }
 
@@ -251,7 +251,6 @@ class TicketController extends Controller
             ->whereNotNull('heure_exact')
             ->orderBy('created_at', 'asc')
             ->get();
-        dd($ticketsExistants);
 
         // Si c'est le premier ticket, l'heure exacte = heure de passage souhaitée
         if ($ticketsExistants->isEmpty()) {
@@ -287,8 +286,13 @@ class TicketController extends Controller
         $heureOuverture = Carbon::parse($entreprise->heure_ouv);
         $heureFermeture = Carbon::parse($entreprise->heure_ferm);
 
+        // Extraire uniquement les heures pour la comparaison
+        $heureExactHHMM = $heureExact->format('H:i');
+        $heureOuvertureHHMM = $heureOuverture->format('H:i');
+        $heureFermetureHHMM = $heureFermeture->format('H:i');
+
         // Si l'heure exacte est en dehors des horaires d'ouverture
-        if ($heureExact->lt($heureOuverture) || $heureExact->gt($heureFermeture)) {
+        if ($heureExactHHMM < $heureOuvertureHHMM || $heureExactHHMM > $heureFermetureHHMM) {
             return false;
         }
 

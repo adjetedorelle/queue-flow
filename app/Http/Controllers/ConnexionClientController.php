@@ -87,15 +87,15 @@ class ConnexionClientController extends Controller
                 }
 
                 // Envoyer le code otp selon le canal prioritaire
-                if ($channel === 'mail') {
-                    Notification::send($user, new EnvoyerOtp($code_otp, $channel));
-                    Log::info('Notification OTP envoyée par mail', ['user_id' => $user->id]);
-                } elseif ($channel === 'whatsapp') {
-                    // Envoi direct via Zavu.dev sans passer par Laravel Notifications
-                    $notification = new EnvoyerOtp($code_otp, $channel);
-                    $result = $notification->toZavuWhatsApp($user);
-                    Log::info('Notification OTP envoyée par WhatsApp', ['user_id' => $user->id, 'result' => $result]);
-                }
+                $channel = 'mail';
+                Notification::send($user, new EnvoyerOtp($code_otp, $channel));
+                Log::info('Notification OTP envoyée par mail', ['user_id' => $user->id]);
+                // } elseif ($channel === 'whatsapp') {
+                //     // Envoi direct via Zavu.dev sans passer par Laravel Notifications
+                //     $notification = new EnvoyerOtp($code_otp, $channel);
+                //     $result = $notification->toZavuWhatsApp($user);
+                //     Log::info('Notification OTP envoyée par WhatsApp', ['user_id' => $user->id, 'result' => $result]);
+                // }
                 DB::commit();
             } catch (\Throwable $th) {
                 DB::rollback();
