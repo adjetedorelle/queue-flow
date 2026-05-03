@@ -243,41 +243,33 @@ class TicketController extends Controller
 
     private function calculerHeureExacte($service, $jourPassage, $typeTicket)
     {
-        // Récupérer tous les tickets de la même file d'attente (même service, même date, même type)
-        // avec une heure_exact déjà définie, triés par created_at
+        $start = Carbon::parse($jourPassage);
+        $dureeTotale = $service->temps_estime + 2; // Temps estimé + 2 min de marge
+
+        // Récupérer tous les tickets planifiés pour ce service et ce jour, triés par heure de passage
         $ticketsExistants = Ticket::where('service_id', $service->id)
-            ->where('jour_passage', 'like', date('Y-m-d', strtotime($jourPassage)) . '%')
+            ->whereDate('jour_passage', $start->toDateString())
             ->where('type', $typeTicket)
             ->whereNotNull('heure_exact')
-            ->orderBy('created_at', 'asc')
+            ->orderBy('heure_exact', 'asc')
             ->get();
 
-        // Si c'est le premier ticket, l'heure exacte = heure de passage souhaitée
-        if ($ticketsExistants->isEmpty()) {
-            return Carbon::parse($jourPassage);
+        foreach ($ticketsExistants as $ticket) {
+            $ticketStart = Carbon::parse($ticket->heure_exact);
+            $ticketEnd = $ticketStart->copy()->addMinutes($dureeTotale);
+
+            // Vérifier s'il y a un chevauchement
+            // Un chevauchement existe si :
+            // (Nouvelle Heure Début < Heure Fin Ticket Existant) ET (Heure Début Ticket Existant < Nouvelle Heure Fin)
+            $newEnd = $start->copy()->addMinutes($dureeTotale);
+
+            if ($start->lt($ticketEnd) && $ticketStart->lt($newEnd)) {
+                // Chevauchement détecté : on décale le début à la fin du ticket existant
+                $start = $ticketEnd;
+            }
         }
 
-        // Trouver le ticket immédiatement avant (le dernier créé avec heure_exact)
-        $ticketPrecedent = $ticketsExistants->last();
-
-        if (!$ticketPrecedent) {
-            return Carbon::parse($jourPassage);
-        }
-
-        // Calculer l'heure de fin du ticket précédent
-        $heureFinPrecedent = Carbon::parse($ticketPrecedent->heure_exact)
-            ->addMinutes($service->temps_estime)
-            ->addMinutes(2); // Marge de 2 minutes
-
-        $heureSouhaitee = Carbon::parse($jourPassage);
-
-        // Si l'heure calculée est inférieure à l'heure souhaitée, utiliser l'heure souhaitée
-        if ($heureFinPrecedent->lt($heureSouhaitee)) {
-            return $heureSouhaitee;
-        }
-
-        // Sinon, utiliser l'heure calculée
-        return $heureFinPrecedent;
+        return $start;
     }
 
     private function verifierHorairesOuverture($heureExact, $entreprise)
