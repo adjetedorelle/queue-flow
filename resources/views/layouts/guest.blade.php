@@ -148,10 +148,6 @@
             {{$slot}}
         </section>
     </main>
-    <!-- Simple Footer Copyright -->
-    <footer class="absolute bottom-0 w-full flex justify-end px-8 py-4 pointer-events-none">
-        <p class="font-label text-[10px] uppercase tracking-widest text-slate-400/50">
-            © 2024 QueueFlow Systems
-        </p>
+    
     </footer>
 
