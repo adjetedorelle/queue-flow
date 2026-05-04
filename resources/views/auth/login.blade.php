@@ -54,20 +54,9 @@
                 type="submit">
                 Se Connecter
             </button>
-            <button
-                class="w-full py-4 border border-outline-variant/30 text-on-primary-fixed-variant font-headline font-bold rounded-xl hover:bg-surface-container-high transition-colors"
-                type="button">
-                Créer un compte
-            </button>
+            
         </div>
     </form>
-    <!-- Footer Links (Contextual) -->
-    <div class="mt-12 flex justify-center space-x-6">
-        <a class="font-label text-[10px] uppercase tracking-widest text-slate-400 hover:text-blue-900 transition-colors"
-            href="#">Politique de confidentialité</a>
-        <a class="font-label text-[10px] uppercase tracking-widest text-slate-400 hover:text-blue-900 transition-colors"
-            href="#">Conditions d'utilisation</a>
-    </div>
 </div>
 
 </x-guest-layout>

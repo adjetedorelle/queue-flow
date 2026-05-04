@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Admin;
 use App\Models\Entreprise;
+use App\Models\Personnel;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -46,10 +47,17 @@ class ServiceController extends Controller
         if ($user->role === 'admin') {
             $admin = Admin::WHERE('utilisateur_id','=',$user->id) ->first();
             $entreprise = Entreprise::WHERE('admin_id','=',$admin->id) ->first();
-            $services = Service::WHERE('entreprise_id','=',$entreprise->id)->paginate(10) ;
-        } else {
-             $services = Service::paginate(10) ;
+            $services = Service::WHERE('entreprise_id','=',$entreprise->id)->paginate(06) ;
+        
         } 
+        if($user->role === 'personnel') {
+            $personnel = Personnel::WHERE('utilisateur_id','=',$user->id) ->first();
+            $services = Service::WHERE('entreprise_id','=',$personnel->entreprise_id)->paginate(06) ;
+        }
+
+        if($user->role === 'super-admin') {
+            $services = Service::paginate(06) ;
+        }
         return view('services.tableauService',compact('services'));  
     }
 
