@@ -125,8 +125,10 @@
                 
                 <div class="relative z-10 flex flex-col items-center">
                     <div class="flex items-center gap-2 mb-4">
-                        <span class="text-white font-black text-2xl tracking-tighter uppercase">QueueFlow</span>
-                        <div class="h-2 w-2 bg-primary-container rounded-full animate-pulse"></div>
+                        <a href="{{ route('Acceuil') }}" class="flex items-center gap-2 hover:scale-105 transition-transform">
+                            <span class="text-white font-black text-2xl tracking-tighter uppercase">QueueFlow</span>
+                            <div class="h-2 w-2 bg-primary-container rounded-full animate-pulse"></div>
+                        </a>
                     </div>
                     <h1 class="text-white text-xl md:text-3xl font-black tracking-tight leading-tight mb-2 text-center uppercase">Prendre un ticket</h1>
                     <p class="text-slate-400 text-[10px] md:text-sm font-medium tracking-wide uppercase">Veuillez remplir les informations suivantes</p>
@@ -153,26 +155,7 @@
                 </div>
             </div>
             @endif
-
-            <!-- Agence Selection -->
-            <div class="px-6 md:px-8">
-                <div class="space-y-3">
-                    <label for="agence" class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant ml-1">Sélectionnez l'agence <span class="text-primary">*</span></label>
-                    <div class="relative group">
-                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none group-focus-within:text-primary transition-colors">
-                            <span class="material-symbols-outlined text-on-surface-variant/40">store</span>
-                        </div>
-                        <select name="agence_id" id="agence" required
-                            class="w-full bg-surface-container-low border border-outline-variant/20 focus:border-primary focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 py-3 pl-14 pr-6 rounded-xl md:rounded-2xl text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none">
-                            <option value="">Sélectionnez une agence</option>
-                            @foreach ($agences as $agence)
-                                <option value="{{ $agence->id }}">{{ $agence->nom }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-
+            
             <!-- Validation Errors -->
             @if ($errors->any())
             <div class="px-6 md:px-8 mt-4">
@@ -215,6 +198,25 @@
                 @csrf
                 @if ($service)
                     <input type="hidden" name="service_id" value="{{ $service->id }}">
+                @endif
+
+                @if ($agences && $agences->count() > 0)
+                <!-- Agence Selection -->
+                <div class="space-y-3">
+                    <label for="agence" class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant ml-1">Sélectionnez l'agence <span class="text-primary">*</span></label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none group-focus-within:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-on-surface-variant/40">store</span>
+                        </div>
+                        <select name="agence_id" id="agence" required
+                            class="w-full bg-surface-container-low border border-outline-variant/20 focus:border-primary focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 py-3 pl-14 pr-6 rounded-xl md:rounded-2xl text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none">
+                            <option value="">Sélectionnez une agence</option>
+                            @foreach ($agences as $agence)
+                                <option value="{{ $agence->id }}">{{ $agence->nom }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
                 @endif
 
                 <!-- Date Selection -->

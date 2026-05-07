@@ -220,11 +220,11 @@
                         <tbody class="divide-y divide-surface-container">
                             @foreach ($adminsrecents as $admin)
                                 <tr class="hover:bg-surface-container-low transition-colors">
-                                    <td class="px-8 py-4 text-sm font-bold">{{ $admin->utilisateur->nom }}
-                                        {{ $admin->utilisateur->prenom }}</td>
-                                    <td class="px-4 py-4 text-sm">{{ $admin->utilisateur->email }}</td>
+                                    <td class="px-8 py-4 text-sm font-bold">{{ $admin->utilisateur->nom ?? '' }}
+                                        {{ $admin->utilisateur->prenom ?? '' }}</td>
+                                    <td class="px-4 py-4 text-sm">{{ $admin->utilisateur->email ?? '' }}</td>
                                     <td class="px-4 py-4 text-sm font-medium text-tertiary">
-                                        {{ $admin->entreprise->nom_ent }}</td>
+                                        {{ $admin->entreprise->nom_ent ?? '' }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
