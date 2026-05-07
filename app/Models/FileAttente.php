@@ -23,8 +23,13 @@ class FileAttente extends Model
         'statut',
         'service_id',
         'type',
+        'agence_id',
     ];  
     public function service (){
         return $this->belongsTo(Service::class);
+    }
+
+    public function agence (){
+        return $this->belongsTo(Agence::class);
     }
 }

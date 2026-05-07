@@ -109,10 +109,9 @@ class TicketController extends Controller
 
     public function submitTicket(Request $request)
     {
-
-
         $request->validate([
             'service_id' => 'required|exists:services,id',
+            'agence_id' => 'nullable|exists:agences,id',
             'jour_passage' => 'required|date|after:now',
             'rappel_minutes' => 'nullable|integer|min:1|max:60',
             'type_ticket' => 'required|in:standard,vip',
@@ -139,18 +138,42 @@ class TicketController extends Controller
                 return redirect()->back()->with('error', 'Seuls les clients VIP peuvent prendre des tickets VIP')->withInput();
             }
 
-            // Chercher ou créer la FileAttente pour ce service à la date donnée et type
-            // dd($request->service_id, $request->jour_passage, $typeTicket);
+            // Récupérer le service
             $service = Service::find($request->service_id);
+            
+            // Vérifier si l'entreprise a des agences
+            $agences = Agence::where('entreprise_id', $service->entreprise_id)->get();
+            $hasAgences = $agences->isNotEmpty();
+            
+            // Validation conditionnelle : si l'entreprise a des agences, une agence doit être sélectionnée
+            if ($hasAgences && !$request->agence_id) {
+                return redirect()->back()->with('error', 'Veuillez sélectionner une agence.')->withInput();
+            }
+            
+            // Récupérer l'agence sélectionnée (null si l'entreprise n'a pas d'agences)
+            $agence = null;
+            if ($request->agence_id) {
+                $agence = Agence::find($request->agence_id);
+                if (!$agence || $agence->entreprise_id !== $service->entreprise_id) {
+                    return redirect()->back()->with('error', 'Agence invalide.')->withInput();
+                }
+            }
+
+            // Chercher ou créer la FileAttente pour ce service, cette agence (ou null), à la date donnée et type
             $datePassage = Carbon::parse($request->jour_passage)->format('Y-m-d');
-            //dd($service->id, $datePassage, $typeTicket);
-            $fileAttente = FileAttente::where('service_id', $service->id)
+            $fileAttenteQuery = FileAttente::where('service_id', $service->id)
                 ->where('date', $datePassage)
                 ->where('type', $typeTicket)
-                ->where('statut', 'ouverte')
-                ->with('service')
-                ->first();
-            //dd($fileAttente);
+                ->where('statut', 'ouverte');
+                
+            // Filtrer par agence seulement si une agence est spécifiée
+            if ($agence) {
+                $fileAttenteQuery->where('agence_id', $agence->id);
+            } else {
+                $fileAttenteQuery->whereNull('agence_id');
+            }
+            
+            $fileAttente = $fileAttenteQuery->with('service')->first();
 
             if (!$fileAttente) {
                 $fileAttente = FileAttente::create([
@@ -159,6 +182,7 @@ class TicketController extends Controller
                     'nb_total' => 1,
                     'statut' => 'ouverte',
                     'service_id' => $service->id,
+                    'agence_id' => $agence ? $agence->id : null,
                     'type' => $typeTicket,
                 ]);
             } else {
@@ -167,10 +191,10 @@ class TicketController extends Controller
             }
 
             // Générer un numéro de ticket unique
-            $numero = $this->genererNumeroTicket($service->id, $request->jour_passage);
+            $numero = $this->genererNumeroTicket($service->id, $request->jour_passage, $agence ? $agence->id : null);
 
             // Calculer l'heure exacte de passage
-            $heureExact = $this->calculerHeureExacte($service, $request->jour_passage, $typeTicket);
+            $heureExact = $this->calculerHeureExacte($service, $request->jour_passage, $typeTicket, $agence ? $agence->id : null);
 
             // Vérifier que l'heure exacte est dans les horaires d'ouverture
             $entreprise = $service->entreprise;
@@ -190,6 +214,7 @@ class TicketController extends Controller
                 'client_id' => $client->id,
                 'service_id' => $service->id,
                 'file_attente_id' => $fileAttente->id,
+                'agence_id' => $agence ? $agence->id : null,
                 'motif' => $typeTicket === 'vip' ? $request->motif : null,
             ]);
 
@@ -221,14 +246,22 @@ class TicketController extends Controller
         }
     }
 
-    private function genererNumeroTicket($serviceId, $date)
+    private function genererNumeroTicket($serviceId, $date, $agenceId)
     {
-        // Format: année-mois-service_id-numéro_séquentiel
+        // Format: année-mois-agence_id-service_id-numéro_séquentiel (ou année-mois-service_id-numéro_séquentiel si pas d'agence)
         $anneeMois = date('Y-m', strtotime($date));
-        $dernierTicket = Ticket::where('service_id', $serviceId)
-            ->where('jour_passage', 'like', $anneeMois . '%')
-            ->orderBy('id', 'desc')
-            ->first();
+        
+        $query = Ticket::where('service_id', $serviceId)
+            ->where('jour_passage', 'like', $anneeMois . '%');
+            
+        // Filtrer par agence seulement si une agence est spécifiée
+        if ($agenceId) {
+            $query->where('agence_id', $agenceId);
+        } else {
+            $query->whereNull('agence_id');
+        }
+        
+        $dernierTicket = $query->orderBy('id', 'desc')->first();
 
         if ($dernierTicket) {
             // Extraire le numéro séquentiel du dernier ticket
@@ -239,21 +272,32 @@ class TicketController extends Controller
             $nouveauNumero = '001';
         }
 
-        return $anneeMois . '-' . $serviceId . '-' . $nouveauNumero;
+        if ($agenceId) {
+            return $anneeMois . '-' . $agenceId . '-' . $serviceId . '-' . $nouveauNumero;
+        } else {
+            return $anneeMois . '-' . $serviceId . '-' . $nouveauNumero;
+        }
     }
 
-    private function calculerHeureExacte($service, $jourPassage, $typeTicket)
+    private function calculerHeureExacte($service, $jourPassage, $typeTicket, $agenceId)
     {
         $start = Carbon::parse($jourPassage);
         $dureeTotale = $service->temps_estime + 2; // Temps estimé + 2 min de marge
 
-        // Récupérer tous les tickets planifiés pour ce service et ce jour, triés par heure de passage
-        $ticketsExistants = Ticket::where('service_id', $service->id)
+        // Récupérer tous les tickets planifiés pour ce service, cette agence (ou null), et ce jour, triés par heure de passage
+        $query = Ticket::where('service_id', $service->id)
             ->whereDate('jour_passage', $start->toDateString())
             ->where('type', $typeTicket)
-            ->whereNotNull('heure_exact')
-            ->orderBy('heure_exact', 'asc')
-            ->get();
+            ->whereNotNull('heure_exact');
+            
+        // Filtrer par agence seulement si une agence est spécifiée
+        if ($agenceId) {
+            $query->where('agence_id', $agenceId);
+        } else {
+            $query->whereNull('agence_id');
+        }
+        
+        $ticketsExistants = $query->orderBy('heure_exact', 'asc')->get();
 
         foreach ($ticketsExistants as $ticket) {
             $ticketStart = Carbon::parse($ticket->heure_exact);
@@ -319,6 +363,13 @@ class TicketController extends Controller
 
         if (!$ticket) {
             abort(403, 'Ticket non trouvé.');
+        }
+
+        if ($ticket->statut === 'en_attente' && $ticket->file_attente_id && $ticket->heure_exact) {
+            $ticket->position = Ticket::where('file_attente_id', $ticket->file_attente_id)
+                ->where('statut', 'en_attente')
+                ->whereRaw('heure_exact < ?', [$ticket->heure_exact])
+                ->count() + 1;
         }
 
         return view('tickets.page_ticket', compact('ticket'));
@@ -489,5 +540,96 @@ class TicketController extends Controller
 
         // 3. Rediriger vers la liste des tickets en attente du service
         return redirect()->back()->with('success', 'Prochain ticket appelé avec succès.');
+    }
+
+    public function mesTickets(Request $request)
+    {
+        $user = auth()->user();
+        $client = Client::where('utilisateur_id', $user->id)->first();
+
+        if (!$client) {
+            return redirect()->route('Acceuil')->with('error', 'Vous devez être enregistré comme client pour accéder à cette page.');
+        }
+
+        $filtre = $request->query('statut', 'tous');
+
+        $query = Ticket::with(['service', 'service.entreprise', 'fileAttente', 'agence'])
+            ->where('client_id', $client->id);
+
+        if ($filtre !== 'tous') {
+            $query->where('statut', $filtre);
+        }
+
+        $tickets = $query->orderBy('created_at', 'desc')->paginate(15);
+
+        foreach ($tickets as $ticket) {
+            if ($ticket->statut === 'en_attente' && $ticket->file_attente_id && $ticket->heure_exact) {
+                $ticket->position = Ticket::where('file_attente_id', $ticket->file_attente_id)
+                    ->where('statut', 'en_attente')
+                    ->whereRaw('heure_exact < ?', [$ticket->heure_exact])
+                    ->count() + 1;
+            }
+        }
+
+        $ticketsParStatut = [
+            'tous' => Ticket::where('client_id', $client->id)->count(),
+            'en_attente' => Ticket::where('client_id', $client->id)->where('statut', 'en_attente')->count(),
+            'en_cours' => Ticket::where('client_id', $client->id)->where('statut', 'en_cours')->count(),
+            'traite' => Ticket::where('client_id', $client->id)->where('statut', 'traite')->count(),
+            'annule' => Ticket::where('client_id', $client->id)->where('statut', 'annule')->count(),
+        ];
+
+        return view('tickets.mes_tickets', compact('tickets', 'filtre', 'ticketsParStatut'));
+    }
+
+    public function annulerTicket(Request $request, $ticketId)
+    {
+        try {
+            DB::beginTransaction();
+
+            $user = auth()->user();
+            $client = Client::where('utilisateur_id', $user->id)->first();
+
+            if (!$client) {
+                return redirect()->back()->with('error', 'Vous devez être enregistré comme client.');
+            }
+
+            $ticket = Ticket::with('fileAttente')->find($ticketId);
+
+            if (!$ticket) {
+                return redirect()->back()->with('error', 'Ticket non trouvé.');
+            }
+
+            if ($ticket->client_id !== $client->id) {
+                abort(403, 'Vous n\'êtes pas autorisé à annuler ce ticket.');
+            }
+
+            if (!in_array($ticket->statut, ['en_attente', 'en_cours'])) {
+                return redirect()->back()->with('error', 'Ce ticket ne peut plus être annulé.');
+            }
+
+            $ancienStatut = $ticket->statut;
+            $ticket->statut = 'annule';
+            $ticket->save();
+
+            if ($ticket->fileAttente) {
+                $ticket->fileAttente->decrement('nb_total');
+                
+                if ($ancienStatut === 'en_attente') {
+                    $ticket->fileAttente->decrement('nb_client_restant');
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('mes_tickets')->with('success', 'Ticket annulé avec succès.');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            Log::error('Erreur annulation ticket', [
+                'ticket_id' => $ticketId,
+                'error' => $th->getMessage()
+            ]);
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'annulation.');
+        }
     }
 }

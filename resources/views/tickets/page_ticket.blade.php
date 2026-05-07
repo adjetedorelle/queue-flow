@@ -176,6 +176,12 @@
             <p class="text-xs text-on-surface-variant font-medium uppercase tracking-widest opacity-70">
                 {{ $ticket->service->entreprise->adresse ?? 'Service de Gestion de File' }}
             </p>
+            @if ($ticket->agence)
+            <div class="mt-2 inline-flex items-center gap-2 bg-surface-container-low px-3 py-1 rounded-full">
+                <span class="material-symbols-outlined text-primary text-xs">store</span>
+                <span class="text-xs font-bold text-on-surface uppercase">{{ $ticket->agence->nom }}</span>
+            </div>
+            @endif
             <div class="mt-4 border-y border-dashed border-outline-variant/30 py-2 flex justify-between items-center px-2">
                 <span class="text-[10px] font-bold text-on-surface-variant uppercase">{{ \Carbon\Carbon::now()->format('d/m/Y') }}</span>
                 <span class="text-[10px] font-bold text-on-surface-variant uppercase">{{ \Carbon\Carbon::now()->format('H:i') }}</span>
@@ -213,10 +219,19 @@
                 <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Heure de passage</span>
                 <span class="text-sm font-bold text-on-surface">{{ $ticket->heure_exact ? \Carbon\Carbon::parse($ticket->heure_exact)->format('d/m/Y à H:i') : 'N/A' }}</span>
             </div>
+            @if($ticket->statut === 'en_attente' && isset($ticket->position))
             <div class="flex justify-between items-end border-b border-dashed border-outline-variant/30 pb-2">
                 <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Position</span>
-                <span class="text-lg font-black text-on-surface">{{ $ticket->fileAttente->nb_client_restant }} personne(s)</span>
+                @php
+                    $personnesAvant = $ticket->position - 1;
+                @endphp
+                @if($personnesAvant === 0)
+                    <span class="text-sm font-black text-green-600">🎉 Vous êtes le prochain !</span>
+                @else
+                    <span class="text-sm font-bold text-on-surface">Position {{ $ticket->position }} ({{ $personnesAvant }} {{ $personnesAvant > 1 ? 'personnes' : 'personne' }} avant vous)</span>
+                @endif
             </div>
+            @endif
             <div class="flex justify-between items-end border-b border-dashed border-outline-variant/30 pb-2">
                 <span class="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Service</span>
                 <span class="text-sm font-bold text-on-surface uppercase">{{ $ticket->service->libelle }}</span>
