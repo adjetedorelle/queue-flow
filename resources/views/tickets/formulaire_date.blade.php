@@ -154,6 +154,25 @@
             </div>
             @endif
 
+            <!-- Agence Selection -->
+            <div class="px-6 md:px-8">
+                <div class="space-y-3">
+                    <label for="agence" class="text-[10px] font-black uppercase tracking-[0.2em] text-on-surface-variant ml-1">Sélectionnez l'agence <span class="text-primary">*</span></label>
+                    <div class="relative group">
+                        <div class="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none group-focus-within:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-on-surface-variant/40">store</span>
+                        </div>
+                        <select name="agence_id" id="agence" required
+                            class="w-full bg-surface-container-low border border-outline-variant/20 focus:border-primary focus:ring-2 focus:ring-blue-500 focus:ring-opacity-20 py-3 pl-14 pr-6 rounded-xl md:rounded-2xl text-on-surface placeholder:text-on-surface-variant/40 focus:outline-none">
+                            <option value="">Sélectionnez une agence</option>
+                            @foreach ($agences as $agence)
+                                <option value="{{ $agence->id }}">{{ $agence->nom }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <!-- Validation Errors -->
             @if ($errors->any())
             <div class="px-6 md:px-8 mt-4">
@@ -326,7 +345,6 @@
             typeRadios.forEach(radio => {
                 radio.addEventListener('change', toggleMotifField);
             });
-
             toggleMotifField();
         });
     </script>

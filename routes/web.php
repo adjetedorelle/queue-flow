@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Agencecontroller;
 use App\Http\Controllers\ConnexionClientController;
 use App\Http\Controllers\Dashbordcontroller;
 use App\Http\Controllers\EntrepriseController;
@@ -151,6 +152,24 @@ Route::get('/export/tickets', [Statcontroller::class, 'exportTousTickets'])->nam
 // Admin
 Route::get('/export/mes-tickets', [Statcontroller::class, 'exportTicketsAdmin'])->name('export.tickets.admin');
 });
+
+Route::get('ajouter_agence',[Agencecontroller::class, 'ajoutAgence'])
+->middleware(['auth', 'verified'])->name('ajouter_agence');
+
+Route::post('enregistrer_agence',[Agencecontroller::class,'enregistrerAgence'])
+->middleware(['auth', 'verified'])->name('enregistrer_agence');
+
+Route::get('liste_agences',[Agencecontroller::class,'listeAgences'])
+->middleware(['auth', 'verified'])->name('liste_agences');
+
+Route::get('formulaire_agence/{id_agence}',[Agencecontroller::class,'modifier'])
+->middleware(['auth', 'verified'])->name('formulaire_agence');
+
+Route::put('modifier_agence/{id_agence}',[Agencecontroller::class, 'mettreAjour'])
+->middleware(['auth', 'verified'])->name('modifier_agence');
+
+Route::delete('supprimer_agence/{id_agence}',[Agencecontroller::class,'supprimer'])
+->middleware(['auth', 'verified'])->name('supprimer_agence');
 
 
 Route::middleware('auth')->group(function () {

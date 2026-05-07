@@ -27,6 +27,7 @@ class Ticket extends Model
         'rappel_minutes',
         'file_attente_id',
         'motif',
+        'agence_id'
     ];
     public function service () {
         return $this->belongsTo(Service::class);
@@ -42,6 +43,10 @@ class Ticket extends Model
 
     public function fileAttente () {
         return $this->belongsTo(FileAttente::class);
+    }
+
+    public function agence () {
+        return $this->belongsTo(Agence::class);
     }
 }
 
