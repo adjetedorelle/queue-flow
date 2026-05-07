@@ -37,6 +37,10 @@ class Entreprise extends Model
       return $this->hasMany(Personnel::class);
     }
 
+    public function agences (){
+        return $this->hasMany(Agence::class);
+    }
+
 }
 
 

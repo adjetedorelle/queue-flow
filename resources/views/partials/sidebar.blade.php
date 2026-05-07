@@ -21,18 +21,10 @@
             <span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Dashboard</span>
         </a>
-        @endif
-        <a class="{{ $navLink(request()->routeIs('tickets_disponibles*')) }}" href="{{ route('tickets_disponibles') }}">
-            <span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
-            <span class="font-manrope text-sm font-medium tracking-tight">Tickets</span>
+        <a class="{{ $navLink(request()->routeIs('liste_agences*')) }}" href="{{ route('liste_agences') }}">
+            <span class="material-symbols-outlined" data-icon="home">home</span>
+            <span class="font-manrope text-sm font-medium tracking-tight">Agences</span>
         </a>
-
-        <a class="{{ $navLink(request()->routeIs('files_disponibles*')) }}" href="{{ route('files_disponibles') }}">
-            <span class="material-symbols-outlined" data-icon="queue_play_next">queue_play_next</span>
-            <span class="font-manrope text-sm font-medium tracking-tight">Files d'attente</span>
-        </a>
-       @if (auth()->user()->role === 'super-admin'||auth()->user()->role === 'admin')
-
         <a class="{{ $navLink(request()->routeIs('statistiques*')) }}" href="{{ route('statistiques')}}">
             <span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Statistiques & Rapports</span>
@@ -46,14 +38,22 @@
             <span class="material-symbols-outlined" data-icon="group">group</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Personnel</span>
         </a>
-          @endif
+        @endif
+        <a class="{{ $navLink(request()->routeIs('tickets_disponibles*')) }}" href="{{ route('tickets_disponibles') }}">
+            <span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
+            <span class="font-manrope text-sm font-medium tracking-tight">Tickets</span>
+        </a>
+
+        <a class="{{ $navLink(request()->routeIs('files_disponibles*')) }}" href="{{ route('files_disponibles') }}">
+            <span class="material-symbols-outlined" data-icon="queue_play_next">queue_play_next</span>
+            <span class="font-manrope text-sm font-medium tracking-tight">Files d'attente</span>
+        </a>
+      
         @if (auth()->user()->role === 'super-admin')
             <a class="{{ $navLink(request()->routeIs('liste_entreprises*')) }}" href="{{ route('liste_entreprises') }}">
                 <span class="material-symbols-outlined" data-icon="business">business</span>
                 <span class="font-manrope text-sm font-medium tracking-tight">Entreprises</span>
-            </a>
-        
-            
+            </a>    
         @endif
 
         <form method="POST" action="{{ route('logout') }}">

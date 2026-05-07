@@ -178,7 +178,7 @@
 
                 <!-- Input Row -->
                 
-                <div class="flex justify-between gap-2 sm:gap-4">
+                <div class="flex justify-between gap-2 sm:gap-2">
                     <input autofocus=""
                         class="otp-input w-12 h-12 sm:w-14 sm:h-14 text-center text-xl font-bold bg-surface-container-low border-0 rounded-md text-on-surface transition-all duration-200 outline-none"
                         maxlength="1" type="text" name="otp[]" />

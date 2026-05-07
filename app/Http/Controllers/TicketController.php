@@ -3,18 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendRappelJob;
 use App\Models\Admin;
-use App\Models\Entreprise;
+use App\Models\Agence;
 use App\Models\Client;
+use App\Models\Entreprise;
 use App\Models\FileAttente;
 use App\Models\Personnel;
 use App\Models\Service;
 use App\Models\Ticket;
-use App\Jobs\SendRappelJob;
 use App\Notifications\RebalancementTicket;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Spatie\Browsershot\Browsershot;
 
@@ -94,7 +95,7 @@ class TicketController extends Controller
         if ($service_id) {
             $service = Service::with('entreprise')->find($service_id);
             if (!$service) {
-                return redirect()->route('services_dispo')->with('error', 'Service non trouvé.');
+                return redirect()->route('services_disponibles')->with('error', 'Service non trouvé.');
             }
             $entreprise = $service->entreprise;
         }
@@ -102,8 +103,8 @@ class TicketController extends Controller
         // Récupérer le client pour vérifier le statut VIP
         $user = auth()->user();
         $client = Client::where('utilisateur_id', $user->id)->first();
-
-        return view('tickets.formulaire_date', compact('service', 'entreprise', 'client'));
+        $agences = Agence::where('entreprise_id', $service->entreprise_id)->get();
+        return view('tickets.formulaire_date', compact('service', 'entreprise', 'client', 'agences'));
     }
 
     public function submitTicket(Request $request)
@@ -215,7 +216,7 @@ class TicketController extends Controller
             return redirect()->route('page_ticket', ['ticketId' => $ticket->id])->with('success', 'Ticket créé avec succès !');
         } catch (\Throwable $th) {
             DB::rollback();
-           
+            
             return redirect()->back()->with('error', 'Une erreur est survenue lors de la création du ticket')->withInput();
         }
     }

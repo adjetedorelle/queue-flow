@@ -108,9 +108,9 @@
     <!-- Header Navigation (Simplified for Transactional Page) -->
     <header class="absolute top-0 w-full flex justify-between items-center px-8 py-6 z-50">
         <div class="flex items-center gap-2">
-            <span class="material-symbols-outlined text-[#002B5B] dark:text-blue-400" data-icon="layers">layers</span>
+            <span class="material-symbols-outlined text-[#ffffff] dark:text-blue-400" data-icon="layers">layers</span>
             <span class="text-2xl font-black font-headline tracking-tight">
-                <span class="text-[#002B5B] dark:text-blue-400">Queue</span><span class="text-[#FF6B00]">Flow</span>
+                <span class="text-[#ffffff] dark:text-blue-400">Queue</span><span class="text-[#FF6B00]">Flow</span>
             </span>
         </div>
         
