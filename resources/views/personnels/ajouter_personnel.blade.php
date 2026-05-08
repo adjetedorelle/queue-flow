@@ -127,11 +127,5 @@
                     Annuler
             </button>
             </div>
-        </form>
-
-
-        
-        
-
-        
+        </form>    
 </x-app-layout>

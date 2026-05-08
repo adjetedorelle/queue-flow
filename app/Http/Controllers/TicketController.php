@@ -517,7 +517,6 @@ class TicketController extends Controller
             ->where('statut', 'en_cours')
             ->whereDate('jour_passage', today())
             ->first();
-
         if ($ticket_encours) {
             $ticket_encours->statut = 'traite';
             $ticket_encours->date_fin_traitement = now();

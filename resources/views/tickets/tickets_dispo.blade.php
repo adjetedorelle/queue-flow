@@ -164,15 +164,11 @@
                                 <th
                                     class="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">
                                     Statut</th>
-                                <th
-                                    class="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest text-center">
-                                    Passage</th>
-                                <th
-                                    class="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest text-center">
-                                    Traitement</th>
-                                <th
-                                    class="px-8 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest text-right">
-                                    Actions</th>
+                                    @if (auth()->user()->role === 'super-admin')
+                                                <th
+                                                class="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+                                                 Entreprise</th>
+                                    @endif
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-surface-container-low">
@@ -182,13 +178,11 @@
                                 <tr class="group hover:bg-surface-container-low/30 transition-all cursor-pointer">
                                     <td class="px-8 py-6">
                                         <span
-                                            class="font-bold text-on-surface bg-surface-container-high px-3 py-1.5 rounded-lg text-sm">{{ $ticket->numero }}</span>
+                                            class="font-bold text-on-surface bg-surface-container-high px-4  rounded-lg text-sm">{{ $ticket->numero }}</span>
                                     </td>
                                     <td class="px-6 py-6">
                                         <div class="flex items-center gap-3">
-                                            <div
-                                                class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden">
-                                            </div>
+                                            
                                             <div>
                                                 <div class="font-bold text-on-surface">
                                                     {{ $ticket->client->utilisateur->nom }}</div>
@@ -236,25 +230,14 @@
                                         @endif
 
                                     </td>
-                                    <td class="px-6 py-6 text-center">
-                                        <div class="text-sm font-bold text-on-surface">14:30</div>
-                                        <div class="text-[10px] text-on-surface-variant font-medium">
-                                            {{ $ticket->statut }}</div>
-                                    </td>
-                                    <td class="px-6 py-6 text-center">
-                                        <div class="text-xs font-bold text-on-surface">
-                                            {{ $ticket->date_debut_traitement }}-{{ $ticket->date_fin_traitement }}
-                                        </div>
-                                        <div class="text-[10px] text-primary font-bold uppercase tracking-tighter">
-                                            Depuis 12
-                                            min</div>
-                                    </td>
-                                    <td class="px-8 py-6 text-right">
-                                        <button
-                                            class="p-2 hover:bg-surface-container-high rounded-full transition-colors text-on-surface-variant">
-                                            <span class="material-symbols-outlined">more_vert</span>
-                                        </button>
-                                    </td>
+                                    @if (auth()->user()->role === 'super-admin')
+                                    <td class="px-6 py-6">
+                                        <span class="flex items-center gap-2 text-sm font-semibold text-on-surface">
+                                            <span
+                                                            class="material-symbols-outlined text-primary text-[18px]">business</span>
+                                                        {{ $ticket->service->entreprise->nom_ent }}
+                                            </td>
+                                            @endif
                                 </tr>
                             @endforeach
                         </tbody>

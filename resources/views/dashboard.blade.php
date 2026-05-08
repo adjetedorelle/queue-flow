@@ -1,5 +1,4 @@
 <x-app-layout>
-
     <script id="tailwind-config">
         tailwind.config = {
             darkMode: "class",

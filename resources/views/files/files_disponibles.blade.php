@@ -199,9 +199,17 @@
                                 <th
                                     class="px-6 py-4 text-[11px] font-black uppercase tracking-[0.1em] text-on-surface-variant">
                                     Statut</th>
+                                  @if (auth()->user()->role === 'super-admin')
+                                    <th
+                                    class="px-6 py-4 text-[11px] font-black uppercase tracking-[0.1em] text-on-surface-variant">
+                                    Entreprise</th>
+                                  @endif
+
+                                  @if (auth()->user()->role === 'admin'|| auth()->user()->role === 'personnel')
                                 <th
                                     class="px-6 py-4 text-[11px] font-black uppercase tracking-[0.1em] text-on-surface-variant text-right">
                                     Actions</th>
+                                    @endif
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-surface-container-low">
@@ -224,10 +232,7 @@
                                 <td class="px-6 py-5 font-semibold text-on-surface">{{ $file->nb_total}}</td>
                                 <td class="px-6 py-5">
                                     <div class="flex flex-col items-center gap-1">
-                                        <span class="font-black text-primary text-lg">{{ $file->nb_client_restants}}</span>
-                                        <div class="w-16 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
-                                            <div class="h-full bg-primary-container w-[95%]"></div>
-                                        </div>
+                                        <span class="font-black text-primary text-lg">{{ $file->nb_client_restants}}</span>     
                                     </div>
                                 </td>
                                 <td class="px-6 py-5">
@@ -242,9 +247,14 @@
                                       <span class="h-2 w-2 rounded-full bg-orange-500"></span>
                                    {{ $file->statut}}
                                 </span> 
-                                    @endif
-                                    
+                                    @endif   
                                 </td>
+                                <td>
+                                    @if (auth()->user()->role === 'super-admin')
+                                        {{ $file->service->entreprise->nom_ent}}
+                                    @endif
+                                </td>
+                                @if (auth()->user()->role === 'admin' || auth()->user()->role === 'personnel')
                                 <td class="px-6 py-5 text-right">
                                     <div class="flex items-center justify-end gap-2">
                                         <button
@@ -252,12 +262,10 @@
                                             title="Consulter" onclick="window.location.href='{{ route('tickets_en_attente', ['id_service' => $file->service_id]) }}'">
                                             <span class="material-symbols-outlined">visibility</span>
                                         </button>
-                                        <button class="p-2 rounded-md hover:bg-error/10 text-error transition-colors"
-                                            title="Clôturer">
-                                            <span class="material-symbols-outlined">lock_open</span>
-                                        </button>
+                                       
                                     </div>
                                 </td>
+                                @endif
                             </tr>
                  
                         @endforeach

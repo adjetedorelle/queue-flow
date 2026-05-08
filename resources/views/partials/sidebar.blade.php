@@ -43,7 +43,7 @@
             <span class="material-symbols-outlined" data-icon="confirmation_number">confirmation_number</span>
             <span class="font-manrope text-sm font-medium tracking-tight">Tickets</span>
         </a>
-        @endif
+       
 
         <a class="{{ $navLink(request()->routeIs('files_disponibles*')) }}" href="{{ route('files_disponibles') }}">
             <span class="material-symbols-outlined" data-icon="queue_play_next">queue_play_next</span>

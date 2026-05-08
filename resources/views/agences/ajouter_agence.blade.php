@@ -60,7 +60,7 @@
                         <div class="relative group">
                             
                             <input class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                id="company_name" name="nom" placeholder="Ex: Retrait"
+                                id="company_name" name="nom" placeholder="Ex: BOA Agence Cotonou"
                                 required="" type="text" />
                         </div>
                     </div>

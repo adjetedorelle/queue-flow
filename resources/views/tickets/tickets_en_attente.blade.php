@@ -195,6 +195,7 @@
                                 <th
                                     class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
                                     Statut</th>
+                                   
                                 <th
                                     class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
                                     Actions</th>
@@ -214,15 +215,14 @@
                                 <td class="px-8 py-5">
                                     <button
                                         class="p-2 rounded-full hover:bg-white text-on-surface-variant opacity-0 group-hover:opacity-100 transition-all">
-                                        <span class="material-symbols-outlined">more_horiz</span>
+                                        <span class="material-symbols-outlined">Annuler</span>
                                     </button>
                                 </td>
                             </tr>   
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="px-8 py-4 bg-surface-container-low/20 text-center">
-                       
+                    <div class="px-8 py-4 bg-surface-container-low/20 text-center">     
                     </div>
                 </div>
             </section>

@@ -23,7 +23,7 @@ class Dashbordcontroller extends Controller
             $nbentreprises = Entreprise::count();
             $nbadmins = Admin::count();
             $nbtickets = Ticket::count();
-            $files = FileAttente::where('statut', 'ouverte')->get();
+            $files = FileAttente::whereDate('created_at', today())->get();
             $entreprisesrecentes = Entreprise::with(['services', 'personnels'])->latest()->take(5)->get();
             $adminsrecents = Admin::with(['utilisateur', 'entreprise'])->latest()->take(5)->get();
         }
@@ -38,8 +38,7 @@ class Dashbordcontroller extends Controller
             $nbtickets = Ticket::whereIn('service_id', $serviceIds)->whereDate('created_at', today())->count();
             $personnels = Personnel::where('entreprise_id', $entreprise->id)->get();
             $nbpersonnels = $personnels->count();
-            $files = FileAttente::whereIn('service_id', $serviceIds)->where('statut', 'ouverte')
-            ->whereDate('created_at', today())
+            $files = FileAttente::whereIn('service_id', $serviceIds)->whereDate('created_at', today())
             ->get();
             $nbfiles = $files->count();
         }

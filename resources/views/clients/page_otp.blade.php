@@ -221,7 +221,43 @@
             </form>
             
     </main>
-    
+    <script>
+    const otpInputs = document.querySelectorAll('.otp-input');
+
+    otpInputs.forEach((input, index) => {
+        input.addEventListener('input', () => {
+            // Garder uniquement un chiffre
+            input.value = input.value.replace(/\D/g, '').slice(0, 1);
+
+            // Passer au suivant si rempli
+            if (input.value && index < otpInputs.length - 1) {
+                otpInputs[index + 1].focus();
+            }
+        });
+
+        input.addEventListener('keydown', (e) => {
+            // Revenir au précédent sur Backspace si le champ est vide
+            if (e.key === 'Backspace' && !input.value && index > 0) {
+                otpInputs[index - 1].focus();
+            }
+        });
+
+        // Gestion du collage (ex: depuis SMS)
+        input.addEventListener('paste', (e) => {
+            e.preventDefault();
+            const text = (e.clipboardData || window.clipboardData)
+                .getData('text')
+                .replace(/\D/g, '');
+
+            otpInputs.forEach((box, i) => {
+                box.value = text[i] || '';
+            });
+
+            const next = Math.min(text.length, otpInputs.length - 1);
+            otpInputs[next].focus();
+        });
+    });
+</script>
 </body>
 
 </html>

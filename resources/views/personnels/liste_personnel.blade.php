@@ -63,6 +63,10 @@
                          Prenom du personnel</th>
                          <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
                          Email</th>
+                         @if (auth()->user()->role === 'super-admin')
+                          <th class="px-8 py-5 text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">
+                         Entreprise</th>
+                         @endif
                         @if (auth()->user()->role === 'admin')     
 
                         <th
@@ -86,6 +90,9 @@
                             </td>
                             <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{ $personnel->utilisateur->prenom}}</td>
                           <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{ $personnel->utilisateur->email}}</td>
+                            @if (auth()->user()->role === 'super-admin')
+                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{ $personnel->entreprise->nom_ent}}</td>
+                            @endif  
                             @if (auth()->user()->role === 'admin')
                             <td class="px-8 py-6 text-right">
                                 <div

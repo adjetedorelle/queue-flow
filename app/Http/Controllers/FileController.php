@@ -18,8 +18,7 @@ class FileController extends Controller
        $personnel=Personnel::WHERE('utilisateur_id','=',$user_connectee->id)->first();
        $services=Service::WHERE('entreprise_id','=',$personnel->entreprise_id)->get(['id']);
        $files=FileAttente::WHEREIN('service_id',$services)
-                          ->where('statut', '=', 'ouverte')
-                          ->whereDate('date', now())
+                          ->whereDate('created_at', today())
                           ->paginate(6);
        $nbfiles = $files->count();
        $nbClients = Ticket::whereIn('service_id', $services)
@@ -42,7 +41,7 @@ class FileController extends Controller
     $services=Service::WHERE('entreprise_id','=',$entreprise->id)->get(['id']);
     $files=FileAttente::WHEREIN('service_id',$services)
                           ->where('statut', '=', 'ouverte')
-                          ->whereDate('date', now())
+                          ->whereDate('created_at', today())
                           ->paginate(6);
     $nbfiles = $files->count();
     $nbClients = Ticket::whereIn('service_id', $services)
@@ -62,8 +61,7 @@ class FileController extends Controller
    
     if ($user_connectee -> role === 'super-admin') {
         $services = Service::pluck('id');
-       $files = FileAttente::where('statut', 'ouverte')
-                   ->whereDate('date', now())
+       $files = FileAttente::whereDate('created_at', today())
                     ->paginate(6);  
        $nbfiles = $files->count();
        $nbClients = Ticket::whereDate('created_at', today())->count();
