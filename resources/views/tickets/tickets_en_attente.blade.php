@@ -191,7 +191,14 @@
                                     Prénom</th>
                                 <th
                                     class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
-                                    Heure de création</th>
+                                    Service</th>
+                                <th
+                                    class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                                    Heure de passage</th>
+
+                                <th
+                                     class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
+                                    Type</th>
                                 <th
                                     class="px-8 py-4 text-[10px] font-bold text-on-surface-variant uppercase tracking-widest">
                                     Statut</th>
@@ -207,17 +214,27 @@
                                 <td class="px-8 py-5 font-bold text-primary">{{ $ticket->numero }}</td>
                                 <td class="px-8 py-5 font-medium text-on-surface">{{$ticket->client->utilisateur->nom}}</td>
                                 <td class="px-8 py-5 font-medium text-on-surface">{{$ticket->client->utilisateur->prenom}}</td>
-                                <td class="px-8 py-5 text-on-surface-variant">{{ $ticket->created_at }}</td>
+                                <td class="px-8 py-5 text-on-surface-variant">{{ $ticket->service->libelle}}</td>
+                                <td class="px-8 py-5 text-on-surface-variant">{{ $ticket->heur_exact }}</td>
+                                <td class="px-8 py-5 text-on-surface-variant">{{ $ticket->type }}</td>
+
                                 <td class="px-8 py-5">
                                     <span
                                         class="bg-surface-container-high text-on-primary-fixed-variant px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider">{{ $ticket->statut }}</span>
                                 </td>
-                                <td class="px-8 py-5">
-                                    <button
-                                        class="p-2 rounded-full hover:bg-white text-on-surface-variant opacity-0 group-hover:opacity-100 transition-all">
-                                        <span class="material-symbols-outlined">Annuler</span>
-                                    </button>
-                                </td>
+                                 <td class="px-6 py-6">
+                                        @if (in_array($ticket->statut, ['en_attente', 'en_cours']))
+                                            <form action="{{ route('tickets.annuler-par-personnel', $ticket->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler ce ticket ?');">
+                                                @csrf
+                                                <button type="submit" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 transition-colors">
+                                                    <span class="material-symbols-outlined text-[16px]">cancel</span>
+                                                    Annuler
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="text-xs text-on-surface-variant font-medium">-</span>
+                                        @endif
+                                    </td>
                             </tr>   
                             @endforeach
                         </tbody>

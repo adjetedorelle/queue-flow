@@ -56,7 +56,7 @@ class TicketController extends Controller
         }
 
         if ($filtre === 'prioritaires') {
-            $query->where('type', 'express')
+            $query->where('type', 'vip')
             ->wheredate('created_at', today())
             ; // adapte selon ton champ
         }
@@ -67,7 +67,7 @@ class TicketController extends Controller
     }
 
 
-    public function ticketsNonTraites($id_service)
+    public function ticketsNonTraites($id_service, $id_file )
     {
         $user_connectee = auth()->user();
         if ($user_connectee->role === 'personnel') {
@@ -75,12 +75,13 @@ class TicketController extends Controller
             $ticket_encour = Ticket::WHERE('personnel_id', '=', $personnel->id)
                 ->WHERE('statut', '=', 'en_cours')
                 // use between to compare date collumn  jour de passage with today start date and today end date
-                ->WHERE('jour_passage', '>=', today()->startOfDay())
-                ->WHERE('jour_passage', '<=', today()->endOfDay())
+                ->WHERE('heure_exact', '>=', today()->startOfDay())
+                ->WHERE('heure_exact', '<=', today()->endOfDay())
                 ->first();
         }
 
         $tickets = Ticket::WHERE('service_id', '=', $id_service)
+            ->WHERE('file_attente_id', '=', $id_file)
             ->WHEREIN('statut', ['en_attente', 'en_cours'])
             ->get();
         $count = $tickets->count();
@@ -565,15 +566,21 @@ class TicketController extends Controller
         // 1. Mettre le ticket en cours à "traite"
         $ticket_encours = Ticket::where('personnel_id', $personnel->id)
             ->where('statut', 'en_cours')
-            ->whereDate('jour_passage', today())
+            ->whereDate('heure_exact', today())
             ->first();
         if ($ticket_encours) {
             $ticket_encours->statut = 'traite';
             $ticket_encours->date_fin_traitement = now();
             $ticket_encours->save();
         }
+        // 2. Mettre à jour le nombre de clients restants dans la file d'attente du ticket traité
+        $file=FileAttente::where('id', $ticket_encours->file_attente_id)->first();
+        $client_restant=$file->nb_client_restant-1;
+        $file->nb_client_restant = $client_restant;
+        $file->save();
 
-        // 2. Récupérer le ticket en_attente le plus ancien du service
+        
+        // 3. Récupérer le ticket en_attente le plus ancien du service
         $prochain_ticket = Ticket::where('service_id', $id_service)
             ->where('statut', 'en_attente')
             ->whereDate('heure_exact', today()) // créé aujourd'hui
@@ -587,7 +594,7 @@ class TicketController extends Controller
             $prochain_ticket->save();
         }
 
-        // 3. Rediriger vers la liste des tickets en attente du service
+        // 4. Rediriger vers la liste des tickets en attente du service
         return redirect()->back()->with('success', 'Prochain ticket appelé avec succès.');
     }
 
