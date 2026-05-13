@@ -232,7 +232,7 @@
                                 <td class="px-6 py-5 font-semibold text-on-surface">{{ $file->nb_total}}</td>
                                 <td class="px-6 py-5">
                                     <div class="flex flex-col items-center gap-1">
-                                        <span class="font-black text-primary text-lg">{{ $file->nb_client_restants}}</span>     
+                                        <span class="font-black text-primary text-lg">{{ $file->nb_client_restant}}</span>     
                                     </div>
                                 </td>
                                 <td class="px-6 py-5">
@@ -256,13 +256,12 @@
                                 </td>
                                 @if (auth()->user()->role === 'admin' || auth()->user()->role === 'personnel')
                                 <td class="px-6 py-5 text-right">
-                                    <div class="flex items-center justify-end gap-2">
+                                    <div class="flex items-center gap-2">
                                         <button
                                             class="p-2 rounded-md hover:bg-surface-container-high text-tertiary transition-colors"
                                             title="Consulter" onclick="window.location.href='{{ route('tickets_en_attente', ['id_service' => $file->service_id, 'id_file' => $file->id ]) }}'">
                                             <span class="material-symbols-outlined">visibility</span>
                                         </button>
-                                       
                                     </div>
                                 </td>
                                 @endif
@@ -279,9 +278,4 @@
                   {{ $files->links() }}
                 </div>
             </div>
-            
-        
-
-
-
 </x-app-layout>
