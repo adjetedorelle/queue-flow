@@ -106,4 +106,92 @@ class Entreprise extends Model
 
         return $joursOuverts;
     }
+
+    /**
+     * Retourne un résumé textuel des jours ouverts
+     */
+    public function getJoursOuvertsTexte()
+    {
+        $jours = $this->getJoursOuverture();
+        
+        if (empty($jours)) {
+            return 'Aucun jour défini';
+        }
+
+        // Abréviations des jours
+        $abreviations = [
+            'Lundi' => 'Lun',
+            'Mardi' => 'Mar',
+            'Mercredi' => 'Mer',
+            'Jeudi' => 'Jeu',
+            'Vendredi' => 'Ven',
+            'Samedi' => 'Sam',
+            'Dimanche' => 'Dim'
+        ];
+
+        $joursAbreges = array_map(function($jour) use ($abreviations) {
+            return $abreviations[$jour] ?? $jour;
+        }, $jours);
+
+        return implode(', ', $joursAbreges);
+    }
+
+    /**
+     * Vérifie si tous les jours ouverts ont les mêmes horaires
+     */
+    public function hasHorairesUniformes()
+    {
+        if (!$this->horaires) {
+            return false;
+        }
+
+        $plagesReference = null;
+        
+        foreach ($this->horaires as $jour => $data) {
+            if ($data['ferme'] ?? true) {
+                continue;
+            }
+
+            $plages = $data['plages'] ?? [];
+            
+            if ($plagesReference === null) {
+                $plagesReference = $plages;
+            } elseif ($plages !== $plagesReference) {
+                return false;
+            }
+        }
+
+        return $plagesReference !== null;
+    }
+
+    /**
+     * Retourne un résumé des horaires
+     */
+    public function getHorairesResume()
+    {
+        if (!$this->horaires) {
+            return 'Non configuré';
+        }
+
+        $joursOuverts = $this->getJoursOuverture();
+        
+        if (empty($joursOuverts)) {
+            return 'Fermé';
+        }
+
+        if ($this->hasHorairesUniformes()) {
+            // Récupérer les plages du premier jour ouvert
+            foreach ($this->horaires as $jour => $data) {
+                if (!($data['ferme'] ?? true) && !empty($data['plages'])) {
+                    $plages = $data['plages'];
+                    $plagesTexte = array_map(function($plage) {
+                        return substr($plage['debut'], 0, 5) . '-' . substr($plage['fin'], 0, 5);
+                    }, $plages);
+                    return implode(', ', $plagesTexte);
+                }
+            }
+        }
+
+        return 'Horaires variables';
+    }
 }
