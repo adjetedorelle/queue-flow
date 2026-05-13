@@ -259,7 +259,7 @@
                                     <div class="flex items-center justify-end gap-2">
                                         <button
                                             class="p-2 rounded-md hover:bg-surface-container-high text-tertiary transition-colors"
-                                            title="Consulter" onclick="window.location.href='{{ route('tickets_en_attente', ['id_service' => $file->service_id]) }}'">
+                                            title="Consulter" onclick="window.location.href='{{ route('tickets_en_attente', ['id_service' => $file->service_id, 'id_file' => $file->id ]) }}'">
                                             <span class="material-symbols-outlined">visibility</span>
                                         </button>
                                        

@@ -107,9 +107,8 @@ Route::delete('supprimer_personnel/{id_user}',[PersonnelController::class,'suppr
 Route::get('tickets_disponibles',[TicketController::class, 'ticketsdispo'])
 ->middleware(['auth', 'verified'])->name('tickets_disponibles');
 
-Route::get('tickets_en_attente/{id_service}',[TicketController::class, 'ticketsNonTraites'])
+Route::get('tickets_en_attente/{id_service}/{id_file?}',[TicketController::class, 'ticketsNonTraites'])
 ->middleware(['auth', 'verified'])->name('tickets_en_attente');
-
 
 Route::get('formulaire_date/{service_id?}',[TicketController::class, 'formulaireDate'])
 ->name('formulaire_date')->middleware('auth');

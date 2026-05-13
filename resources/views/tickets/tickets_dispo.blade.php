@@ -239,7 +239,7 @@
                                     <td class="px-6 py-6">
                                         <span class="flex items-center gap-2 text-sm font-semibold text-on-surface">
                                             <span
-                                                            class="material-symbols-outlined text-primary text-[18px]">business</span>
+                                            class="material-symbols-outlined text-primary text-[18px]">business</span>
                                                         {{ $ticket->service->entreprise->nom_ent }}
                                             </td>
                                             @endif
