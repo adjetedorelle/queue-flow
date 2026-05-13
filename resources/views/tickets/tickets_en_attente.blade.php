@@ -215,7 +215,7 @@
                                 <td class="px-8 py-5 font-medium text-on-surface">{{$ticket->client->utilisateur->nom}}</td>
                                 <td class="px-8 py-5 font-medium text-on-surface">{{$ticket->client->utilisateur->prenom}}</td>
                                 <td class="px-8 py-5 text-on-surface-variant">{{ $ticket->service->libelle}}</td>
-                                <td class="px-8 py-5 text-on-surface-variant">{{ $ticket->heur_exact }}</td>
+                                <td class="px-8 py-5 text-on-surface-variant">{{ $ticket->heure_exact }}</td>
                                 <td class="px-8 py-5 text-on-surface-variant">{{ $ticket->type }}</td>
 
                                 <td class="px-8 py-5">
