@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 use Spatie\Browsershot\Browsershot;
 
 class TicketController extends Controller
@@ -326,7 +327,7 @@ class TicketController extends Controller
     private function verifierHorairesEntreprise($datePassage, $heureExact, $entreprise)
     {
         $date = Carbon::parse($datePassage);
-        $jourSemaine = $date->locale('fr_FR')->translatedFormat('l');
+        $jourSemaine = Str::ucfirst($date->locale('fr_FR')->translatedFormat('l'));
         $heure = Carbon::parse($heureExact)->format('H:i');
 
         // Vérifier si l'entreprise a des horaires définis
