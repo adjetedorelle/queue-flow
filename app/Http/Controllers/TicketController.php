@@ -12,6 +12,7 @@ use App\Models\FileAttente;
 use App\Models\Personnel;
 use App\Models\Service;
 use App\Models\Ticket;
+use App\Notifications\AnnulationTicket;
 use App\Notifications\RebalancementTicket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -196,11 +197,12 @@ class TicketController extends Controller
             // Calculer l'heure exacte de passage
             $heureExact = $this->calculerHeureExacte($service, $request->jour_passage, $typeTicket, $agence ? $agence->id : null);
 
-            // Vérifier que l'heure exacte est dans les horaires d'ouverture
+            // Vérifier les horaires d'ouverture (jour et heure)
             $entreprise = $service->entreprise;
-            if (!$this->verifierHorairesOuverture($heureExact, $entreprise)) {
-
-                return redirect()->back()->with('error', "L'heure de passage est en dehors des horaires d'ouverture de l'entreprise ({$entreprise->heure_ouv} - {$entreprise->heure_ferm}).")->withInput();
+            $verificationHoraires = $this->verifierHorairesEntreprise($request->jour_passage, $heureExact, $entreprise);
+            
+            if (!$verificationHoraires['valide']) {
+                return redirect()->back()->with('error', $verificationHoraires['message'])->withInput();
             }
 
             // Créer le ticket
@@ -317,23 +319,71 @@ class TicketController extends Controller
         return $start;
     }
 
-    private function verifierHorairesOuverture($heureExact, $entreprise)
+    /**
+     * Vérifie si l'entreprise est ouverte à une date et heure données
+     */
+    private function verifierHorairesEntreprise($datePassage, $heureExact, $entreprise)
     {
-        $heureExact = Carbon::parse($heureExact);
-        $heureOuverture = Carbon::parse($entreprise->heure_ouv);
-        $heureFermeture = Carbon::parse($entreprise->heure_ferm);
+        $date = Carbon::parse($datePassage);
+        $jourSemaine = $date->locale('fr_FR')->translatedFormat('l');
+        $heure = Carbon::parse($heureExact)->format('H:i');
 
-        // Extraire uniquement les heures pour la comparaison
-        $heureExactHHMM = $heureExact->format('H:i');
-        $heureOuvertureHHMM = $heureOuverture->format('H:i');
-        $heureFermetureHHMM = $heureFermeture->format('H:i');
-
-        // Si l'heure exacte est en dehors des horaires d'ouverture
-        if ($heureExactHHMM < $heureOuvertureHHMM || $heureExactHHMM > $heureFermetureHHMM) {
-            return false;
+        // Vérifier si l'entreprise a des horaires définis
+        if (!$entreprise->horaires) {
+            return [
+                'valide' => false,
+                'message' => "Les horaires de l'entreprise ne sont pas configurés."
+            ];
         }
 
-        return true;
+        // Vérifier si le jour existe dans les horaires
+        if (!isset($entreprise->horaires[$jourSemaine])) {
+            return [
+                'valide' => false,
+                'message' => "L'entreprise est fermée le {$jourSemaine}."
+            ];
+        }
+
+        $jourData = $entreprise->horaires[$jourSemaine];
+
+        // Vérifier si le jour est marqué comme fermé
+        if ($jourData['ferme'] ?? true) {
+            return [
+                'valide' => false,
+                'message' => "L'entreprise est fermée le {$jourSemaine}."
+            ];
+        }
+
+        // Vérifier si l'heure est dans une des plages horaires
+        $plages = $jourData['plages'] ?? [];
+        
+        if (empty($plages)) {
+            return [
+                'valide' => false,
+                'message' => "Aucune plage horaire définie pour le {$jourSemaine}."
+            ];
+        }
+
+        foreach ($plages as $plage) {
+            if ($heure >= $plage['debut'] && $heure <= $plage['fin']) {
+                return [
+                    'valide' => true,
+                    'message' => ''
+                ];
+            }
+        }
+
+        // Construire un message avec les plages horaires disponibles
+        $plagesTexte = array_map(function($plage) {
+            return $plage['debut'] . ' - ' . $plage['fin'];
+        }, $plages);
+        
+        $plagesFormatees = implode(', ', $plagesTexte);
+
+        return [
+            'valide' => false,
+            'message' => "L'heure de passage ({$heure}) est en dehors des horaires d'ouverture du {$jourSemaine}. Plages disponibles : {$plagesFormatees}."
+        ];
     }
 
     public function pageOtp()
@@ -613,11 +663,14 @@ class TicketController extends Controller
 
             if ($ticket->fileAttente) {
                 $ticket->fileAttente->decrement('nb_total');
-                
+
                 if ($ancienStatut === 'en_attente') {
                     $ticket->fileAttente->decrement('nb_client_restant');
                 }
             }
+
+            // Envoyer notification au client
+            $ticket->client->utilisateur->notify(new AnnulationTicket($ticket));
 
             DB::commit();
 
@@ -625,6 +678,75 @@ class TicketController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
             Log::error('Erreur annulation ticket', [
+                'ticket_id' => $ticketId,
+                'error' => $th->getMessage()
+            ]);
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'annulation.');
+        }
+    }
+
+    public function annulerTicketParPersonnel(Request $request, $ticketId)
+    {
+        try {
+            DB::beginTransaction();
+
+            $user = auth()->user();
+
+            // Vérifier que l'utilisateur est un personnel
+            if ($user->role !== 'personnel') {
+                abort(403, 'Vous n\'êtes pas autorisé à effectuer cette action.');
+            }
+
+            $personnel = Personnel::where('utilisateur_id', $user->id)->first();
+
+            if (!$personnel) {
+                abort(403, 'Profil personnel non trouvé.');
+            }
+
+            $ticket = Ticket::with(['fileAttente', 'service', 'service.entreprise'])->find($ticketId);
+
+            if (!$ticket) {
+                return redirect()->back()->with('error', 'Ticket non trouvé.');
+            }
+
+            // Vérifier que le personnel appartient à la même entreprise que le ticket
+            if ($ticket->service->entreprise_id !== $personnel->entreprise_id) {
+                abort(403, 'Vous n\'êtes pas autorisé à annuler ce ticket.');
+            }
+
+            if (!in_array($ticket->statut, ['en_attente', 'en_cours'])) {
+                return redirect()->back()->with('error', 'Ce ticket ne peut plus être annulé.');
+            }
+
+            $ancienStatut = $ticket->statut;
+            $ticket->statut = 'annule';
+            $ticket->save();
+
+            if ($ticket->fileAttente) {
+                $ticket->fileAttente->decrement('nb_total');
+
+                if ($ancienStatut === 'en_attente') {
+                    $ticket->fileAttente->decrement('nb_client_restant');
+                }
+            }
+
+            // Envoyer notification au client
+            $ticket->client->utilisateur->notify(new AnnulationTicket($ticket));
+
+            // Logger qui a annulé le ticket
+            Log::info('Ticket annulé par personnel', [
+                'ticket_id' => $ticketId,
+                'personnel_id' => $personnel->id,
+                'personnel_nom' => $personnel->utilisateur->nom . ' ' . $personnel->utilisateur->prenom,
+                'entreprise_id' => $personnel->entreprise_id,
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Ticket annulé avec succès. Client notifié.');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            Log::error('Erreur annulation ticket par personnel', [
                 'ticket_id' => $ticketId,
                 'error' => $th->getMessage()
             ]);

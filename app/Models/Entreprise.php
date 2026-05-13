@@ -16,13 +16,15 @@ class Entreprise extends Model
     protected $fillable = [
         'nom_ent',
         'adresse',
-        'heure_ouv',
-        'heure_ferm',
         'admin_id', 
-        'jour_ouv',
+        'horaires',
         'statut',
         'bio',
         'image'    
+    ];
+
+    protected $casts = [
+        'horaires' => 'array',
     ];
 
     public function services (){
@@ -41,6 +43,67 @@ class Entreprise extends Model
         return $this->hasMany(Agence::class);
     }
 
+    /**
+     * Vérifie si l'entreprise est ouverte à un jour et une heure donnés
+     */
+    public function estOuvert($jour, $heure)
+    {
+        if (!$this->horaires || !isset($this->horaires[$jour])) {
+            return false;
+        }
+
+        $jourData = $this->horaires[$jour];
+
+        // Si le jour est marqué comme fermé
+        if ($jourData['ferme'] ?? true) {
+            return false;
+        }
+
+        // Vérifier si l'heure est dans une des plages horaires
+        $plages = $jourData['plages'] ?? [];
+        foreach ($plages as $plage) {
+            if ($heure >= $plage['debut'] && $heure <= $plage['fin']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Récupère les plages horaires d'un jour donné
+     */
+    public function getPlagesHoraires($jour)
+    {
+        if (!$this->horaires || !isset($this->horaires[$jour])) {
+            return [];
+        }
+
+        $jourData = $this->horaires[$jour];
+        
+        if ($jourData['ferme'] ?? true) {
+            return [];
+        }
+
+        return $jourData['plages'] ?? [];
+    }
+
+    /**
+     * Récupère la liste des jours d'ouverture
+     */
+    public function getJoursOuverture()
+    {
+        if (!$this->horaires) {
+            return [];
+        }
+
+        $joursOuverts = [];
+        foreach ($this->horaires as $jour => $data) {
+            if (!($data['ferme'] ?? true) && !empty($data['plages'])) {
+                $joursOuverts[] = $jour;
+            }
+        }
+
+        return $joursOuverts;
+    }
 }
-
-
