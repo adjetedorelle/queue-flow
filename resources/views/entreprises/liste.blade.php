@@ -86,8 +86,8 @@
                                 {{ $entreprise->adresse }}</td>
                             <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">{{ $entreprise->bio }}
                             </td>
-                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
-                                {{ $entreprise->jour_ouv }}</td>
+                            <td class="px-8 py-6 text-on-surface-variant max-w-[200px]">
+                                {{ $entreprise->getJoursOuvertsTexte() }}</td>
                             <td class="px-8 py-6">
                                 @if ($entreprise->statut === 'actif')
                                     <span
@@ -104,11 +104,7 @@
                                 @endif
                             </td>
                             <td class="px-8 py-6">
-                                <div class="flex flex-col">
-                                    <span
-                                        class="text-sm font-semibold text-on-surface">{{ $entreprise->heure_ouv }}-{{ $entreprise->heure_ferm }}</span>
-
-                                </div>
+                                <x-horaires-display :entreprise="$entreprise" format="table" />
                             </td>
                             <td class="px-8 py-6 text-on-surface-variant max-w-[200px] truncate">
                                 @if ($entreprise->image)
@@ -177,4 +173,6 @@
         </div>
     </div>
     </div>
+
+    <script src="{{ asset('js/horaires-modal.js') }}"></script>
 </x-app-layout>

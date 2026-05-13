@@ -58,18 +58,8 @@
 
                                 <p><strong>Description : </strong>{{ $entreprise->bio }}</p>
                             </div>
-                            <div class="space-y-3 mb-8">
-                                <div class="flex items-center text-on-surface-variant text-sm gap-3">
-                                    <span class="material-symbols-outlined text-lg"
-                                        data-icon="calendar_month">calendar_month</span>
-                                    <p><strong>Jour d'ouverture :</strong>{{ $entreprise->jour_ouv }}</p>
-                                </div>
-                                <div class="flex items-center text-on-surface-variant text-sm gap-3">
-                                    <span class="material-symbols-outlined text-lg" data-icon="schedule">schedule</span>
-                                    <p><strong>Horaires : </strong>{{ $entreprise->heure_ouv }}
-                                        {{ $entreprise->heure_ferm }}</p>
-                                </div>
-
+                            <div class="mb-8">
+                                <x-horaires-display :entreprise="$entreprise" format="compact" />
                             </div>
                             <button
                                 class="w-full kinetic-glow text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-lg shadow-primary-container/20 hover:shadow-primary-container/40"
@@ -89,4 +79,6 @@
 
 
         </main>
+
+        <script src="{{ asset('js/horaires-modal.js') }}"></script>
     @endsection
