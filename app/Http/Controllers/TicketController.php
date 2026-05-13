@@ -576,8 +576,8 @@ class TicketController extends Controller
         // 2. Récupérer le ticket en_attente le plus ancien du service
         $prochain_ticket = Ticket::where('service_id', $id_service)
             ->where('statut', 'en_attente')
-            ->whereDate('created_at', today()) // créé aujourd'hui
-            ->oldest('created_at')
+            ->whereDate('heure_exact', today()) // créé aujourd'hui
+            ->oldest('heure_exact')
             ->first();
 
         if ($prochain_ticket) {
