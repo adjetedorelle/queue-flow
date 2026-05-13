@@ -144,6 +144,9 @@ Route::get('mes-tickets',[TicketController::class, 'mesTickets'])
 Route::post('tickets/{ticketId}/annuler',[TicketController::class, 'annulerTicket'])
 ->name('tickets.annuler')->middleware('auth');
 
+Route::post('tickets/{ticketId}/annuler-par-personnel',[TicketController::class, 'annulerTicketParPersonnel'])
+->name('tickets.annuler-par-personnel')->middleware('auth');
+
 Route::get('appeler_prochain/{id_service?}',[TicketController::class, 'appelerProchain'])
 ->middleware(['auth', 'verified'])->name('appeler_prochain');
 

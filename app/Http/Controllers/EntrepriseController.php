@@ -24,13 +24,16 @@ class EntrepriseController extends Controller
             'adresse'=> 'string|nullable|max:150',
             'bio'=> 'string|required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'heure_ouv'=> 'string|required|max:05',
-            'heure_ferm'=> 'string|required|max:05',
-            'jour_ouv'=> 'string|required|max:100',
+            'horaires'=> 'required|array',
+            'horaires.*'=> 'required|array',
+            'horaires.*.ferme'=> 'nullable|boolean',
+            'horaires.*.plages'=> 'nullable|array',
+            'horaires.*.plages.*.debut'=> 'nullable|date_format:H:i',
+            'horaires.*.plages.*.fin'=> 'nullable|date_format:H:i|after:horaires.*.plages.*.debut',
             'nom'=> 'string|required|max:100',
             'prenom'=> 'string|required|max:100',
             'email'=> 'string|required|max:100',
-            'password'=> 'string|required|max:100'           
+            'password'=> 'string|required|max:100'
         ]);
 
         $user = User::create([
@@ -45,14 +48,15 @@ class EntrepriseController extends Controller
             'utilisateur_id'=>$user->id
         ]);
 
-        Entreprise::create([
+        // Traiter les horaires
+        $horaires = $this->traiterHoraires($request->horaires);
+
+       Entreprise::create([
             'nom_ent'=>$request->nom_ent,
             'adresse'=>$request->adresse,
             'bio'=>$request->bio,
             'image' => $request->file('image')->store('entreprises', 'public'),
-            'heure_ouv'=>$request->heure_ouv,
-            'heure_ferm'=>$request->heure_ferm,
-            'jour_ouv'=>$request->jour_ouv,
+            'horaires'=>$horaires,
             'admin_id'=>$admin->id
 
         ]);
@@ -73,26 +77,31 @@ class EntrepriseController extends Controller
          $request->validate([
             'nom_ent'=> 'string|required|max:100',
             'adresse'=> 'string|nullable|max:150',
-            'heure_ouv'=> 'string|required|max:10',
-             'heure_ferm'=> 'string|required|max:10',
-             'jour_ouv'=> 'string|required|max:100',
-             'bio'=> 'string|required',
+            'horaires'=> 'required|array',
+            'horaires.*'=> 'required|array',
+            'horaires.*.ferme'=> 'nullable|boolean',
+            'horaires.*.plages'=> 'nullable|array',
+            'horaires.*.plages.*.debut'=> 'nullable|date_format:H:i',
+            'horaires.*.plages.*.fin'=> 'nullable|date_format:H:i',
+            'bio'=> 'string|required',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            
+
         ]);
                
        $entreprise = Entreprise::where('id', '=',$id_entreprise)->first();
+       
+       // Traiter les horaires
+        $horaires = $this->traiterHoraires($request->horaires);
+       
        if ($request->hasFile('image')) {
         $entreprise['image'] = $request->file('image')->store('entreprises', 'public');
     }
        $entreprise->update([
         'nom_ent'=> $request->nom_ent,
         'adresse'=> $request->adresse,
-        'heure_ouv'=> $request->heure_ouv,
-        'heure_ferm'=> $request->heure_ferm,
-        'jour_ouv'=> $request->jour_ouv,
+        'horaires'=> $horaires,
         'bio'=>$request->bio,
-        
+
        ]);
 
        
@@ -126,6 +135,55 @@ public function toggleStatut($id_entreprise)
     return back()->with('success', 'Statut mis à jour avec succès.');
 }
 
+/**
+ * Traite et nettoie les horaires reçus du formulaire
+ */
+private function traiterHoraires($horairesInput)
+{
+    $horaires = [];
+    $joursSemaine = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    
+    foreach ($joursSemaine as $jour) {
+        if (!isset($horairesInput[$jour])) {
+            // Si le jour n'est pas dans l'input, le marquer comme fermé
+            $horaires[$jour] = [
+                'ferme' => true,
+                'plages' => []
+            ];
+            continue;
+        }
+        
+        $jourData = $horairesInput[$jour];
+        $ferme = isset($jourData['ferme']) && $jourData['ferme'] == '1';
+        
+        if ($ferme) {
+            $horaires[$jour] = [
+                'ferme' => true,
+                'plages' => []
+            ];
+        } else {
+            // Filtrer les plages vides
+            $plages = [];
+            if (isset($jourData['plages']) && is_array($jourData['plages'])) {
+                foreach ($jourData['plages'] as $plage) {
+                    if (!empty($plage['debut']) && !empty($plage['fin'])) {
+                        $plages[] = [
+                            'debut' => $plage['debut'],
+                            'fin' => $plage['fin']
+                        ];
+                    }
+                }
+            }
+            
+            $horaires[$jour] = [
+                'ferme' => false,
+                'plages' => $plages
+            ];
+        }
+    }
+    
+    return $horaires;
+}
 
    
 }

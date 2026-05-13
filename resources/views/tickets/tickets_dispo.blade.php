@@ -169,6 +169,11 @@
                                                 class="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">
                                                  Entreprise</th>
                                     @endif
+                                    @if (auth()->user()->role === 'personnel')
+                                                <th
+                                                class="px-6 py-5 text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+                                                 Actions</th>
+                                    @endif
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-surface-container-low">
@@ -238,6 +243,21 @@
                                                         {{ $ticket->service->entreprise->nom_ent }}
                                             </td>
                                             @endif
+                                    @if (auth()->user()->role === 'personnel')
+                                    <td class="px-6 py-6">
+                                        @if (in_array($ticket->statut, ['en_attente', 'en_cours']))
+                                            <form action="{{ route('tickets.annuler-par-personnel', $ticket->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir annuler ce ticket ?');">
+                                                @csrf
+                                                <button type="submit" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold bg-red-50 text-red-600 border border-red-100 hover:bg-red-100 transition-colors">
+                                                    <span class="material-symbols-outlined text-[16px]">cancel</span>
+                                                    Annuler
+                                                </button>
+                                            </form>
+                                        @else
+                                            <span class="text-xs text-on-surface-variant font-medium">-</span>
+                                        @endif
+                                    </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>

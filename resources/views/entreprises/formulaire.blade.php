@@ -94,70 +94,86 @@
                                 required="" type="text"> {{ $entreprise->bio }}</textarea>
                         </div>
                     </div>
+                    <!-- Horaires par jour -->
                     <div class="relative">
-                        <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1" for="address">
-                            Jour d'ouverture <span class="text-primary">*</span>
+                        <label class="block text-xs font-bold text-on-surface-variant mb-3 ml-1">
+                            Horaires d'ouverture <span class="text-primary">*</span>
                         </label>
-                        <div class="relative group">
-                            <span
-                                class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
-                                data-icon=""></span>
-                            <input class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                id="jour_ouv" name="jour_ouv" placeholder="lundi-jeudi" required="" type="text"
-                                value="{{ $entreprise->jour_ouv }}" />
+                        <div class="space-y-4">
+                            @foreach(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'] as $jour)
+                                @php
+                                    $jourData = $entreprise->horaires[$jour] ?? ['ferme' => true, 'plages' => []];
+                                    $ferme = $jourData['ferme'] ?? true;
+                                    $plages = $jourData['plages'] ?? [];
+                                    if (empty($plages)) {
+                                        $plages = [['debut' => '', 'fin' => '']];
+                                    }
+                                @endphp
+                                <div class="border border-surface-container-high rounded-lg p-4" data-jour="{{ $jour }}">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h4 class="font-bold text-on-surface">{{ $jour }}</h4>
+                                        <label class="flex items-center gap-2 cursor-pointer">
+                                            <input type="checkbox" name="horaires[{{ $jour }}][ferme]" value="1" 
+                                                   {{ $ferme ? 'checked' : '' }}
+                                                   class="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                            <span class="text-sm text-on-surface-variant font-medium">Fermé</span>
+                                        </label>
+                                    </div>
+                                    <div class="plages-container space-y-2">
+                                        @foreach($plages as $index => $plage)
+                                            <div class="plage flex items-center gap-3">
+                                                <div class="flex-1">
+                                                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Début</label>
+                                                    <input type="time" 
+                                                           name="horaires[{{ $jour }}][plages][{{ $index }}][debut]" 
+                                                           value="{{ $plage['debut'] ?? '' }}"
+                                                           class="sunken-input w-full px-4 py-2.5 rounded-lg text-on-surface font-medium">
+                                                </div>
+                                                <div class="flex-1">
+                                                    <label class="block text-xs font-bold text-on-surface-variant mb-1">Fin</label>
+                                                    <input type="time" 
+                                                           name="horaires[{{ $jour }}][plages][{{ $index }}][fin]" 
+                                                           value="{{ $plage['fin'] ?? '' }}"
+                                                           class="sunken-input w-full px-4 py-2.5 rounded-lg text-on-surface font-medium">
+                                                </div>
+                                                <button type="button" 
+                                                        class="supprimer-plage mt-6 px-3 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors font-bold"
+                                                        title="Supprimer cette plage">
+                                                    <span class="material-symbols-outlined text-[20px]">delete</span>
+                                                </button>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <button type="button" 
+                                            class="ajouter-plage mt-3 px-4 py-2 bg-primary-container text-white rounded-lg hover:bg-primary transition-colors text-sm font-bold flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-[18px]">add</span>
+                                        Ajouter une plage horaire
+                                    </button>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                    <!-- Time Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="relative">
-                            <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1" for="opening_time">
-                                Heure d’ouverture <span class="text-primary">*</span>
-                            </label>
-                            <div class="relative group">
-                                <span
-                                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
-                                    data-icon="schedule">schedule</span>
-                                <input
-                                    class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                    id="opening_time" name="heure_ouv" required="" type="time"
-                                    value="{{ $entreprise->heure_ouv }}" />
-                            </div>
-                        </div>
-                        <div class="relative">
-                            <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1" for="closing_time">
-                                Heure de fermeture <span class="text-primary">*</span>
-                            </label>
-                            <div class="relative group">
-                                <span
-                                    class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary-container transition-colors"
-                                    data-icon="alarm_off">alarm_off</span>
-                                <input
-                                    class="sunken-input w-full pl-12 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                    id="closing_time" name="heure_ferm" required="" type="time"
-                                    value="{{ $entreprise->heure_ferm }}" />
-                            </div>
-                            <div class="relative">
-                                <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1">
-                                    Image <span class="text-primary">*</span>
-                                </label>
+                    <!-- Image -->
+                    <div class="relative">
+                        <label class="block text-xs font-bold text-on-surface-variant mb-1 ml-1">
+                            Image <span class="text-primary">*</span>
+                        </label>
 
-                                {{-- Afficher l'image actuelle --}}
-                                @if ($entreprise->image)
-                                    <div class="mb-3">
-                                        <p class="text-xs text-on-surface-variant mb-1">Image actuelle :</p>
-                                        <img src="{{ asset('storage/' . $entreprise->image) }}"
-                                            alt="{{ $entreprise->nom_ent }}"
-                                            class="w-16 h-16 object-cover rounded-lg" />
-                                    </div>
-                                @endif
-                                <input
-                                    class="sunken-input w-full pl-4 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
-                                    name="image" type="file" accept="image/*" />
-                                <p class="text-xs text-on-surface-variant mt-1 ml-1">
-                                    Laissez vide pour conserver l'image actuelle.
-                                </p>
+                        {{-- Afficher l'image actuelle --}}
+                        @if ($entreprise->image)
+                            <div class="mb-3">
+                                <p class="text-xs text-on-surface-variant mb-1">Image actuelle :</p>
+                                <img src="{{ asset('storage/' . $entreprise->image) }}"
+                                    alt="{{ $entreprise->nom_ent }}"
+                                    class="w-16 h-16 object-cover rounded-lg" />
                             </div>
-                        </div>
+                        @endif
+                        <input
+                            class="sunken-input w-full pl-4 pr-4 py-3.5 rounded-lg text-on-surface font-medium"
+                            name="image" type="file" accept="image/*" />
+                        <p class="text-xs text-on-surface-variant mt-1 ml-1">
+                            Laissez vide pour conserver l'image actuelle.
+                        </p>
                     </div>
                 </div>
             </section>
@@ -177,10 +193,9 @@
                 </button>
             </div>
         </form>
+    </div>
 
-
-
-
+    <script src="{{ asset('js/horaires-entreprise.js') }}"></script>
 
 
 </x-app-layout>
