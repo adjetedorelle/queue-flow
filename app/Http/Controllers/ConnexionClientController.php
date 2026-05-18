@@ -64,7 +64,7 @@ class ConnexionClientController extends Controller
         // Si le numero de téléphone ou l'email n'existe pas dans la base de donnees, creer un nouvel utilisateur et un client et envoyer le code otp
             try {
                 DB::beginTransaction();
-
+                 
                     if (!$utilisateurExistant) {
                     $user= User::create([
                         'email' => $email,
